@@ -1,13 +1,18 @@
 package com.example.keepfit.NavigationContainer
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
@@ -23,6 +28,7 @@ import com.example.keepfit.ui.theme.CustomShapes
 import com.example.keepfit.ui.theme.KeepFitTheme
 
 @Composable
+@Preview
 fun NavigationContainer() {
     
     val navController = rememberNavController()
@@ -42,7 +48,9 @@ fun NavigationContainer() {
                        .weight(1F)
                ) {
 
-                   NavHost(navController = navController,
+                   NavHost(
+                       modifier = Modifier.fillMaxSize(),//.border(1.dp, Color(0xFFFF0000)),
+                       navController = navController,
                        startDestination = Screen.Home.route){
 
                        composable(Screen.Home.route){ HomeScreen() }
