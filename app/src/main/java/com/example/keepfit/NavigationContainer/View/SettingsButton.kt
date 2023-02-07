@@ -31,7 +31,7 @@ fun SettingsButton(alignment: Modifier) {
         ) {
 
             Box(
-                modifier = Modifier.padding(10.dp)
+                modifier = Modifier.padding(15.dp)
             ){
 
                 Image(painterResource(id = R.drawable.settings_icon), "Gear icon")
