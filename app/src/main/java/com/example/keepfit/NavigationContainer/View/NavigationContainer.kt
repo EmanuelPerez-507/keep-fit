@@ -1,13 +1,11 @@
 package com.example.keepfit.NavigationContainer
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -40,16 +38,13 @@ fun NavigationContainer() {
             color = MaterialTheme.colors.background
         ) {
 
-           Column() {
-
                Box(
                    modifier = Modifier
                        .fillMaxWidth()
-                       .weight(1F)
                ) {
 
                    NavHost(
-                       modifier = Modifier.fillMaxSize(),//.border(1.dp, Color(0xFFFF0000)),
+                       modifier = Modifier.fillMaxSize().border(3.dp, Color(0xFFFF0000)),
                        navController = navController,
                        startDestination = Screen.Home.route){
 
@@ -61,36 +56,35 @@ fun NavigationContainer() {
 
                    }
 
-                    SettingsButton(Modifier.align(Alignment.TopEnd))
+                   BottomNavigation(
+                       elevation = 40.dp,
+                       modifier = Modifier
+                           .padding(horizontal = 10.dp)
+                           .clip(shape = CustomShapes.onlyTop.medium())
+                           .fillMaxWidth()
+                           .align(Alignment.BottomCenter)
+                   ) {
 
-               }
+                       val navBackStackEntry by navController.currentBackStackEntryAsState()
+                       val currentDestination = navBackStackEntry?.destination
 
-               BottomNavigation(
-                   elevation = 40.dp,
-                   modifier = Modifier
-                       .padding(horizontal = 10.dp)
-                       .clip(shape = CustomShapes.onlyTop.medium())
-                       .fillMaxWidth()
-               ) {
-
-                   val navBackStackEntry by navController.currentBackStackEntryAsState()
-                   val currentDestination = navBackStackEntry?.destination
-
-                    Screen.all.map {
-                        itemData -> BottomNavigationItem(
-                            label = {Text(text = itemData.label)},
-                            icon =  {Icon(painterResource(id = itemData.icon), contentDescription = null)},
-                            selected = currentDestination?.hierarchy?.any { it.route == itemData.route  } == true,
-                            onClick = {
-                                      navController.navigate(itemData.route)
-                            },
+                       Screen.all.map {
+                               itemData -> BottomNavigationItem(
+                           label = {Text(text = itemData.label)},
+                           icon =  {Icon(painterResource(id = itemData.icon), contentDescription = null)},
+                           selected = currentDestination?.hierarchy?.any { it.route == itemData.route  } == true,
+                           onClick = {
+                               navController.navigate(itemData.route)
+                           },
                         )
-                    }
+                       }
 
+
+                   }
+
+                   SettingsButton(Modifier.align(Alignment.TopEnd))
 
                }
-
-           }
 
         }
     }
