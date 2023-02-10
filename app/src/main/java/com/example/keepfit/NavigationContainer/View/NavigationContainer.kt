@@ -1,5 +1,6 @@
 package com.example.keepfit.NavigationContainer
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -10,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,6 +28,7 @@ import com.example.keepfit.NavigationContainer.View.Screen
 import com.example.keepfit.NavigationContainer.View.SettingsButton
 import com.example.keepfit.ui.theme.CustomShapes
 import com.example.keepfit.ui.theme.KeepFitTheme
+import org.w3c.dom.Text
 
 @Composable
 @Preview
@@ -53,7 +56,9 @@ fun NavigationContainer() {
                        navController = navController,
                        startDestination = Screen.Home.route){
 
-                       composable(Screen.Home.route){ HomeScreen() }
+                       composable(
+                           route = Screen.Home.route,
+                       ){ HomeScreen() }
 
                        composable(Screen.Goals.route){ GoalsScreen() }
 
@@ -77,16 +82,24 @@ fun NavigationContainer() {
                    val currentDestination = navBackStackEntry?.destination
 
                     Screen.all.map {
-                        itemData -> BottomNavigationItem(
+                        itemData ->
+                        val selected:Boolean = currentDestination?.hierarchy?.any { it.route == itemData.route  } == true
+                        val animatedValue:Float by animateFloatAsState(targetValue =
+                            when(selected){
+                                true -> 1.3F
+                                false -> 1F
+                            }
+                        )
+                        BottomNavigationItem(
+                            modifier = Modifier.scale(animatedValue),
                             label = {Text(text = itemData.label)},
                             icon =  {Icon(painterResource(id = itemData.icon), contentDescription = null)},
-                            selected = currentDestination?.hierarchy?.any { it.route == itemData.route  } == true,
+                            selected = selected,
                             onClick = {
-                                      navController.navigate(itemData.route)
+                                navController.navigate(itemData.route)
                             },
                         )
                     }
-
 
                }
 
