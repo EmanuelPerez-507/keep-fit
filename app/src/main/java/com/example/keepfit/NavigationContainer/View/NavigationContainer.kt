@@ -3,6 +3,7 @@ package com.example.keepfit.NavigationContainer
 import android.view.MotionEvent
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -34,6 +35,7 @@ import com.example.keepfit.NavigationContainer.View.Screen
 import com.example.keepfit.NavigationContainer.View.SettingsButton
 import com.example.keepfit.ui.theme.CustomShapes
 import com.example.keepfit.ui.theme.KeepFitTheme
+import org.w3c.dom.Text
 
 
 
@@ -110,21 +112,27 @@ fun NavigationContainer() {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = navBackStackEntry?.destination
 
-                Screen.all.map {itemData ->
+                    Screen.all.map {
+                        itemData ->
+                        val selected:Boolean = currentDestination?.hierarchy?.any { it.route == itemData.route  } == true
+                        val animatedValue:Float by animateFloatAsState(targetValue =
+                            when(selected){
+                                true -> 1.3F
+                                false -> 1F
+                            }
+                        )
+                        BottomNavigationItem(
+                            modifier = Modifier.scale(animatedValue),
+                            label = {Text(text = itemData.label)},
+                            icon =  {Icon(painterResource(id = itemData.icon), contentDescription = null)},
+                            selected = selected,
+                            onClick = {
+                                navController.navigate(itemData.route)
+                            },
+                        )
+                    }
 
-                    BottomNavigationItem(
-                        label = {Text(text = itemData.label)},
-                        icon =  {Icon(painterResource(id = itemData.icon), contentDescription = null)},
-                        selected = currentDestination?.hierarchy?.any { it.route == itemData.route  } == true,
-                        onClick = {
-                            navController.navigate(itemData.route)
-                        },
-                        modifier = Modifier.scale(1F)
-                    )
-                }
-
-
-            }
+               }
 
             SettingsButton(
                 Modifier.align(Alignment.TopEnd),
