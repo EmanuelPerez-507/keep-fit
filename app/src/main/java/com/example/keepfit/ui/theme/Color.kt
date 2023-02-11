@@ -12,9 +12,8 @@ val Purple700 = Color(0xFF3700B3)
 val Teal200 = Color(0x0003DAC5)
 val CancelRed = Color(0xFFB30505)
 
-val PeachCream = Color(0x60F28500)
+val PeachCream = Color(0xFFF28500)
 val Gray = Color(0xFF888888)
-val Teal200 = Color(0xFFACF1DE)
 val mediumBlue = Color(0xFF4EE0B8)
 
 val LightBlue = Color(0xFF81E2C7)
