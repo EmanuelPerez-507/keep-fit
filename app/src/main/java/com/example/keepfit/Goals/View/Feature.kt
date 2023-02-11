@@ -1,4 +1,4 @@
-package com.example.keepfit
+package com.example.keepfit.Goals.View
 
 import androidx.annotation.DrawableRes
 import androidx.compose.ui.graphics.Color
