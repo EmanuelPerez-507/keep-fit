@@ -24,6 +24,7 @@ import androidx.compose.ui.zIndex
 import com.example.keepfit.NavigationContainer.PlaceHolder
 import com.example.keepfit.NavigationContainer.SettingButtonState
 import com.example.keepfit.R
+import com.example.keepfit.Settings.View.SettingsScreen
 import com.example.keepfit.ui.theme.CancelRed
 import com.example.keepfit.ui.theme.medium
 
@@ -121,6 +122,8 @@ fun SettingsButton(
         Box(
             modifier = Modifier.fillMaxSize()
         ){
+
+            SettingsScreen()
 
             Button(
                 modifier = Modifier
