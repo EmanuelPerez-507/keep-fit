@@ -1,21 +1,28 @@
 package com.example.keepfit.NavigationContainer
 
+import android.view.MotionEvent
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.Center
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -30,56 +37,80 @@ import com.example.keepfit.ui.theme.CustomShapes
 import com.example.keepfit.ui.theme.KeepFitTheme
 import org.w3c.dom.Text
 
+
+
+class PlaceHolder<Payload>(var payload:Payload?)
+
+enum class SettingButtonState{
+    EXPANDED, COMPRESSED
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 @Preview
 fun NavigationContainer() {
-    
+
+    val settingsRect: PlaceHolder<Rect?> = PlaceHolder(null)
+
+    var settingsButtonState: SettingButtonState by remember{
+        mutableStateOf(SettingButtonState.EXPANDED)
+    }
+
+    val setSettingButtonState = fun (newState: SettingButtonState){
+        settingsButtonState = newState
+    }
+
     val navController = rememberNavController()
     
     KeepFitTheme {
-        // A surface container using the 'background' color from the theme
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colors.background
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .pointerInteropFilter { motionEvent ->
+                    when (motionEvent.action) {
+                        MotionEvent.ACTION_DOWN -> {
+                            if (!settingsRect.payload?.isEmpty!!) {
+                                if (!settingsRect.payload?.contains(
+                                        Offset(motionEvent.x, motionEvent.y)
+                                    )!!
+                                ) {
+                                    settingsButtonState = SettingButtonState.COMPRESSED
+                                }
+                            }
+                        }
+                    }
+                    false
+                }
+
         ) {
 
-           Column() {
+            NavHost(
+                modifier = Modifier
+                    .fillMaxSize(),
+//                    .border(3.dp, Color(0xFFFF0000)),
+                navController = navController,
+                startDestination = Screen.Home.route){
 
-               Box(
-                   modifier = Modifier
-                       .fillMaxWidth()
-                       .weight(1F)
-               ) {
+                composable(Screen.Home.route){ HomeScreen() }
 
-                   NavHost(
-                       modifier = Modifier.fillMaxSize(),//.border(1.dp, Color(0xFFFF0000)),
-                       navController = navController,
-                       startDestination = Screen.Home.route){
+                composable(Screen.Goals.route){ GoalsScreen() }
 
-                       composable(
-                           route = Screen.Home.route,
-                       ){ HomeScreen() }
+                composable(Screen.History.route){ HistoryScreen() }
 
-                       composable(Screen.Goals.route){ GoalsScreen() }
+            }
 
-                       composable(Screen.History.route){ HistoryScreen() }
+            BottomNavigation(
+                elevation = 0.dp,
+                modifier = Modifier
+                    .padding(horizontal = 10.dp)
+                    .clip(shape = CustomShapes.onlyTop.medium())
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+            ) {
 
-                   }
-
-                    SettingsButton(Modifier.align(Alignment.TopEnd))
-
-               }
-
-               BottomNavigation(
-                   elevation = 40.dp,
-                   modifier = Modifier
-                       .padding(horizontal = 10.dp)
-                       .clip(shape = CustomShapes.onlyTop.medium())
-                       .fillMaxWidth()
-               ) {
-
-                   val navBackStackEntry by navController.currentBackStackEntryAsState()
-                   val currentDestination = navBackStackEntry?.destination
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentDestination = navBackStackEntry?.destination
 
                     Screen.all.map {
                         itemData ->
@@ -103,9 +134,15 @@ fun NavigationContainer() {
 
                }
 
-           }
+            SettingsButton(
+                Modifier.align(Alignment.TopEnd),
+                settingsRect,
+                settingsButtonState,
+                setSettingButtonState
+            )
 
         }
+
     }
 
 }

@@ -1,21 +1,17 @@
 package com.example.keepfit.ui.theme
 
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 
-val smallPercent = 15
-val mediumPercent = 25
-val largePercent = 35
+val small = 15.dp
+val medium = 25.dp
+val large = 35.dp
 
 val Shapes = Shapes(
-    small = RoundedCornerShape(percent = smallPercent),
-    medium = RoundedCornerShape(percent = mediumPercent),
-    large = RoundedCornerShape(percent = largePercent)
+    small = RoundedCornerShape(small),
+    medium = RoundedCornerShape(medium),
+    large = RoundedCornerShape(large)
 )
 
 object CustomShapes {
@@ -31,13 +27,13 @@ object CustomShapes {
     object onlyTop {
 
         fun small(): RoundedCornerShape{
-            return RoundedCornerShape(topStartPercent = smallPercent, topEndPercent = smallPercent)
+            return RoundedCornerShape(topStart = small, topEnd = small)
         }
         fun medium(): RoundedCornerShape {
-            return RoundedCornerShape(topStartPercent = mediumPercent, topEndPercent = mediumPercent)
+            return RoundedCornerShape(topStart = medium, topEnd = medium)
         }
         fun large(): RoundedCornerShape{
-            return RoundedCornerShape(topStartPercent = largePercent, topEndPercent = largePercent)
+            return RoundedCornerShape(topStart = large, topEnd = large)
         }
 
     }
