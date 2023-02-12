@@ -53,7 +53,7 @@ fun NavigationContainer() {
     val settingsRect: PlaceHolder<Rect?> = PlaceHolder(null)
 
     var settingsButtonState: SettingButtonState by remember{
-        mutableStateOf(SettingButtonState.COMPRESSED)
+        mutableStateOf(SettingButtonState.EXPANDED)
     }
 
     val setSettingButtonState = fun (newState: SettingButtonState){
