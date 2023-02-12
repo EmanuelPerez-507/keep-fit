@@ -28,7 +28,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.keepfit.Goals.View.GoalsScreen
+import com.example.keepfit.GoalScreen
 import com.example.keepfit.History.View.HistoryScreen
 import com.example.keepfit.Home.View.HomeScreen
 import com.example.keepfit.NavigationContainer.View.Screen
@@ -53,7 +53,7 @@ fun NavigationContainer() {
     val settingsRect: PlaceHolder<Rect?> = PlaceHolder(null)
 
     var settingsButtonState: SettingButtonState by remember{
-        mutableStateOf(SettingButtonState.EXPANDED)
+        mutableStateOf(SettingButtonState.COMPRESSED)
     }
 
     val setSettingButtonState = fun (newState: SettingButtonState){
@@ -94,7 +94,7 @@ fun NavigationContainer() {
 
                 composable(Screen.Home.route){ HomeScreen() }
 
-                composable(Screen.Goals.route){ GoalsScreen() }
+                composable(Screen.Goals.route){ GoalScreen() }
 
                 composable(Screen.History.route){ HistoryScreen() }
 
