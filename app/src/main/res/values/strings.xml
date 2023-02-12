@@ -5,4 +5,22 @@
     <string name="menu_goals">Goals</string>
     <string name="menu_history">History</string>
 
+    <string name="settings_title_theme">Theme</string>
+    <string name="settings_title_distance">Distance</string>
+    <string name="settings_title_clearData">Clear data</string>
+    <string name="settings_title_resetSettings">Reset settings</string>
+
+    <string name="settings_description_theme">
+        Use this feature to switch between light/dark theme
+    </string>
+    <string name="settings_description_distance">
+        Switch between measurements (km/miles)
+    </string>
+    <string name="settings_description_clearData">
+        Clears all data from the application
+    </string>
+    <string name="settings_description_resetSettings">
+        Sets all settings to default
+    </string>
+
 </resources>

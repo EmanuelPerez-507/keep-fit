@@ -14,6 +14,11 @@ val Shapes = Shapes(
     large = RoundedCornerShape(large)
 )
 
+enum class ShapeSide{
+    LEFT,
+    RIGHT
+}
+
 object CustomShapes {
 
     fun noRound(): RoundedCornerShape{
@@ -24,18 +29,28 @@ object CustomShapes {
         return RoundedCornerShape(50)
     }
 
-    object onlyTop {
+    val onlyTop:Shapes = Shapes(
+        small = RoundedCornerShape(topStart = small, topEnd = small),
+        medium = RoundedCornerShape(topStart = medium, topEnd = medium),
+        large = RoundedCornerShape(topStart = large, topEnd = large)
+    )
 
-        fun small(): RoundedCornerShape{
-            return RoundedCornerShape(topStart = small, topEnd = small)
+    fun onlySide(side:ShapeSide = ShapeSide.LEFT):Shapes {
+        return when(side){
+            ShapeSide.LEFT->Shapes(
+                small = RoundedCornerShape(topStart = small, bottomStart = small),
+                medium = RoundedCornerShape(topStart = medium, bottomStart = medium),
+                large = RoundedCornerShape(topStart = large, bottomStart = large)
+            )
+            ShapeSide.RIGHT->Shapes(
+                small = RoundedCornerShape(bottomEnd = small, topEnd = small),
+                medium = RoundedCornerShape(bottomEnd = medium, topEnd = medium),
+                large = RoundedCornerShape(bottomEnd = large, topEnd = large)
+            )
         }
-        fun medium(): RoundedCornerShape {
-            return RoundedCornerShape(topStart = medium, topEnd = medium)
-        }
-        fun large(): RoundedCornerShape{
-            return RoundedCornerShape(topStart = large, topEnd = large)
-        }
-
     }
+
+    val onlyLeft:Shapes = onlySide(ShapeSide.LEFT)
+    val onlyRight:Shapes = onlySide(ShapeSide.RIGHT)
 
 }

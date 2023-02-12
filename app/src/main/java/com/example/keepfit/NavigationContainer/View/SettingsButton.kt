@@ -11,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
@@ -24,6 +25,7 @@ import androidx.compose.ui.zIndex
 import com.example.keepfit.NavigationContainer.PlaceHolder
 import com.example.keepfit.NavigationContainer.SettingButtonState
 import com.example.keepfit.R
+import com.example.keepfit.Settings.View.SettingsScreen
 import com.example.keepfit.ui.theme.CancelRed
 import com.example.keepfit.ui.theme.medium
 
@@ -83,7 +85,7 @@ fun SettingsButton(
         label = "widthTransition") { currentState ->
         when(currentState){
             SettingButtonState.COMPRESSED -> 55.dp
-            SettingButtonState.EXPANDED -> 250.dp
+            SettingButtonState.EXPANDED -> 300.dp
         }
     }
 
@@ -92,7 +94,7 @@ fun SettingsButton(
         label = "widthTransition") { currentState ->
         when(currentState){
             SettingButtonState.COMPRESSED -> 55.dp
-            SettingButtonState.EXPANDED -> 450.dp
+            SettingButtonState.EXPANDED -> 425.dp
         }
     }
 
@@ -100,6 +102,13 @@ fun SettingsButton(
         when(currentState){
             SettingButtonState.COMPRESSED -> 8.dp
             SettingButtonState.EXPANDED -> 20.dp
+        }
+    }
+
+    val animatedContentScale: Float by transition.animateFloat(label = "shadowTransition") {currentState ->
+        when(currentState){
+            SettingButtonState.COMPRESSED -> 0F
+            SettingButtonState.EXPANDED -> 1F
         }
     }
 
@@ -118,18 +127,23 @@ fun SettingsButton(
         color = Color.LightGray,
     ) {
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
+        Box(
+            modifier = Modifier.fillMaxSize()
         ){
+
+            Box(modifier = Modifier.fillMaxSize().scale(animatedContentScale)){
+
+                SettingsScreen()
+
+            }
 
             Button(
                 modifier = Modifier
                     .size(65.dp)
-                    .align(Alignment.End),
+                    .align(Alignment.TopEnd),
                 shape = RoundedCornerShape(
-                        bottomStart = 30.dp
-                    ),
+                    bottomStart = 15.dp
+                ),
                 colors = ButtonDefaults.buttonColors(backgroundColor = animatedColor,contentColor = Color.Transparent),
                 onClick = {
                     when(state){
@@ -148,7 +162,6 @@ fun SettingsButton(
             }
 
         }
-
 
     }
 
