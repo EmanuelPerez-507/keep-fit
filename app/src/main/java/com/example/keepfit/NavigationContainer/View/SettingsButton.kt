@@ -92,7 +92,7 @@ fun SettingsButton(
         label = "widthTransition") { currentState ->
         when(currentState){
             SettingButtonState.COMPRESSED -> 55.dp
-            SettingButtonState.EXPANDED -> 450.dp
+            SettingButtonState.EXPANDED -> 400.dp
         }
     }
 
@@ -118,18 +118,17 @@ fun SettingsButton(
         color = Color.LightGray,
     ) {
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
+        Box(
+            modifier = Modifier.fillMaxSize()
         ){
 
             Button(
                 modifier = Modifier
                     .size(65.dp)
-                    .align(Alignment.End),
+                    .align(Alignment.TopEnd),
                 shape = RoundedCornerShape(
-                        bottomStart = 30.dp
-                    ),
+                    bottomStart = 30.dp
+                ),
                 colors = ButtonDefaults.buttonColors(backgroundColor = animatedColor,contentColor = Color.Transparent),
                 onClick = {
                     when(state){
@@ -148,7 +147,6 @@ fun SettingsButton(
             }
 
         }
-
 
     }
 
