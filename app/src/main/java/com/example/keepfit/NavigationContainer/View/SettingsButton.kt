@@ -94,7 +94,7 @@ fun SettingsButton(
         label = "widthTransition") { currentState ->
         when(currentState){
             SettingButtonState.COMPRESSED -> 55.dp
-            SettingButtonState.EXPANDED -> 425.dp
+            SettingButtonState.EXPANDED -> 475.dp
         }
     }
 

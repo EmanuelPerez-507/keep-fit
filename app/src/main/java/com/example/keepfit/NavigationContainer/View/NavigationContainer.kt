@@ -112,25 +112,25 @@ fun NavigationContainer() {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = navBackStackEntry?.destination
 
-                    Screen.all.map {
-                        itemData ->
-                        val selected:Boolean = currentDestination?.hierarchy?.any { it.route == itemData.route  } == true
-                        val animatedValue:Float by animateFloatAsState(targetValue =
-                            when(selected){
-                                true -> 1.3F
-                                false -> 1F
-                            }
-                        )
-                        BottomNavigationItem(
-                            modifier = Modifier.scale(animatedValue),
-                            label = {Text(text = itemData.label)},
-                            icon =  {Icon(painterResource(id = itemData.icon), contentDescription = null)},
-                            selected = selected,
-                            onClick = {
-                                navController.navigate(itemData.route)
-                            },
-                        )
-                    }
+                Screen.all.map {
+                    itemData ->
+                    val selected:Boolean = currentDestination?.hierarchy?.any { it.route == itemData.route  } == true
+                    val animatedValue:Float by animateFloatAsState(targetValue =
+                        when(selected){
+                            true -> 1.3F
+                            false -> 1F
+                        }
+                    )
+                    BottomNavigationItem(
+                        modifier = Modifier.scale(animatedValue),
+                        label = {Text(text = itemData.label)},
+                        icon =  {Icon(painterResource(id = itemData.icon), contentDescription = null)},
+                        selected = selected,
+                        onClick = {
+                            navController.navigate(itemData.route)
+                        },
+                    )
+                }
 
                }
 
