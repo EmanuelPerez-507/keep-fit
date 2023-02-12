@@ -84,7 +84,7 @@ fun SettingsButton(
         label = "widthTransition") { currentState ->
         when(currentState){
             SettingButtonState.COMPRESSED -> 55.dp
-            SettingButtonState.EXPANDED -> 250.dp
+            SettingButtonState.EXPANDED -> 300.dp
         }
     }
 
@@ -93,7 +93,7 @@ fun SettingsButton(
         label = "widthTransition") { currentState ->
         when(currentState){
             SettingButtonState.COMPRESSED -> 55.dp
-            SettingButtonState.EXPANDED -> 400.dp
+            SettingButtonState.EXPANDED -> 425.dp
         }
     }
 
