@@ -104,7 +104,7 @@ fun NavigationContainer() {
                 elevation = 0.dp,
                 modifier = Modifier
                     .padding(horizontal = 10.dp)
-                    .clip(shape = CustomShapes.onlyTop.medium())
+                    .clip(shape = CustomShapes.onlyTop.medium)
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)
             ) {

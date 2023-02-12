@@ -11,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
@@ -104,6 +105,13 @@ fun SettingsButton(
         }
     }
 
+    val animatedContentScale: Float by transition.animateFloat(label = "shadowTransition") {currentState ->
+        when(currentState){
+            SettingButtonState.COMPRESSED -> 0F
+            SettingButtonState.EXPANDED -> 1F
+        }
+    }
+
     Surface(
         modifier = alignment
             .padding(animatedPadding)
@@ -123,14 +131,18 @@ fun SettingsButton(
             modifier = Modifier.fillMaxSize()
         ){
 
-            SettingsScreen()
+            Box(modifier = Modifier.fillMaxSize().scale(animatedContentScale)){
+
+                SettingsScreen()
+
+            }
 
             Button(
                 modifier = Modifier
                     .size(65.dp)
                     .align(Alignment.TopEnd),
                 shape = RoundedCornerShape(
-                    bottomStart = 30.dp
+                    bottomStart = 15.dp
                 ),
                 colors = ButtonDefaults.buttonColors(backgroundColor = animatedColor,contentColor = Color.Transparent),
                 onClick = {

@@ -14,7 +14,7 @@
         Use this feature to switch between light/dark theme
     </string>
     <string name="settings_description_distance">
-        Switch between preferred measurements (km/miles)
+        Switch between measurements (km/miles)
     </string>
     <string name="settings_description_clearData">
         Clears all data from the application

@@ -52,9 +52,7 @@ fun SettingsScreen() {
             title = stringResource(com.example.keepfit.R.string.settings_title_theme),
             description = stringResource(com.example.keepfit.R.string.settings_description_theme)
         ){
-            var themeStatus:Boolean by remember{mutableStateOf(false)}
-            Switch(modifier = Modifier.clickable { themeStatus = !themeStatus },
-                checked = themeStatus, onCheckedChange = {})
+            Switch(checked = true, onCheckedChange = {})
         }
 
         Divider(modifier = Modifier.padding(horizontal = sideSpacing))
@@ -64,7 +62,7 @@ fun SettingsScreen() {
             description = stringResource(com.example.keepfit.R.string.settings_description_distance)
         ){
             
-            SegmentedButton("Km", "Miles")
+            SegmentedButton("Km", "Mi")
 
         }
 
