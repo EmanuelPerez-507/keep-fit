@@ -1,22 +1,23 @@
 package com.example.keepfit.ui.theme
 
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 
-val smallPercent = 15
-val mediumPercent = 25
-val largePercent = 35
+val small = 15.dp
+val medium = 25.dp
+val large = 35.dp
 
 val Shapes = Shapes(
-    small = RoundedCornerShape(percent = smallPercent),
-    medium = RoundedCornerShape(percent = mediumPercent),
-    large = RoundedCornerShape(percent = largePercent)
+    small = RoundedCornerShape(small),
+    medium = RoundedCornerShape(medium),
+    large = RoundedCornerShape(large)
 )
+
+enum class ShapeSide{
+    LEFT,
+    RIGHT
+}
 
 object CustomShapes {
 
@@ -28,18 +29,28 @@ object CustomShapes {
         return RoundedCornerShape(50)
     }
 
-    object onlyTop {
+    val onlyTop:Shapes = Shapes(
+        small = RoundedCornerShape(topStart = small, topEnd = small),
+        medium = RoundedCornerShape(topStart = medium, topEnd = medium),
+        large = RoundedCornerShape(topStart = large, topEnd = large)
+    )
 
-        fun small(): RoundedCornerShape{
-            return RoundedCornerShape(topStartPercent = smallPercent, topEndPercent = smallPercent)
+    fun onlySide(side:ShapeSide = ShapeSide.LEFT):Shapes {
+        return when(side){
+            ShapeSide.LEFT->Shapes(
+                small = RoundedCornerShape(topStart = small, bottomStart = small),
+                medium = RoundedCornerShape(topStart = medium, bottomStart = medium),
+                large = RoundedCornerShape(topStart = large, bottomStart = large)
+            )
+            ShapeSide.RIGHT->Shapes(
+                small = RoundedCornerShape(bottomEnd = small, topEnd = small),
+                medium = RoundedCornerShape(bottomEnd = medium, topEnd = medium),
+                large = RoundedCornerShape(bottomEnd = large, topEnd = large)
+            )
         }
-        fun medium(): RoundedCornerShape {
-            return RoundedCornerShape(topStartPercent = mediumPercent, topEndPercent = mediumPercent)
-        }
-        fun large(): RoundedCornerShape{
-            return RoundedCornerShape(topStartPercent = largePercent, topEndPercent = largePercent)
-        }
-
     }
+
+    val onlyLeft:Shapes = onlySide(ShapeSide.LEFT)
+    val onlyRight:Shapes = onlySide(ShapeSide.RIGHT)
 
 }

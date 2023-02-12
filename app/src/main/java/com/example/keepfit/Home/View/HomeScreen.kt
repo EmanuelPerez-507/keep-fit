@@ -4,18 +4,18 @@ import android.content.Intent.getIntent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.FloatingActionButtonDefaults
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Updater
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.modifier.modifierLocalOf
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
@@ -29,12 +29,28 @@ import java.time.format.FormatStyle
 val current = LocalDateTime.now()
 val formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
 val formatted = current.format(formatter)
-var totalStepsToday = 0
-var goalStepsToday = 0
+var passableSteps = 100
+var savedTotalSteps = 0
+var goalStepsToday = 1700
+var hitStepsGoal = ""
 
 @Composable
 @Preview
 fun HomeScreen() {
+    var Steps by remember { mutableStateOf("") }
+
+    var totalStepsToday:Int by remember {
+        mutableStateOf(0)
+    }
+
+    totalStepsToday = savedTotalSteps
+
+    val SetTotalSteps = fun (steps:Int){
+        println("Added $passableSteps steps!")
+        totalStepsToday += passableSteps
+        savedTotalSteps = totalStepsToday
+        println("Total steps $totalStepsToday")
+    }
 
     Box(
         modifier = Modifier
@@ -45,35 +61,38 @@ fun HomeScreen() {
 
         Text(
             modifier = Modifier.align(Alignment.TopStart),
-            text = "Today\n$formatted"
+            text = "\nToday" +
+                    "\n$formatted"
         )
-
 
         Text(
             modifier = Modifier.align(Alignment.Center),
-            text = "$totalStepsToday"
+            text = "Steps" +
+                    "\n$totalStepsToday" +
+                    "\n$goalStepsToday" +
+                    "\n"
         )
 
-        AddRecordButton(Modifier.align(Alignment.BottomEnd))
+        Text(
+            modifier = Modifier.align(Alignment.Center),
+            text = ""
+        )
+
+        AddRecordButton(Modifier.align(Alignment.BottomEnd), SetTotalSteps)
+
     }
 }
 
-fun AddNumberSteps(){
-    println("Added 100 steps!")
-    totalStepsToday += 100
-    println("Total steps $totalStepsToday")
-}
-
 @Composable
-fun AddRecordButton(alignment: Modifier) {
+fun AddRecordButton(alignment: Modifier, setStepsFunction:(Int)->Unit) {
     FloatingActionButton(
         modifier = alignment
             .padding(10.dp)
             .size(55.dp)
             .clip(CustomShapes.round()),
-        onClick = {AddNumberSteps()},
+        onClick = { setStepsFunction(passableSteps)},
         elevation = FloatingActionButtonDefaults.elevation(0.dp,0.dp),
-        backgroundColor = Color.Gray
+        backgroundColor = Color.Green
     ) {
 
         Box(
