@@ -90,7 +90,7 @@ fun NavigationContainer() {
                     .fillMaxSize(),
 //                    .border(3.dp, Color(0xFFFF0000)),
                 navController = navController,
-                startDestination = Screen.Home.route){
+                startDestination = Screen.History.route){
 
                 composable(Screen.Home.route){ HomeScreen() }
 
