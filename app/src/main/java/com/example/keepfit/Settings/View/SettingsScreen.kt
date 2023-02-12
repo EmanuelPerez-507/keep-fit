@@ -49,6 +49,15 @@ fun SettingsScreen() {
         Divider(modifier = Modifier.padding(horizontal = sideSpacing))
 
         SettingsPanel(
+            title = stringResource(com.example.keepfit.R.string.settings_title_edit),
+            description = stringResource(com.example.keepfit.R.string.settings_description_edit)
+        ){
+            Switch(checked = true, onCheckedChange = {})
+        }
+
+        Divider(modifier = Modifier.padding(horizontal = sideSpacing))
+
+        SettingsPanel(
             title = stringResource(com.example.keepfit.R.string.settings_title_theme),
             description = stringResource(com.example.keepfit.R.string.settings_description_theme)
         ){
