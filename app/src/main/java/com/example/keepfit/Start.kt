@@ -3,6 +3,7 @@ package com.example.keepfit
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -15,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.room.Room
 import com.example.keepfit.DataLayer.Goals.Goal
 import com.example.keepfit.DataLayer.KeepFitDB
+import com.example.keepfit.Goals.ViewModel.GoalScreenModel
 import com.example.keepfit.NavigationContainer.NavigationContainer
 import com.example.keepfit.ui.theme.KeepFitTheme
 import java.util.concurrent.Executor
@@ -34,12 +36,15 @@ class Start : ComponentActivity() {
 
         val newGoal = Goal(0, "Goal1", 3000, Color.Blue.toArgb())
 
-        dbThred.submit {
-            goalHistoryDB.Goals().create(newGoal)
-        }
+        val goalsScreenView:GoalScreenModel by viewModels()
 
         setContent {
-            NavigationContainer()
+            NavigationContainer(goalsScreenView)
         }
+
+        dbThred.submit {
+            goalsScreenView.init(goalHistoryDB)
+        }
+
     }
 }
