@@ -23,6 +23,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import com.example.keepfit.Home.View.goalStepsToday
+import com.example.keepfit.Home.View.savedTotalSteps
 
 
 @Composable
@@ -182,21 +184,27 @@ fun EmbeddedElements(
     smallTextFontSize: TextUnit
 ) {
 // shows the steps
+    var Steps by remember { mutableStateOf("0") }
+
+    Steps = savedTotalSteps.toString()
+
     Text(
-        text = "$bigText ${bigTextSuffix.take(2)}",
+        text = "$Steps ${bigTextSuffix.take(2)}",
         color = bigTextColor,
         fontSize = bigTextFontSize,
         textAlign = TextAlign.Center,
         fontWeight = FontWeight.Bold
     )
+
     Text(
-        text = "2000",
+        text = "$goalStepsToday",
         fontSize = bigTextFontSize,
         textAlign = TextAlign.Center,
         fontWeight = FontWeight.Bold,
         color = Color.Cyan
     )
-        Text(
+
+    Text(
         text = "Steps",
         color = smallTextColor,
         fontSize = smallTextFontSize,
