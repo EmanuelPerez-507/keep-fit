@@ -1,6 +1,6 @@
 package com.example.keepfit
 
-//import android.graphics.drawable.AdaptiveIconDrawable
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
@@ -9,26 +9,43 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.*
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import com.example.keepfit.Goals.View.Feature
 import com.example.keepfit.ui.theme.*
+
+enum class createGoalPanelState{
+    HIDDEN,
+    OPENED
+}
+
+val animationDelay:Int = 150
 
 //main Goal screen
 @Preview(showBackground = true)
 @Composable
+@OptIn(ExperimentalComposeUiApi::class)
 fun GoalScreen(){
     Box(modifier = Modifier
         .background(Color.White)
@@ -36,69 +53,181 @@ fun GoalScreen(){
     ){
         Column {
             HeaderSett()
-            GoalButton()
-            //Added features in the parameters to easily change the goals info,
-            // can be used dynamically as well
-            FeatureSection(
-                features = listOf(
-                    Feature(
-                        title = "Goal1",
-                        steps = "2000",
-                        R.drawable.ic_headphone,
-                        BlueViolet1,
-                        BlueViolet2,
-                        BlueViolet3
-                    ),
-                    Feature(
-                        title = "Goal2",
-                        steps = "1800",
-                        R.drawable.ic_videocam,
-                        LightGreen1,
-                        LightGreen2,
-                        LightGreen3
-                    ),
-                    Feature(
-                        title = "New Year",
-                        steps = "20,000",
-                        R.drawable.ic_headphone,
-                        OrangeYellow1,
-                        OrangeYellow2,
-                        OrangeYellow3
-                    ),
-                    Feature(
-                        title = "Final Goal",
-                        steps = "1200",
-                        R.drawable.ic_headphone,
-                        Beige1,
-                        Beige2,
-                        Beige3
-                    ),
-                    Feature(
-                        title = "New 1",
-                        steps = "800",
-                        R.drawable.ic_headphone,
-                        BlueViolet1,
-                        BlueViolet2,
-                        BlueViolet3
-                    ),
-                    Feature(
-                        title = "New 2",
-                        steps = "2100",
-                        R.drawable.ic_videocam,
-                        LightGreen1,
-                        LightGreen2,
-                        LightGreen3
-                    ),
+
+            var currentCreateGoalPanelState:createGoalPanelState by remember{mutableStateOf(createGoalPanelState.HIDDEN)}
+            val createGoalDialogTransition = updateTransition(targetState = currentCreateGoalPanelState)
+            val keyboardController = LocalSoftwareKeyboardController.current
+            val setCreateGoalPanelState = fun (newState:createGoalPanelState) {
+                if(newState!=currentCreateGoalPanelState){
+                    if(newState == createGoalPanelState.HIDDEN){
+                        keyboardController?.hide()
+                    }
+                }
+                currentCreateGoalPanelState = newState
+            }
+
+            Box(){
+
+                val shadowAnimation:Dp by createGoalDialogTransition.animateDp(
+                    label="createGoalShadow",
+                    transitionSpec = {
+                        tween(
+                            delayMillis =
+                            when(currentCreateGoalPanelState){
+                                createGoalPanelState.HIDDEN -> animationDelay
+                                createGoalPanelState.OPENED -> 0
+                            }
+                        )
+                    }
+                ) {currentState->
+                    when(currentState){
+                        createGoalPanelState.HIDDEN -> 0.dp
+                        createGoalPanelState.OPENED -> 35.dp
+                    }
+                }
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .shadow(
+                            shadowAnimation,
+                            shape = RoundedCornerShape(bottomStart = 50.dp, bottomEnd = 50.dp)
+                        )
+                        .zIndex(0.5F)
+                        .background(color = Color.White),
+                ){
+                    val alphaAnimation:Float by createGoalDialogTransition.animateFloat(
+                        label="createGoalAlpha",
+                        transitionSpec = {
+                            tween(
+                                delayMillis =
+                                when(currentCreateGoalPanelState){
+                                    createGoalPanelState.HIDDEN -> 0
+                                    createGoalPanelState.OPENED -> animationDelay
+                                }
+                            )
+                        }
+                    ) {currentState ->
+                        when(currentState){
+                            createGoalPanelState.HIDDEN -> 0F
+                            createGoalPanelState.OPENED -> 1F
+                        }
+                    }
+                    val heightAnimation:Dp by createGoalDialogTransition.animateDp(
+                        label="createGoalHeight",
+                        transitionSpec = {
+                            tween(
+                                delayMillis =
+                                when(currentCreateGoalPanelState){
+                                    createGoalPanelState.HIDDEN -> animationDelay
+                                    createGoalPanelState.OPENED -> 0
+                                }
+                            )
+                        }
+                    ) { currentState ->
+                        when(currentState){
+                            createGoalPanelState.HIDDEN -> 0.dp
+                            createGoalPanelState.OPENED -> 160.dp
+                        }
+                    }
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(heightAnimation)
+                            .alpha(alphaAnimation),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ){
+                        var stringInput1:String by remember{mutableStateOf("")}
+                        TextField(value = stringInput1, onValueChange = {value ->
+                            stringInput1 = value
+                        })
+                        Spacer(modifier = Modifier.height(10.dp))
+                        var stringInput2:String by remember{mutableStateOf("")}
+                        TextField(value = stringInput2, onValueChange = {value ->
+                            stringInput2 = value
+                        })
+                    }
+                    GoalButton(
+                        Modifier.align(Alignment.CenterHorizontally),
+                        createGoalDialogTransition,
+                        currentCreateGoalPanelState,
+                        setCreateGoalPanelState
+                    )
+                }
+
+                Column(){
+
+                    Spacer(
+                        modifier = Modifier.height(135.dp)
+                    )
+                    //Added features in the parameters to easily change the goals info,
+                    // can be used dynamically as well
+                    FeatureSection(
+                        features = listOf(
                             Feature(
-                            title = "New 3",
-                    steps = "1200",
-                    R.drawable.ic_headphone,
-                    OrangeYellow1,
-                    OrangeYellow2,
-                    OrangeYellow3
-                )
-                )
-            )
+                                title = "Goal1",
+                                steps = "2000",
+                                R.drawable.ic_headphone,
+                                BlueViolet1,
+                                BlueViolet2,
+                                BlueViolet3
+                            ),
+                            Feature(
+                                title = "Goal2",
+                                steps = "1800",
+                                R.drawable.ic_videocam,
+                                LightGreen1,
+                                LightGreen2,
+                                LightGreen3
+                            ),
+                            Feature(
+                                title = "New Year",
+                                steps = "20,000",
+                                R.drawable.ic_headphone,
+                                OrangeYellow1,
+                                OrangeYellow2,
+                                OrangeYellow3
+                            ),
+                            Feature(
+                                title = "Final Goal",
+                                steps = "1200",
+                                R.drawable.ic_headphone,
+                                Beige1,
+                                Beige2,
+                                Beige3
+                            ),
+                            Feature(
+                                title = "New 1",
+                                steps = "800",
+                                R.drawable.ic_headphone,
+                                BlueViolet1,
+                                BlueViolet2,
+                                BlueViolet3
+                            ),
+                            Feature(
+                                title = "New 2",
+                                steps = "2100",
+                                R.drawable.ic_videocam,
+                                LightGreen1,
+                                LightGreen2,
+                                LightGreen3
+                            ),
+                            Feature(
+                                title = "New 3",
+                                steps = "1200",
+                                R.drawable.ic_headphone,
+                                OrangeYellow1,
+                                OrangeYellow2,
+                                OrangeYellow3
+                            )
+                        )
+                    )
+
+                }
+
+            }
+
         }
     }
 }
@@ -128,26 +257,46 @@ fun HeaderSett(
     )
     }
         //SETTINGS ICON(BUTTON)
-        Icon(painter = painterResource(id = R.drawable.baseline_settings_24),
-            contentDescription = "Settings",
-            tint = Color.Black,
-            modifier = Modifier
-                .size(45.dp)
-                .padding(end = 10.dp),
-            )
+//        Icon(painter = painterResource(id = R.drawable.baseline_settings_24),
+//            contentDescription = "Settings",
+//            tint = Color.Black,
+//            modifier = Modifier
+//                .size(45.dp)
+//                .padding(end = 10.dp),
+//            )
     }
 }
 
 
 //Button to set the goals(BUTTON: add clickable or onclick)
 @Composable
-fun GoalButton(
+fun GoalButton(modifier: Modifier,
+               animationTransition: Transition<createGoalPanelState>,
+               currentPanelState: createGoalPanelState,
+                assignGoalPanelState: (createGoalPanelState)->Unit){
 
-){
+    val rotationAnimation:Float by animationTransition.animateFloat(
+        label = "rocketRotation",
+        transitionSpec = {
+            tween(
+                delayMillis =
+                when(currentPanelState){
+                    createGoalPanelState.HIDDEN -> animationDelay
+                    createGoalPanelState.OPENED -> 0
+                }
+            )
+        }
+    ) {currentValue ->
+        when(currentValue){
+         createGoalPanelState.OPENED -> -45F
+         createGoalPanelState.HIDDEN -> 0F
+        }
+    }
+
     Row(
-modifier = Modifier
-    .height(150.dp)
-    .fillMaxWidth()
+        modifier = modifier
+            .height(150.dp)
+            .fillMaxWidth()
     ) {
         Column(
             modifier = Modifier
@@ -155,37 +304,46 @@ modifier = Modifier
                 .fillMaxWidth()
                 .height(120.dp)
                 .padding(top = 15.dp, bottom = 0.dp),
-//
             horizontalAlignment = Alignment.CenterHorizontally,
-
-
             ) {
 
-            Box( contentAlignment = Center,
-                modifier = Modifier
-                    .size(100.dp)
-                    .clip(CircleShape)
-                    .background(ButtonOrange)) {
+            Button(
+                shape = CustomShapes.round(),
+                onClick = {
+                    val toggledState:createGoalPanelState = when(currentPanelState){
+                        createGoalPanelState.HIDDEN -> createGoalPanelState.OPENED
+                        createGoalPanelState.OPENED -> createGoalPanelState.HIDDEN
+                    }
+                    assignGoalPanelState(toggledState)
+                },
+                contentPadding = PaddingValues(0.dp)
+            ){
 
-                Box(
-                    contentAlignment = Center,
+                Box( contentAlignment = Center,
                     modifier = Modifier
-                        .size(90.dp)
+                        .size(100.dp)
                         .clip(CircleShape)
-                        .background(HeaderOrange)
+                        .background(ButtonOrange)) {
 
-                ) {
-                    Icon(
-                        contentDescription ="Rocket",
-                        tint = Color.Unspecified,
-                        imageVector = ImageVector.vectorResource(id = R.drawable.baseline_rocket_launch_24),
+                    Box(
+                        contentAlignment = Center,
                         modifier = Modifier
-                            .size(75.dp)
-                    )
+                            .size(90.dp)
+                            .clip(CircleShape)
+                            .background(HeaderOrange)
 
-
-
+                    ) {
+                        Icon(
+                            contentDescription ="Rocket",
+                            tint = Color.Unspecified,
+                            imageVector = ImageVector.vectorResource(id = R.drawable.baseline_rocket_launch_24),
+                            modifier = Modifier
+                                .size(75.dp)
+                                .rotate(rotationAnimation)
+                        )
+                    }
                 }
+
             }
 
             Text(
@@ -202,7 +360,7 @@ modifier = Modifier
     }
 
 
-        }
+}
 //HORIZONTAL SLOT FORM WHICH WAS USED ACCORDING TO THE PLAN
 
 //Slots created for each goal set
