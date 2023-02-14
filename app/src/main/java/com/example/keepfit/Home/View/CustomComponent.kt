@@ -2,14 +2,16 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -23,8 +25,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import com.example.keepfit.Home.View.goalStepsToday
 import com.example.keepfit.Home.View.savedTotalSteps
+import com.example.keepfit.ui.theme.CustomShapes
 
 
 @Composable
@@ -42,7 +44,7 @@ fun CustomComponent(
 //    indicatorStrokeCap: StrokeCap = StrokeCap.Round,
     bigTextFontSize: TextUnit = MaterialTheme.typography.h5.fontSize,
     bigTextColor: Color = MaterialTheme.colors.onSurface,
-    bigTextSuffix: String = "/",
+    bigTextSuffix: String = "",
     smallText: String = "Remaining",
     smallTextFontSize: TextUnit = MaterialTheme.typography.h6.fontSize,
     smallTextColor: Color = MaterialTheme.colors.onSurface.copy(alpha = 0.3f)
@@ -114,7 +116,9 @@ fun CustomComponent(
             bigTextSuffix = bigTextSuffix,
             smallText = smallText,
             smallTextColor = smallTextColor,
-            smallTextFontSize = smallTextFontSize
+            smallTextFontSize = smallTextFontSize,
+            Steps = indicatorValue,
+            TotalSteps = maxIndicatorValue
         )
     }
 }
@@ -181,12 +185,12 @@ fun EmbeddedElements(
     bigTextSuffix: String,
     smallText: String,
     smallTextColor: Color,
-    smallTextFontSize: TextUnit
+    smallTextFontSize: TextUnit,
+    Steps: Int,
+    TotalSteps: Int
+
 ) {
 // shows the steps
-    var Steps by remember { mutableStateOf("0") }
-
-    Steps = savedTotalSteps.toString()
 
     Text(
         text = "$Steps ${bigTextSuffix.take(2)}",
@@ -196,8 +200,16 @@ fun EmbeddedElements(
         fontWeight = FontWeight.Bold
     )
 
-    Text(
-        text = "$goalStepsToday",
+    Divider(modifier = Modifier
+        .height(5.dp)
+        .width(100.dp)
+        .background(color = Color.Black)
+        .clip(CustomShapes.round())
+    )
+
+
+            Text(
+        text = "$TotalSteps",
         fontSize = bigTextFontSize,
         textAlign = TextAlign.Center,
         fontWeight = FontWeight.Bold,

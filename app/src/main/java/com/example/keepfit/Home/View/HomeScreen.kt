@@ -36,12 +36,12 @@ val formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
 val formatted = current.format(formatter)
 var passableSteps = 100
 var savedTotalSteps = 0
-var goalStepsToday = 1700
 var hitStepsGoal = ""
 
 @Composable
 @Preview
 fun HomeScreen() {
+
     var totalStepsToday:Int by remember {
         mutableStateOf(0)
     }
@@ -67,7 +67,7 @@ fun HomeScreen() {
 
         settingButton()
         dateAndTime()
-        progressBar()
+        progressBar(totalStepsToday)
 
     }
         ButtonWithColor(Modifier.align(Alignment.BottomEnd), SetTotalSteps)
@@ -94,13 +94,7 @@ fun settingButton(){
         horizontalAlignment = Alignment.End,
 
         ) {
-//        Icon(painter = painterResource(id = R.drawable.baseline_settings_24),
-//            contentDescription = "Settings",
-//            tint = Color.Black,
-//            modifier = Modifier
-//                .size(45.dp)
-//                .padding(end = 10.dp),
-//        )
+//
     }
     }
 }
@@ -128,7 +122,7 @@ fun dateAndTime(){
 }
 
 @Composable
-fun progressBar(){
+fun progressBar(steps:Int, goalSteps:Int = 1700){
     var value by remember{ mutableStateOf(0) }
     value = savedTotalSteps
 
@@ -149,7 +143,10 @@ fun progressBar(){
 
             ) {
 
-            CustomComponent()
+            CustomComponent(
+                indicatorValue = steps,
+                maxIndicatorValue = goalSteps
+            )
         }
         }
 }
@@ -167,14 +164,4 @@ fun ButtonWithColor(mod: Modifier,setStepsFunction:(Int)->Unit){
         Text(text = "+",color = Color.White)
     }
 }
-
-
-//@Composable
-//fun AddRecordButton(
-//    setStepsFunction:(Int)->Unit
-//){
-//Row() {
-    
-//}
-//}
 
