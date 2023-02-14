@@ -2,10 +2,12 @@ package com.example.keepfit.Home.View
 
 import CustomComponent
 import android.content.Intent.getIntent
+import android.graphics.Paint.Align
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -40,8 +42,6 @@ var hitStepsGoal = ""
 @Composable
 @Preview
 fun HomeScreen() {
-    var Steps by remember { mutableStateOf("") }
-
     var totalStepsToday:Int by remember {
         mutableStateOf(0)
     }
@@ -55,12 +55,14 @@ fun HomeScreen() {
         println("Total steps $totalStepsToday")
     }
 
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
     ){
-    Column {
+
+        Column {
         //call functions
 
         settingButton()
@@ -68,31 +70,9 @@ fun HomeScreen() {
         progressBar()
 
     }
+        ButtonWithColor(Modifier.align(Alignment.BottomEnd), SetTotalSteps)
     }
 
-//// timing and day
-//        Text(
-//            modifier = Modifier.align(Alignment.TopStart),
-//            text = "\nToday" +
-//                    "\n$formatted"
-//        )
-//// total steps
-//        Text(
-//            modifier = Modifier.align(Alignment.Center),
-//            text = "Steps" +
-//                    "\n$totalStepsToday" +
-//                    "\n$goalStepsToday" +
-//                    "\n"
-//        )
-//
-//        Text(
-//            modifier = Modifier.align(Alignment.Center),
-//            text = ""
-//        )
-//
-//        AddRecordButton(Modifier.align(Alignment.BottomEnd), SetTotalSteps)
-//
-//    }
 }
 
 
@@ -114,16 +94,17 @@ fun settingButton(){
         horizontalAlignment = Alignment.End,
 
         ) {
-        Icon(painter = painterResource(id = R.drawable.baseline_settings_24),
-            contentDescription = "Settings",
-            tint = Color.Black,
-            modifier = Modifier
-                .size(45.dp)
-                .padding(end = 10.dp),
-        )
+//        Icon(painter = painterResource(id = R.drawable.baseline_settings_24),
+//            contentDescription = "Settings",
+//            tint = Color.Black,
+//            modifier = Modifier
+//                .size(45.dp)
+//                .padding(end = 10.dp),
+//        )
     }
     }
 }
+
 @Composable
 fun dateAndTime(){
     Row (
@@ -143,11 +124,13 @@ fun dateAndTime(){
             modifier = Modifier.padding(start = 10.dp, bottom = 20.dp)
         )
     }
+
 }
 
 @Composable
 fun progressBar(){
     var value by remember{ mutableStateOf(0) }
+    value = savedTotalSteps
 
     Row(
         modifier = Modifier
@@ -171,33 +154,20 @@ fun progressBar(){
         }
 }
 
-
-
-
-
-
-
 @Composable
-fun AddRecordButton(alignment: Modifier, setStepsFunction:(Int)->Unit) {
-    FloatingActionButton(
-        modifier = alignment
-            .padding(10.dp)
-            .size(55.dp)
-            .clip(CustomShapes.round()),
-        onClick = { setStepsFunction(passableSteps)},
-        elevation = FloatingActionButtonDefaults.elevation(0.dp,0.dp),
-        backgroundColor = Color.Green
-    ) {
+fun ButtonWithColor(mod: Modifier,setStepsFunction:(Int)->Unit){
+    Button(
+        modifier = mod
+            .offset((-10).dp, (-100).dp),
+        onClick = {setStepsFunction(passableSteps)},
+        shape = RoundedCornerShape(20.dp),
+        colors = ButtonDefaults.buttonColors(backgroundColor = Color.DarkGray))
 
-        Box(
-            modifier = Modifier.padding(15.dp)
-        ) {
-
-            Image(painterResource(id = R.drawable.settings_icon), "Gear icon")
-
-        }
+    {
+        Text(text = "+",color = Color.White)
     }
 }
+
 
 //@Composable
 //fun AddRecordButton(
