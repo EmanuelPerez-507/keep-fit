@@ -31,8 +31,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.keepfit.DataLayer.Goals.Goal
 import androidx.compose.ui.zIndex
 import com.example.keepfit.Goals.View.Feature
+import com.example.keepfit.Goals.ViewModel.GoalScreenModel
 import com.example.keepfit.ui.theme.*
 
 enum class createGoalPanelState{
@@ -43,10 +45,15 @@ enum class createGoalPanelState{
 val animationDelay:Int = 150
 
 //main Goal screen
-@Preview(showBackground = true)
-@Composable
+//@Preview(showBackground = true)
 @OptIn(ExperimentalComposeUiApi::class)
-fun GoalScreen(){
+@Composable
+fun GoalScreen(
+    viewmodel:GoalScreenModel
+){
+
+    val currentGoalList = viewmodel.goalsList
+
     Box(modifier = Modifier
         .background(Color.White)
         .fillMaxSize()
@@ -163,66 +170,7 @@ fun GoalScreen(){
                     )
                     //Added features in the parameters to easily change the goals info,
                     // can be used dynamically as well
-                    FeatureSection(
-                        features = listOf(
-                            Feature(
-                                title = "Goal1",
-                                steps = "2000",
-                                R.drawable.ic_headphone,
-                                BlueViolet1,
-                                BlueViolet2,
-                                BlueViolet3
-                            ),
-                            Feature(
-                                title = "Goal2",
-                                steps = "1800",
-                                R.drawable.ic_videocam,
-                                LightGreen1,
-                                LightGreen2,
-                                LightGreen3
-                            ),
-                            Feature(
-                                title = "New Year",
-                                steps = "20,000",
-                                R.drawable.ic_headphone,
-                                OrangeYellow1,
-                                OrangeYellow2,
-                                OrangeYellow3
-                            ),
-                            Feature(
-                                title = "Final Goal",
-                                steps = "1200",
-                                R.drawable.ic_headphone,
-                                Beige1,
-                                Beige2,
-                                Beige3
-                            ),
-                            Feature(
-                                title = "New 1",
-                                steps = "800",
-                                R.drawable.ic_headphone,
-                                BlueViolet1,
-                                BlueViolet2,
-                                BlueViolet3
-                            ),
-                            Feature(
-                                title = "New 2",
-                                steps = "2100",
-                                R.drawable.ic_videocam,
-                                LightGreen1,
-                                LightGreen2,
-                                LightGreen3
-                            ),
-                            Feature(
-                                title = "New 3",
-                                steps = "1200",
-                                R.drawable.ic_headphone,
-                                OrangeYellow1,
-                                OrangeYellow2,
-                                OrangeYellow3
-                            )
-                        )
-                    )
+                    FeatureSection(currentGoalList)
 
                 }
 
@@ -427,7 +375,7 @@ fun GoalButton(modifier: Modifier,
 //This Composable is used to set a list of features to create a lazyverticalgrid
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun FeatureSection(features: List<Feature>) {
+fun FeatureSection(features: List<Goal>) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             text = "Your Goals",
@@ -449,14 +397,14 @@ fun FeatureSection(features: List<Feature>) {
 //
 @Composable
 fun FeatureItem(
-    feature: Feature
+    feature: Goal
 ) {
     BoxWithConstraints(
         modifier = Modifier
             .padding(7.5.dp)
             .aspectRatio(1f)
             .clip(RoundedCornerShape(10.dp))
-            .background(feature.darkColor)
+            .background(Color(color = feature.color))
     ) {
         val width = constraints.maxWidth
         val height = constraints.maxHeight
@@ -502,11 +450,11 @@ fun FeatureItem(
         ) {
             drawPath(
                 path = mediumColoredPath,
-                color = feature.mediumColor
+                color = Color(color = feature.color)
             )
             drawPath(
                 path = lightColoredPath,
-                color = feature.lightColor
+                color = Color(color = feature.color)
             )
         }
 
@@ -518,14 +466,14 @@ fun FeatureItem(
                 .padding(15.dp)
         ) {
             Text(
-                text = feature.title,
+                text = feature.name,
                 style = MaterialTheme.typography.h6.copy(),
                 lineHeight = 26.sp,
                 modifier = Modifier.align(Alignment.TopStart)
             )
 
             Text(
-                text = feature.steps,
+                text = feature.steps.toString(),
                 style = MaterialTheme.typography.h4,
                 modifier = Modifier .align(Center)
             )
