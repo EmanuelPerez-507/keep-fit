@@ -55,7 +55,7 @@ fun GoalScreen(
     val currentGoalList = viewmodel.goalsList
 
     Box(modifier = Modifier
-        .background(Color.White)
+
         .fillMaxSize()
     ){
         Column {

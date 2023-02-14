@@ -1,7 +1,9 @@
 package com.example.keepfit.Home.View
 
+import CustomComponent
 import android.content.Intent.getIntent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -22,6 +24,7 @@ import androidx.core.content.ContextCompat.startActivity
 import com.example.keepfit.NavigationContainer.View.Screen
 import com.example.keepfit.R
 import com.example.keepfit.ui.theme.CustomShapes
+import com.example.keepfit.ui.theme.HeaderOrange
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -55,33 +58,124 @@ fun HomeScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .border(1.dp, Color(0x00ff00))
-    )
-    {
+            .background(Color.White)
+    ){
+    Column {
+        //call functions
 
-        Text(
-            modifier = Modifier.align(Alignment.TopStart),
-            text = "\nToday" +
-                    "\n$formatted"
-        )
-
-        Text(
-            modifier = Modifier.align(Alignment.Center),
-            text = "Steps" +
-                    "\n$totalStepsToday" +
-                    "\n$goalStepsToday" +
-                    "\n"
-        )
-
-        Text(
-            modifier = Modifier.align(Alignment.Center),
-            text = ""
-        )
-
-        AddRecordButton(Modifier.align(Alignment.BottomEnd), SetTotalSteps)
+        settingButton()
+        dateAndTime()
+        progressBar()
 
     }
+    }
+
+//// timing and day
+//        Text(
+//            modifier = Modifier.align(Alignment.TopStart),
+//            text = "\nToday" +
+//                    "\n$formatted"
+//        )
+//// total steps
+//        Text(
+//            modifier = Modifier.align(Alignment.Center),
+//            text = "Steps" +
+//                    "\n$totalStepsToday" +
+//                    "\n$goalStepsToday" +
+//                    "\n"
+//        )
+//
+//        Text(
+//            modifier = Modifier.align(Alignment.Center),
+//            text = ""
+//        )
+//
+//        AddRecordButton(Modifier.align(Alignment.BottomEnd), SetTotalSteps)
+//
+//    }
 }
+
+
+
+@Composable
+fun settingButton(){
+    Row(
+        modifier = Modifier
+            .height(80.dp)
+            .fillMaxWidth()
+    ) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .fillMaxWidth()
+//            .height(120.dp)
+            .padding(top = 15.dp, bottom = 0.dp),
+//
+        horizontalAlignment = Alignment.End,
+
+        ) {
+        Icon(painter = painterResource(id = R.drawable.baseline_settings_24),
+            contentDescription = "Settings",
+            tint = Color.Black,
+            modifier = Modifier
+                .size(45.dp)
+                .padding(end = 10.dp),
+        )
+    }
+    }
+}
+@Composable
+fun dateAndTime(){
+    Row (
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(0.dp)
+            .height(80.dp)
+    ){
+        Text(
+
+            text = ("\nToday" +
+                    "\n$formatted"),
+
+            style = MaterialTheme.typography.body1,
+            modifier = Modifier.padding(start = 10.dp, bottom = 20.dp)
+        )
+    }
+}
+
+@Composable
+fun progressBar(){
+    var value by remember{ mutableStateOf(0) }
+
+    Row(
+        modifier = Modifier
+
+            .fillMaxWidth()
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .fillMaxWidth()
+
+                .padding(top = 15.dp, bottom = 0.dp),
+//
+            horizontalAlignment = Alignment.CenterHorizontally,
+
+
+            ) {
+
+            CustomComponent()
+        }
+        }
+}
+
+
+
+
+
+
 
 @Composable
 fun AddRecordButton(alignment: Modifier, setStepsFunction:(Int)->Unit) {
@@ -104,3 +198,13 @@ fun AddRecordButton(alignment: Modifier, setStepsFunction:(Int)->Unit) {
         }
     }
 }
+
+//@Composable
+//fun AddRecordButton(
+//    setStepsFunction:(Int)->Unit
+//){
+//Row() {
+    
+//}
+//}
+
