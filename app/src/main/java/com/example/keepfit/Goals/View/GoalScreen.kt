@@ -31,7 +31,7 @@ import com.example.keepfit.ui.theme.*
 @Composable
 fun GoalScreen(){
     Box(modifier = Modifier
-        .background(Color.White)
+
         .fillMaxSize()
     ){
         Column {
@@ -43,7 +43,7 @@ fun GoalScreen(){
                 features = listOf(
                     Feature(
                         title = "Goal1",
-                        steps = "2000",
+                        steps = "20000",
                         R.drawable.ic_headphone,
                         BlueViolet1,
                         BlueViolet2,
