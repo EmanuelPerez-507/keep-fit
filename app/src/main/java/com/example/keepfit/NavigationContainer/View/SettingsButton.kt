@@ -37,7 +37,7 @@ fun SettingsButton(
     changeState: (SettingButtonState) -> Unit
 ) {
 
-    val transition = updateTransition(state, label = "settingButtonTransition")
+    val transition:Transition<SettingButtonState> = updateTransition(state, label = "settingButtonTransition")
 
     val animatedPadding: Dp by transition.animateDp(label = "paddingTransition") { currentState ->
         when (currentState) {
