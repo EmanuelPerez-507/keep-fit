@@ -3,43 +3,65 @@ package com.example.keepfit
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
+import androidx.activity.viewModels
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.lifecycleScope
 import androidx.room.Room
 import com.example.keepfit.DataLayer.Goals.Goal
 import com.example.keepfit.DataLayer.KeepFitDB
+import com.example.keepfit.Goals.ViewModel.Create.ExpandableGoalCreateModel
+import com.example.keepfit.Goals.ViewModel.Create.GoalCreateModel
+import com.example.keepfit.Goals.ViewModel.Show.GoalScreenModel
 import com.example.keepfit.NavigationContainer.NavigationContainer
-import com.example.keepfit.ui.theme.KeepFitTheme
-import java.util.concurrent.Executor
+import com.example.keepfit.TemplateFunctionality.Expandable
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 class Start : ComponentActivity() {
 
-    val dbThred:ExecutorService = Executors.newSingleThreadExecutor()
+    companion object{
+
+        val dbThread:ExecutorService = Executors.newSingleThreadExecutor()
+        var database:KeepFitDB? = null
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val goalHistoryDB = Room.databaseBuilder(
+        database = Room.databaseBuilder(
             applicationContext, KeepFitDB::class.java, "goal-history-db"
         ).build()
 
-        val newGoal = Goal(0, "Goal1", 3000, Color.Blue.toArgb())
+        val initialGoals = listOf<Goal>(
+             Goal(0, "Blue", 3000, Color(0xFF33BBFF).toArgb()),
+             Goal(0, "Green", 3000, Color(0xFF00CC66).toArgb()),
+             Goal(0, "Yellow", 3000, Color(0xFFFACA1E).toArgb()),
+             Goal(0, "Red", 3000, Color(0xFFFF1A1A).toArgb()),
+             Goal(0, "Purple", 3000, Color(0xFFbc89f5).toArgb()),
+             Goal(0, "Pink", 3000, Color(0xFFD909C7).toArgb())
+        )
 
-        dbThred.submit {
-            goalHistoryDB.Goals().create(newGoal)
-        }
+        val goalsScreenView: GoalScreenModel by viewModels()
+
+        val createGoalsScreenView: GoalCreateModel by viewModels()
+        val createGoalScreenExpandable:Expandable by viewModels()
+        val expandableCreateGoalVM:ExpandableGoalCreateModel = ExpandableGoalCreateModel(
+            createGoalScreenExpandable,
+            createGoalsScreenView
+        )
 
         setContent {
-            NavigationContainer()
+            NavigationContainer(goalsScreenView, expandableCreateGoalVM)
         }
+
+        lifecycleScope.launch(Dispatchers.Default){
+            goalsScreenView.init()
+        }
+
     }
 }
