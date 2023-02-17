@@ -81,7 +81,7 @@ fun HomeScreen() {
 fun settingButton(){
     Row(
         modifier = Modifier
-            .height(80.dp)
+            .height(10.dp)
             .fillMaxWidth()
     ) {
     Column(

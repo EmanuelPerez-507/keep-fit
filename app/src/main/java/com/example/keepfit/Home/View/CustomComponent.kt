@@ -193,7 +193,7 @@ fun EmbeddedElements(
 // shows the steps
 
     Text(
-        text = "$Steps ${bigTextSuffix.take(2)}",
+        text = "$Steps${bigTextSuffix.take(2)}",
         color = bigTextColor,
         fontSize = bigTextFontSize,
         textAlign = TextAlign.Center,
@@ -208,7 +208,7 @@ fun EmbeddedElements(
     )
 
 
-            Text(
+    Text(
         text = "$TotalSteps",
         fontSize = bigTextFontSize,
         textAlign = TextAlign.Center,
