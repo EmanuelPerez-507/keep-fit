@@ -1,10 +1,7 @@
 package com.example.keepfit.NavigationContainer
 
 import android.view.MotionEvent
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -13,32 +10,26 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.keepfit.GoalScreen
-import com.example.keepfit.Goals.ViewModel.GoalScreenModel
+import com.example.keepfit.Goals.ViewModel.Create.ExpandableGoalCreateModel
+import com.example.keepfit.Goals.ViewModel.Create.GoalCreateModel
+import com.example.keepfit.Goals.ViewModel.Show.GoalScreenModel
 import com.example.keepfit.History.View.HistoryScreen
 import com.example.keepfit.Home.View.HomeScreen
 import com.example.keepfit.NavigationContainer.View.Screen
 import com.example.keepfit.NavigationContainer.View.SettingsButton
 import com.example.keepfit.ui.theme.CustomShapes
 import com.example.keepfit.ui.theme.KeepFitTheme
-import org.w3c.dom.Text
-
 
 
 class PlaceHolder<Payload>(var payload:Payload?)
@@ -51,7 +42,8 @@ enum class SettingButtonState{
 @Composable
 //@Preview
 fun NavigationContainer(
-    goalsViewModel:GoalScreenModel
+    goalsViewModel: GoalScreenModel,
+    goalsCreateModel: ExpandableGoalCreateModel
 ) {
 
     val settingsRect: PlaceHolder<Rect?> = PlaceHolder(null)
@@ -98,7 +90,10 @@ fun NavigationContainer(
 
                 composable(Screen.Home.route){ HomeScreen() }
 
-                composable(Screen.Goals.route){ GoalScreen(goalsViewModel) }
+                composable(Screen.Goals.route){GoalScreen(
+                    goalsViewModel,
+                    goalsCreateModel
+                ) }
 
                 composable(Screen.History.route){ HistoryScreen() }
 
