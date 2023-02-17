@@ -6,17 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Rect
 import androidx.lifecycle.ViewModel
 
-class Expandable: ViewModel(){
+interface Expandable{
 
-    var _expanded:Boolean by mutableStateOf(false)
-
-    var expandedBox:Rect? = null
-
-    var expanded:Boolean
-        set(value){
-            _expanded = value
-            if(!value){ expandedBox = null }
-        }
-        get() = _expanded
+    fun expandable():ExpandState
 
 }

@@ -1,19 +1,22 @@
-package com.example.keepfit.NavigationContainer.View
+package com.example.keepfit.Home.View
 
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.*
-import androidx.compose.animation.core.AnimationConstants.DefaultDurationMillis
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.boundsInRoot
@@ -23,33 +26,34 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.example.keepfit.Controls.ExpandableFAB
+import com.example.keepfit.Home.ViewModel.ExpandableAddStepsVM
 import com.example.keepfit.R
 import com.example.keepfit.Settings.View.SettingsScreen
-import com.example.keepfit.TemplateFunctionality.ExpandState
 import com.example.keepfit.TemplateFunctionality.Expandable
 import com.example.keepfit.ui.theme.CancelRed
 import com.example.keepfit.ui.theme.medium
 
 @Composable
-fun SettingsButton(
-    alignment: Modifier,
-    state: ExpandState,
+fun PlusButton(
+    alignment:Modifier,
+    state: ExpandableAddStepsVM,
+    content:@Composable ()->Unit
 ) {
 
-ExpandableFAB(
-    expandedButtonColor = CancelRed,
-    FABColor = Color.LightGray,
-    height = 450.dp,
-    width = 350.dp,
-    iconId = R.drawable.settings_icon,
-    iconDescriptor = "Gear icon",
-    alignment = alignment,
-    state = state,
-    anchor = Alignment.TopEnd
-){
+    ExpandableFAB(
+        expandedButtonColor = CancelRed,
+        FABColor = Color.DarkGray,
+        height = 200.dp,
+        width = 200.dp,
+        iconId = R.drawable.settings_icon,
+        iconDescriptor = "Plus icon",
+        alignment = alignment,
+        state = state.expandable(),
+        anchor = Alignment.BottomEnd
+    ){
 
-    SettingsScreen()
+        Text("Potato")
 
-}
+    }
 
 }

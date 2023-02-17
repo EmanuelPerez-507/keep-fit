@@ -26,35 +26,24 @@ import com.example.keepfit.Goals.ViewModel.Create.GoalCreateModel
 import com.example.keepfit.Goals.ViewModel.Show.GoalScreenModel
 import com.example.keepfit.History.View.HistoryScreen
 import com.example.keepfit.Home.View.HomeScreen
+import com.example.keepfit.Home.ViewModel.ExpandableAddStepsVM
 import com.example.keepfit.NavigationContainer.View.Screen
 import com.example.keepfit.NavigationContainer.View.SettingsButton
+import com.example.keepfit.NavigationContainer.ViewModel.ExpandableSettingsViewModel
+import com.example.keepfit.TemplateFunctionality.Expandable
 import com.example.keepfit.ui.theme.CustomShapes
 import com.example.keepfit.ui.theme.KeepFitTheme
 
-
-class PlaceHolder<Payload>(var payload:Payload?)
-
-enum class SettingButtonState{
-    EXPANDED, COMPRESSED
-}
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 //@Preview
 fun NavigationContainer(
     goalsViewModel: GoalScreenModel,
-    goalsCreateModel: ExpandableGoalCreateModel
+    goalsCreateModel: ExpandableGoalCreateModel,
+    addStepsModel: ExpandableAddStepsVM,
+    settingsExpandable:ExpandableSettingsViewModel
 ) {
-
-    val settingsRect: PlaceHolder<Rect?> = PlaceHolder(null)
-
-    var settingsButtonState: SettingButtonState by remember{
-        mutableStateOf(SettingButtonState.COMPRESSED)
-    }
-
-    val setSettingButtonState = fun (newState: SettingButtonState){
-        settingsButtonState = newState
-    }
 
     val navController = rememberNavController()
     
@@ -66,14 +55,14 @@ fun NavigationContainer(
                 .pointerInteropFilter { motionEvent ->
                     when (motionEvent.action) {
                         MotionEvent.ACTION_DOWN -> {
-                            if (!settingsRect.payload?.isEmpty!!) {
-                                if (!settingsRect.payload?.contains(
-                                        Offset(motionEvent.x, motionEvent.y)
-                                    )!!
-                                ) {
-                                    settingsButtonState = SettingButtonState.COMPRESSED
-                                }
-                            }
+//                            if (!settingsRect.payload?.isEmpty!!) {
+//                                if (!settingsRect.payload?.contains(
+//                                        Offset(motionEvent.x, motionEvent.y)
+//                                    )!!
+//                                ) {
+//                                    settingsButtonState = SettingButtonState.COMPRESSED
+//                                }
+//                            }
                         }
                     }
                     false
@@ -86,9 +75,11 @@ fun NavigationContainer(
                     .fillMaxSize(),
 //                    .border(3.dp, Color(0xFFFF0000)),
                 navController = navController,
-                startDestination = Screen.Goals.route){
+                startDestination = Screen.Home.route){
 
-                composable(Screen.Home.route){ HomeScreen() }
+                composable(Screen.Home.route){ HomeScreen(
+                    addStepsModel
+                ) }
 
                 composable(Screen.Goals.route){GoalScreen(
                     goalsViewModel,
@@ -135,9 +126,7 @@ fun NavigationContainer(
 
             SettingsButton(
                 Modifier.align(Alignment.TopEnd),
-                settingsRect,
-                settingsButtonState,
-                setSettingButtonState
+                settingsExpandable.expandable(),
             )
 
         }
