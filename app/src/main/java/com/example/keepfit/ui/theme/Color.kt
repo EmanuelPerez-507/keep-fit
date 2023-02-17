@@ -38,3 +38,14 @@ val BlueViolet1 = Color(0xffaeb4fd)
 val BlueViolet2 = Color(0xff9fa5fe)
 val BlueViolet3 = Color(0xff8f98fd)
 val CancelRed = Color(0xFFB30505)
+
+class GoalBacks{
+    companion object{
+        val Blue = Color(0xFF33BBFF)
+        val Green = Color(0xFF00CC66)
+        val Yellow = Color(0xFFFACA1E)
+        val Red = Color(0xFFFF1A1A)
+        val Purple = Color(0xFFbc89f5)
+        val Pink = Color(0xFFD909C7)
+    }
+}
