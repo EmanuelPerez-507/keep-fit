@@ -1,6 +1,6 @@
 package com.example.keepfit
 
-//import android.graphics.drawable.AdaptiveIconDrawable
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
@@ -9,96 +9,152 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.*
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import com.example.keepfit.Goals.View.Feature
+import com.example.keepfit.Goals.ViewModel.Create.ExpandableGoalCreateModel
+import com.example.keepfit.Goals.ViewModel.Show.GoalScreenModel
 import com.example.keepfit.ui.theme.*
 
+val animationDelay:Int = 150
+
 //main Goal screen
-@Preview(showBackground = true)
+//@Preview(showBackground = true)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun GoalScreen(){
+fun GoalScreen(
+    viewModel: GoalScreenModel,
+    creationViewModel: ExpandableGoalCreateModel
+){
+
+    val currentGoalList = viewModel.goalsList
+
     Box(modifier = Modifier
-        .background(Color.White)
+
         .fillMaxSize()
     ){
         Column {
             HeaderSett()
-            GoalButton()
-            //Added features in the parameters to easily change the goals info,
-            // can be used dynamically as well
-            FeatureSection(
-                features = listOf(
-                    Feature(
-                        title = "Goal1",
-                        steps = "2000",
-                        R.drawable.ic_headphone,
-                        BlueViolet1,
-                        BlueViolet2,
-                        BlueViolet3
-                    ),
-                    Feature(
-                        title = "Goal2",
-                        steps = "1800",
-                        R.drawable.ic_videocam,
-                        LightGreen1,
-                        LightGreen2,
-                        LightGreen3
-                    ),
-                    Feature(
-                        title = "New Year",
-                        steps = "20,000",
-                        R.drawable.ic_headphone,
-                        OrangeYellow1,
-                        OrangeYellow2,
-                        OrangeYellow3
-                    ),
-                    Feature(
-                        title = "Final Goal",
-                        steps = "1200",
-                        R.drawable.ic_headphone,
-                        Beige1,
-                        Beige2,
-                        Beige3
-                    ),
-                    Feature(
-                        title = "New 1",
-                        steps = "800",
-                        R.drawable.ic_headphone,
-                        BlueViolet1,
-                        BlueViolet2,
-                        BlueViolet3
-                    ),
-                    Feature(
-                        title = "New 2",
-                        steps = "2100",
-                        R.drawable.ic_videocam,
-                        LightGreen1,
-                        LightGreen2,
-                        LightGreen3
-                    ),
-                            Feature(
-                            title = "New 3",
-                    steps = "1200",
-                    R.drawable.ic_headphone,
-                    OrangeYellow1,
-                    OrangeYellow2,
-                    OrangeYellow3
-                )
-                )
+
+            val createGoalDialogTransition = updateTransition(targetState = creationViewModel.expandable().expanded,
+                label = "createGoalTransition"
             )
+            val keyboardController = LocalSoftwareKeyboardController.current
+
+            Box(){
+
+                val shadowAnimation:Dp by createGoalDialogTransition.animateDp(
+                    label="createGoalShadow",
+                    transitionSpec = {
+                        tween(
+                            delayMillis =
+                            when(creationViewModel.expandable().expanded){
+                                false -> animationDelay
+                                true -> 0
+                            }
+                        )
+                    }
+                ) {currentState->
+                    when(currentState){
+                        false -> 0.dp
+                        true -> 35.dp
+                    }
+                }
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .shadow(
+                            shadowAnimation,
+                            shape = CustomShapes.onlyBottom.medium
+                        )
+                        .zIndex(0.5F)
+                        .background(color = Color.White),
+                ){
+                    val alphaAnimation:Float by createGoalDialogTransition.animateFloat(
+                        label="createGoalAlpha",
+                        transitionSpec = {
+                            tween(
+                                delayMillis =
+                                when(creationViewModel.expandable().expanded){
+                                    false -> 0
+                                    true -> animationDelay
+                                }
+                            )
+                        }
+                    ) {currentState ->
+                        when(currentState){
+                            false -> 0F
+                            true -> 1F
+                        }
+                    }
+                    val heightAnimation:Dp by createGoalDialogTransition.animateDp(
+                        label="createGoalHeight",
+                        transitionSpec = {
+                            tween(
+                                delayMillis =
+                                when(creationViewModel.expandable().expanded){
+                                    false -> animationDelay
+                                    true -> 0
+                                }
+                            )
+                        }
+                    ) { currentState ->
+                        when(currentState){
+                            false -> 0.dp
+                            true -> 160.dp
+                        }
+                    }
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(heightAnimation)
+                            .alpha(alphaAnimation),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ){
+                        TextField(value = creationViewModel.goalName, onValueChange = creationViewModel::goalName::set)
+                        Spacer(modifier = Modifier.height(10.dp))
+                        TextField(value = creationViewModel.goalSteps, onValueChange = creationViewModel::goalSteps::set)
+                    }
+                    GoalButton(
+                        Modifier.align(Alignment.CenterHorizontally),
+                        createGoalDialogTransition,
+                        creationViewModel
+                    )
+                }
+
+                Column(){
+
+                    Spacer(
+                        modifier = Modifier.height(135.dp)
+                    )
+                    //Added features in the parameters to easily change the goals info,
+                    // can be used dynamically as well
+                    FeatureSection(currentGoalList)
+
+                }
+
+            }
+
         }
     }
 }
@@ -128,26 +184,45 @@ fun HeaderSett(
     )
     }
         //SETTINGS ICON(BUTTON)
-        Icon(painter = painterResource(id = R.drawable.baseline_settings_24),
-            contentDescription = "Settings",
-            tint = Color.Black,
-            modifier = Modifier
-                .size(45.dp)
-                .padding(end = 10.dp),
-            )
+//        Icon(painter = painterResource(id = R.drawable.baseline_settings_24),
+//            contentDescription = "Settings",
+//            tint = Color.Black,
+//            modifier = Modifier
+//                .size(45.dp)
+//                .padding(end = 10.dp),
+//            )
     }
 }
 
 
 //Button to set the goals(BUTTON: add clickable or onclick)
 @Composable
-fun GoalButton(
+fun GoalButton(modifier: Modifier,
+               animationTransition: Transition<Boolean>,
+               currentPanelState: ExpandableGoalCreateModel){
 
-){
+    val rotationAnimation:Float by animationTransition.animateFloat(
+        label = "rocketRotation",
+        transitionSpec = {
+            tween(
+                delayMillis =
+                when(currentPanelState.expandable().expanded){
+                    false -> animationDelay
+                    true -> 0
+                }
+            )
+        }
+    ) {currentValue ->
+        when(currentValue){
+         true -> -45F
+         false -> 0F
+        }
+    }
+
     Row(
-modifier = Modifier
-    .height(150.dp)
-    .fillMaxWidth()
+        modifier = modifier
+            .height(150.dp)
+            .fillMaxWidth()
     ) {
         Column(
             modifier = Modifier
@@ -155,37 +230,40 @@ modifier = Modifier
                 .fillMaxWidth()
                 .height(120.dp)
                 .padding(top = 15.dp, bottom = 0.dp),
-//
             horizontalAlignment = Alignment.CenterHorizontally,
-
-
             ) {
 
-            Box( contentAlignment = Center,
-                modifier = Modifier
-                    .size(100.dp)
-                    .clip(CircleShape)
-                    .background(ButtonOrange)) {
+            Button(
+                shape = CustomShapes.round(),
+                onClick = currentPanelState::expansionBtnClick,
+                contentPadding = PaddingValues(0.dp)
+            ){
 
-                Box(
-                    contentAlignment = Center,
+                Box( contentAlignment = Center,
                     modifier = Modifier
-                        .size(90.dp)
+                        .size(100.dp)
                         .clip(CircleShape)
-                        .background(HeaderOrange)
+                        .background(ButtonOrange)) {
 
-                ) {
-                    Icon(
-                        contentDescription ="Rocket",
-                        tint = Color.Unspecified,
-                        imageVector = ImageVector.vectorResource(id = R.drawable.baseline_rocket_launch_24),
+                    Box(
+                        contentAlignment = Center,
                         modifier = Modifier
-                            .size(75.dp)
-                    )
+                            .size(90.dp)
+                            .clip(CircleShape)
+                            .background(HeaderOrange)
 
-
-
+                    ) {
+                        Icon(
+                            contentDescription ="Rocket",
+                            tint = Color.Unspecified,
+                            imageVector = ImageVector.vectorResource(id = R.drawable.baseline_rocket_launch_24),
+                            modifier = Modifier
+                                .size(75.dp)
+                                .rotate(rotationAnimation)
+                        )
+                    }
                 }
+
             }
 
             Text(
@@ -202,7 +280,7 @@ modifier = Modifier
     }
 
 
-        }
+}
 //HORIZONTAL SLOT FORM WHICH WAS USED ACCORDING TO THE PLAN
 
 //Slots created for each goal set
@@ -295,6 +373,12 @@ fun FeatureItem(
 ) {
     BoxWithConstraints(
         modifier = Modifier
+            .scale(
+                when(feature.title){
+                    "Blue" -> 1F
+                    else -> 0.9F
+                }
+            )
             .padding(7.5.dp)
             .aspectRatio(1f)
             .clip(RoundedCornerShape(10.dp))
@@ -306,7 +390,7 @@ fun FeatureItem(
         // Medium colored path
         val mediumColoredPoint1 = Offset(0f, height * 0.3f)
         val mediumColoredPoint2 = Offset(width * 0.1f, height * 0.35f)
-        val mediumColoredPoint3 = Offset(width * 0.4f, height * 0.05f)
+        val mediumColoredPoint3 = Offset(width * 0.4f, height * 0.17f)
         val mediumColoredPoint4 = Offset(width * 0.75f, height * 0.7f)
         val mediumColoredPoint5 = Offset(width * 1.4f, -height.toFloat())
 
@@ -361,15 +445,17 @@ fun FeatureItem(
         ) {
             Text(
                 text = feature.title,
-                style = MaterialTheme.typography.h6.copy(),
+                style = MaterialTheme.typography.h6,
                 lineHeight = 26.sp,
-                modifier = Modifier.align(Alignment.TopStart)
+                modifier = Modifier.align(Alignment.TopStart),
+                color = Color.Black
             )
 
             Text(
                 text = feature.steps,
                 style = MaterialTheme.typography.h4,
-                modifier = Modifier .align(Center)
+                modifier = Modifier .align(Center),
+                color = Color.Black
             )
             //CAN ADD DELETE ICON HERE
 //            Icon(
