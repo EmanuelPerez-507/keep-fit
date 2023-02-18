@@ -21,50 +21,43 @@ import androidx.compose.ui.draw.*
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.example.keepfit.Goals.View.Feature
+import com.example.keepfit.Goals.ViewModel.Create.ExpandableGoalCreateModel
+import com.example.keepfit.Goals.ViewModel.Show.GoalScreenModel
 import com.example.keepfit.ui.theme.*
-
-enum class createGoalPanelState{
-    HIDDEN,
-    OPENED
-}
 
 val animationDelay:Int = 150
 
 //main Goal screen
-@Preview(showBackground = true)
-@Composable
+//@Preview(showBackground = true)
 @OptIn(ExperimentalComposeUiApi::class)
-fun GoalScreen(){
+@Composable
+fun GoalScreen(
+    viewModel: GoalScreenModel,
+    creationViewModel: ExpandableGoalCreateModel
+){
+
+    val currentGoalList = viewModel.goalsList
+
     Box(modifier = Modifier
-        .background(Color.White)
+
         .fillMaxSize()
     ){
         Column {
             HeaderSett()
 
-            var currentCreateGoalPanelState:createGoalPanelState by remember{mutableStateOf(createGoalPanelState.HIDDEN)}
-            val createGoalDialogTransition = updateTransition(targetState = currentCreateGoalPanelState)
+            val createGoalDialogTransition = updateTransition(targetState = creationViewModel.expandable().expanded,
+                label = "createGoalTransition"
+            )
             val keyboardController = LocalSoftwareKeyboardController.current
-            val setCreateGoalPanelState = fun (newState:createGoalPanelState) {
-                if(newState!=currentCreateGoalPanelState){
-                    if(newState == createGoalPanelState.HIDDEN){
-                        keyboardController?.hide()
-                    }
-                }
-                currentCreateGoalPanelState = newState
-            }
 
             Box(){
 
@@ -73,16 +66,16 @@ fun GoalScreen(){
                     transitionSpec = {
                         tween(
                             delayMillis =
-                            when(currentCreateGoalPanelState){
-                                createGoalPanelState.HIDDEN -> animationDelay
-                                createGoalPanelState.OPENED -> 0
+                            when(creationViewModel.expandable().expanded){
+                                false -> animationDelay
+                                true -> 0
                             }
                         )
                     }
                 ) {currentState->
                     when(currentState){
-                        createGoalPanelState.HIDDEN -> 0.dp
-                        createGoalPanelState.OPENED -> 35.dp
+                        false -> 0.dp
+                        true -> 35.dp
                     }
                 }
 
@@ -91,7 +84,7 @@ fun GoalScreen(){
                         .fillMaxWidth()
                         .shadow(
                             shadowAnimation,
-                            shape = RoundedCornerShape(bottomStart = 50.dp, bottomEnd = 50.dp)
+                            shape = CustomShapes.onlyBottom.medium
                         )
                         .zIndex(0.5F)
                         .background(color = Color.White),
@@ -101,16 +94,16 @@ fun GoalScreen(){
                         transitionSpec = {
                             tween(
                                 delayMillis =
-                                when(currentCreateGoalPanelState){
-                                    createGoalPanelState.HIDDEN -> 0
-                                    createGoalPanelState.OPENED -> animationDelay
+                                when(creationViewModel.expandable().expanded){
+                                    false -> 0
+                                    true -> animationDelay
                                 }
                             )
                         }
                     ) {currentState ->
                         when(currentState){
-                            createGoalPanelState.HIDDEN -> 0F
-                            createGoalPanelState.OPENED -> 1F
+                            false -> 0F
+                            true -> 1F
                         }
                     }
                     val heightAnimation:Dp by createGoalDialogTransition.animateDp(
@@ -118,16 +111,16 @@ fun GoalScreen(){
                         transitionSpec = {
                             tween(
                                 delayMillis =
-                                when(currentCreateGoalPanelState){
-                                    createGoalPanelState.HIDDEN -> animationDelay
-                                    createGoalPanelState.OPENED -> 0
+                                when(creationViewModel.expandable().expanded){
+                                    false -> animationDelay
+                                    true -> 0
                                 }
                             )
                         }
                     ) { currentState ->
                         when(currentState){
-                            createGoalPanelState.HIDDEN -> 0.dp
-                            createGoalPanelState.OPENED -> 160.dp
+                            false -> 0.dp
+                            true -> 160.dp
                         }
                     }
                     Column(
@@ -138,21 +131,14 @@ fun GoalScreen(){
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ){
-                        var stringInput1:String by remember{mutableStateOf("")}
-                        TextField(value = stringInput1, onValueChange = {value ->
-                            stringInput1 = value
-                        })
+                        TextField(value = creationViewModel.goalName, onValueChange = creationViewModel::goalName::set)
                         Spacer(modifier = Modifier.height(10.dp))
-                        var stringInput2:String by remember{mutableStateOf("")}
-                        TextField(value = stringInput2, onValueChange = {value ->
-                            stringInput2 = value
-                        })
+                        TextField(value = creationViewModel.goalSteps, onValueChange = creationViewModel::goalSteps::set)
                     }
                     GoalButton(
                         Modifier.align(Alignment.CenterHorizontally),
                         createGoalDialogTransition,
-                        currentCreateGoalPanelState,
-                        setCreateGoalPanelState
+                        creationViewModel
                     )
                 }
 
@@ -163,66 +149,7 @@ fun GoalScreen(){
                     )
                     //Added features in the parameters to easily change the goals info,
                     // can be used dynamically as well
-                    FeatureSection(
-                        features = listOf(
-                            Feature(
-                                title = "Goal1",
-                                steps = "2000",
-                                R.drawable.ic_headphone,
-                                BlueViolet1,
-                                BlueViolet2,
-                                BlueViolet3
-                            ),
-                            Feature(
-                                title = "Goal2",
-                                steps = "1800",
-                                R.drawable.ic_videocam,
-                                LightGreen1,
-                                LightGreen2,
-                                LightGreen3
-                            ),
-                            Feature(
-                                title = "New Year",
-                                steps = "20,000",
-                                R.drawable.ic_headphone,
-                                OrangeYellow1,
-                                OrangeYellow2,
-                                OrangeYellow3
-                            ),
-                            Feature(
-                                title = "Final Goal",
-                                steps = "1200",
-                                R.drawable.ic_headphone,
-                                Beige1,
-                                Beige2,
-                                Beige3
-                            ),
-                            Feature(
-                                title = "New 1",
-                                steps = "800",
-                                R.drawable.ic_headphone,
-                                BlueViolet1,
-                                BlueViolet2,
-                                BlueViolet3
-                            ),
-                            Feature(
-                                title = "New 2",
-                                steps = "2100",
-                                R.drawable.ic_videocam,
-                                LightGreen1,
-                                LightGreen2,
-                                LightGreen3
-                            ),
-                            Feature(
-                                title = "New 3",
-                                steps = "1200",
-                                R.drawable.ic_headphone,
-                                OrangeYellow1,
-                                OrangeYellow2,
-                                OrangeYellow3
-                            )
-                        )
-                    )
+                    FeatureSection(currentGoalList)
 
                 }
 
@@ -271,25 +198,24 @@ fun HeaderSett(
 //Button to set the goals(BUTTON: add clickable or onclick)
 @Composable
 fun GoalButton(modifier: Modifier,
-               animationTransition: Transition<createGoalPanelState>,
-               currentPanelState: createGoalPanelState,
-                assignGoalPanelState: (createGoalPanelState)->Unit){
+               animationTransition: Transition<Boolean>,
+               currentPanelState: ExpandableGoalCreateModel){
 
     val rotationAnimation:Float by animationTransition.animateFloat(
         label = "rocketRotation",
         transitionSpec = {
             tween(
                 delayMillis =
-                when(currentPanelState){
-                    createGoalPanelState.HIDDEN -> animationDelay
-                    createGoalPanelState.OPENED -> 0
+                when(currentPanelState.expandable().expanded){
+                    false -> animationDelay
+                    true -> 0
                 }
             )
         }
     ) {currentValue ->
         when(currentValue){
-         createGoalPanelState.OPENED -> -45F
-         createGoalPanelState.HIDDEN -> 0F
+         true -> -45F
+         false -> 0F
         }
     }
 
@@ -309,13 +235,7 @@ fun GoalButton(modifier: Modifier,
 
             Button(
                 shape = CustomShapes.round(),
-                onClick = {
-                    val toggledState:createGoalPanelState = when(currentPanelState){
-                        createGoalPanelState.HIDDEN -> createGoalPanelState.OPENED
-                        createGoalPanelState.OPENED -> createGoalPanelState.HIDDEN
-                    }
-                    assignGoalPanelState(toggledState)
-                },
+                onClick = currentPanelState::expansionBtnClick,
                 contentPadding = PaddingValues(0.dp)
             ){
 
@@ -453,6 +373,12 @@ fun FeatureItem(
 ) {
     BoxWithConstraints(
         modifier = Modifier
+            .scale(
+                when(feature.title){
+                    "Blue" -> 1F
+                    else -> 0.9F
+                }
+            )
             .padding(7.5.dp)
             .aspectRatio(1f)
             .clip(RoundedCornerShape(10.dp))
@@ -464,7 +390,7 @@ fun FeatureItem(
         // Medium colored path
         val mediumColoredPoint1 = Offset(0f, height * 0.3f)
         val mediumColoredPoint2 = Offset(width * 0.1f, height * 0.35f)
-        val mediumColoredPoint3 = Offset(width * 0.4f, height * 0.05f)
+        val mediumColoredPoint3 = Offset(width * 0.4f, height * 0.17f)
         val mediumColoredPoint4 = Offset(width * 0.75f, height * 0.7f)
         val mediumColoredPoint5 = Offset(width * 1.4f, -height.toFloat())
 
@@ -519,15 +445,17 @@ fun FeatureItem(
         ) {
             Text(
                 text = feature.title,
-                style = MaterialTheme.typography.h6.copy(),
+                style = MaterialTheme.typography.h6,
                 lineHeight = 26.sp,
-                modifier = Modifier.align(Alignment.TopStart)
+                modifier = Modifier.align(Alignment.TopStart),
+                color = Color.Black
             )
 
             Text(
                 text = feature.steps,
                 style = MaterialTheme.typography.h4,
-                modifier = Modifier .align(Center)
+                modifier = Modifier .align(Center),
+                color = Color.Black
             )
             //CAN ADD DELETE ICON HERE
 //            Icon(

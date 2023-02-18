@@ -35,6 +35,12 @@ object CustomShapes {
         large = RoundedCornerShape(topStart = large, topEnd = large)
     )
 
+    val onlyBottom:Shapes = Shapes(
+        small = RoundedCornerShape(bottomStart = small, bottomEnd = small),
+        medium = RoundedCornerShape(bottomStart = medium, bottomEnd = medium),
+        large = RoundedCornerShape(bottomStart = large, bottomEnd = large)
+    )
+
     fun onlySide(side:ShapeSide = ShapeSide.LEFT):Shapes {
         return when(side){
             ShapeSide.LEFT->Shapes(
