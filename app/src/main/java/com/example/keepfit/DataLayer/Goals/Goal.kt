@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "Goal")
 data class Goal(
-    @PrimaryKey var id:Int,
+    @PrimaryKey(autoGenerate = true) var id:Int,
     @ColumnInfo(name = "name") var name:String,
     @ColumnInfo(name = "steps") var steps:Int,
     @ColumnInfo(name = "color") var color:Int)
