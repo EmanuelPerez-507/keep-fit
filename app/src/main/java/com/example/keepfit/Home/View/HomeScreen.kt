@@ -23,8 +23,10 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
+import com.example.keepfit.Home.ViewModel.ExpandableAddStepsVM
 import com.example.keepfit.NavigationContainer.View.Screen
 import com.example.keepfit.R
+import com.example.keepfit.Settings.View.SettingsScreen
 import com.example.keepfit.ui.theme.CustomShapes
 import com.example.keepfit.ui.theme.HeaderOrange
 import java.time.LocalDateTime
@@ -39,8 +41,9 @@ var savedTotalSteps = 0
 var hitStepsGoal = ""
 
 @Composable
-@Preview
-fun HomeScreen() {
+fun HomeScreen(
+    plusButtonState:ExpandableAddStepsVM
+) {
 
     var totalStepsToday:Int by remember {
         mutableStateOf(0)
@@ -55,60 +58,49 @@ fun HomeScreen() {
         println("Total steps $totalStepsToday")
     }
 
-
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(color = Color.White)
+            .padding(bottom = 100.dp)
     ){
 
-        Column {
-        //call functions
+        Column (
+            modifier = Modifier.fillMaxSize()
+                ){
+            //call functions
+            dateAndTime()
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ){
+                CustomComponent(
+                    indicatorValue = savedTotalSteps
+                )
+            }
 
-        settingButton()
-        dateAndTime()
-        progressBar(totalStepsToday)
+        }
 
-    }
-        ButtonWithColor(Modifier.align(Alignment.BottomEnd), SetTotalSteps)
+        PlusButton(
+            alignment = Modifier.align(Alignment.BottomEnd),
+            state = plusButtonState){
+            Text("papas")
+        }
+
     }
 
 }
 
-
-
 @Composable
-fun settingButton(){
+fun dateAndTime() {
     Row(
-        modifier = Modifier
-            .height(10.dp)
-            .fillMaxWidth()
-    ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .fillMaxWidth()
-//            .height(120.dp)
-            .padding(top = 15.dp, bottom = 0.dp),
-//
-        horizontalAlignment = Alignment.End,
-
-        ) {
-//
-    }
-    }
-}
-
-@Composable
-fun dateAndTime(){
-    Row (
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
             .padding(0.dp)
             .height(80.dp)
-    ){
+    ) {
         Text(
 
             text = ("\nToday" +
@@ -119,49 +111,5 @@ fun dateAndTime(){
         )
     }
 
-}
-
-@Composable
-fun progressBar(steps:Int, goalSteps:Int = 1700){
-    var value by remember{ mutableStateOf(0) }
-    value = savedTotalSteps
-
-    Row(
-        modifier = Modifier
-
-            .fillMaxWidth()
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .fillMaxWidth()
-
-                .padding(top = 15.dp, bottom = 0.dp),
-//
-            horizontalAlignment = Alignment.CenterHorizontally,
-
-
-            ) {
-
-            CustomComponent(
-                indicatorValue = steps,
-                maxIndicatorValue = goalSteps
-            )
-        }
-        }
-}
-
-@Composable
-fun ButtonWithColor(mod: Modifier,setStepsFunction:(Int)->Unit){
-    Button(
-        modifier = mod
-            .offset((-10).dp, (-100).dp),
-        onClick = {setStepsFunction(passableSteps)},
-        shape = RoundedCornerShape(20.dp),
-        colors = ButtonDefaults.buttonColors(backgroundColor = Color.DarkGray))
-
-    {
-        Text(text = "+",color = Color.White)
-    }
 }
 

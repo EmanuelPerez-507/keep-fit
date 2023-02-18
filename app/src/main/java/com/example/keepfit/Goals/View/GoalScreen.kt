@@ -54,7 +54,7 @@ fun GoalScreen(
         Column {
             HeaderSett()
 
-            val createGoalDialogTransition = updateTransition(targetState = creationViewModel.expandable.expanded,
+            val createGoalDialogTransition = updateTransition(targetState = creationViewModel.expandable().expanded,
                 label = "createGoalTransition"
             )
             val keyboardController = LocalSoftwareKeyboardController.current
@@ -66,7 +66,7 @@ fun GoalScreen(
                     transitionSpec = {
                         tween(
                             delayMillis =
-                            when(creationViewModel.expandable.expanded){
+                            when(creationViewModel.expandable().expanded){
                                 false -> animationDelay
                                 true -> 0
                             }
@@ -84,7 +84,7 @@ fun GoalScreen(
                         .fillMaxWidth()
                         .shadow(
                             shadowAnimation,
-                            shape = RoundedCornerShape(bottomStart = 50.dp, bottomEnd = 50.dp)
+                            shape = CustomShapes.onlyBottom.medium
                         )
                         .zIndex(0.5F)
                         .background(color = Color.White),
@@ -94,7 +94,7 @@ fun GoalScreen(
                         transitionSpec = {
                             tween(
                                 delayMillis =
-                                when(creationViewModel.expandable.expanded){
+                                when(creationViewModel.expandable().expanded){
                                     false -> 0
                                     true -> animationDelay
                                 }
@@ -111,7 +111,7 @@ fun GoalScreen(
                         transitionSpec = {
                             tween(
                                 delayMillis =
-                                when(creationViewModel.expandable.expanded){
+                                when(creationViewModel.expandable().expanded){
                                     false -> animationDelay
                                     true -> 0
                                 }
@@ -131,9 +131,9 @@ fun GoalScreen(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ){
-                        TextField(value = creationViewModel.mainVM.goalName, onValueChange = creationViewModel.mainVM::goalName::set)
+                        TextField(value = creationViewModel.goalName, onValueChange = creationViewModel::goalName::set)
                         Spacer(modifier = Modifier.height(10.dp))
-                        TextField(value = creationViewModel.mainVM.goalSteps, onValueChange = creationViewModel.mainVM::goalSteps::set)
+                        TextField(value = creationViewModel.goalSteps, onValueChange = creationViewModel::goalSteps::set)
                     }
                     GoalButton(
                         Modifier.align(Alignment.CenterHorizontally),
@@ -206,7 +206,7 @@ fun GoalButton(modifier: Modifier,
         transitionSpec = {
             tween(
                 delayMillis =
-                when(currentPanelState.expandable.expanded){
+                when(currentPanelState.expandable().expanded){
                     false -> animationDelay
                     true -> 0
                 }

@@ -7,13 +7,17 @@ import androidx.activity.viewModels
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.room.Room
 import com.example.keepfit.DataLayer.Goals.Goal
 import com.example.keepfit.DataLayer.KeepFitDB
 import com.example.keepfit.Goals.ViewModel.Create.ExpandableGoalCreateModel
 import com.example.keepfit.Goals.ViewModel.Create.GoalCreateModel
 import com.example.keepfit.Goals.ViewModel.Show.GoalScreenModel
+import com.example.keepfit.Home.ViewModel.AddStepsVM
+import com.example.keepfit.Home.ViewModel.ExpandableAddStepsVM
 import com.example.keepfit.NavigationContainer.NavigationContainer
+import com.example.keepfit.NavigationContainer.ViewModel.ExpandableSettingsViewModel
 import com.example.keepfit.TemplateFunctionality.Expandable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -48,15 +52,25 @@ class Start : ComponentActivity() {
 
         val goalsScreenView: GoalScreenModel by viewModels()
 
-        val createGoalsScreenView: GoalCreateModel by viewModels()
-        val createGoalScreenExpandable:Expandable by viewModels()
-        val expandableCreateGoalVM:ExpandableGoalCreateModel = ExpandableGoalCreateModel(
-            createGoalScreenExpandable,
-            createGoalsScreenView
-        )
+        //Create goal dialog
+        val expandableCreateGoalVM:ExpandableGoalCreateModel by viewModels()
+
+        //add steps dialog
+        val expandableAddStepsVM:ExpandableAddStepsVM by viewModels()
+
+        //settings button (temporary)
+        val settingsExpandable:ExpandableSettingsViewModel by viewModels()
 
         setContent {
-            NavigationContainer(goalsScreenView, expandableCreateGoalVM)
+            NavigationContainer(
+
+                goalsScreenView,
+                expandableCreateGoalVM,
+
+                expandableAddStepsVM,
+
+                settingsExpandable
+            )
         }
 
         lifecycleScope.launch(Dispatchers.Default){
