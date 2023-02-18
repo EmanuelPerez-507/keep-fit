@@ -203,8 +203,8 @@ fun EmbeddedElements(
     Divider(modifier = Modifier
         .height(5.dp)
         .width(100.dp)
-        .background(color = Color.Black)
         .clip(CustomShapes.round())
+        .background(color = Color.Black)
     )
 
 

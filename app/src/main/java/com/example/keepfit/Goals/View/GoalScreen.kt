@@ -84,7 +84,7 @@ fun GoalScreen(
                         .fillMaxWidth()
                         .shadow(
                             shadowAnimation,
-                            shape = RoundedCornerShape(bottomStart = 50.dp, bottomEnd = 50.dp)
+                            shape = CustomShapes.onlyBottom.medium
                         )
                         .zIndex(0.5F)
                         .background(color = Color.White),

@@ -16,6 +16,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -25,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.example.keepfit.TemplateFunctionality.ExpandState
 import com.example.keepfit.TemplateFunctionality.Expandable
+import com.example.keepfit.ui.theme.CustomShapes
 import com.example.keepfit.ui.theme.medium
 
 @Composable
@@ -38,7 +40,8 @@ fun ExpandableFAB(
     alignment: Modifier,
     state: ExpandState,
     anchor:Alignment,
-    content:@Composable ()->Unit = {},
+    rotation:Float = -90F,
+    content:@Composable ()->Unit = {}
 ) {
 
     val transition: Transition<Boolean> = updateTransition(state.expanded, label = "settingButtonTransition")
@@ -53,7 +56,7 @@ fun ExpandableFAB(
     val animatedRotation: Float by transition.animateFloat(label = "rotationTransition") { currentState ->
         when(currentState){
             false -> 0F
-            true -> -90F
+            true -> rotation
         }
     }
 
@@ -118,6 +121,14 @@ fun ExpandableFAB(
         }
     }
 
+    val buttonShape: Shape = when(anchor){
+        Alignment.TopStart -> RoundedCornerShape(bottomEnd = 15.dp)
+        Alignment.TopEnd -> RoundedCornerShape(bottomStart = 15.dp)
+        Alignment.BottomStart -> RoundedCornerShape(topEnd = 15.dp)
+        Alignment.BottomEnd -> RoundedCornerShape(topStart = 15.dp)
+        else->CustomShapes.round()
+    }
+
     Surface(
         modifier = alignment
             .padding(animatedPadding)
@@ -147,9 +158,7 @@ fun ExpandableFAB(
                 modifier = Modifier
                     .size(65.dp)
                     .align(anchor),
-                shape = RoundedCornerShape(
-                    bottomStart = 15.dp
-                ),
+                shape = buttonShape,
                 colors = ButtonDefaults.buttonColors(backgroundColor = animatedColor,contentColor = Color.Transparent),
                 onClick = {
                           state.expanded = !state.expanded

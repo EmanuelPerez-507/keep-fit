@@ -45,11 +45,12 @@ fun PlusButton(
         FABColor = Color.DarkGray,
         height = 200.dp,
         width = 200.dp,
-        iconId = R.drawable.settings_icon,
+        iconId = R.drawable.plus_round_icon,
         iconDescriptor = "Plus icon",
         alignment = alignment,
         state = state.expandable(),
-        anchor = Alignment.BottomEnd
+        anchor = Alignment.BottomEnd,
+        rotation = -135F
     ){
 
         Text("Potato")
