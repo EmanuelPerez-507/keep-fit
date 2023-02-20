@@ -27,6 +27,7 @@ import com.example.keepfit.Goals.ViewModel.Show.GoalScreenModel
 import com.example.keepfit.History.View.HistoryScreen
 import com.example.keepfit.Home.View.HomeScreen
 import com.example.keepfit.Home.ViewModel.ExpandableAddStepsVM
+import com.example.keepfit.Home.ViewModel.HomeVM
 import com.example.keepfit.NavigationContainer.View.Screen
 import com.example.keepfit.NavigationContainer.View.SettingsButton
 import com.example.keepfit.NavigationContainer.ViewModel.ExpandableSettingsViewModel
@@ -41,6 +42,7 @@ import com.example.keepfit.ui.theme.KeepFitTheme
 fun NavigationContainer(
     goalsViewModel: GoalScreenModel,
     goalsCreateModel: ExpandableGoalCreateModel,
+    homeVM: HomeVM,
     addStepsModel: ExpandableAddStepsVM,
     settingsExpandable:ExpandableSettingsViewModel
 ) {
@@ -78,6 +80,7 @@ fun NavigationContainer(
                 startDestination = Screen.Home.route){
 
                 composable(Screen.Home.route){ HomeScreen(
+                    homeVM,
                     addStepsModel
                 ) }
 

@@ -4,7 +4,6 @@ import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -25,7 +24,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import com.example.keepfit.Home.View.savedTotalSteps
 import com.example.keepfit.ui.theme.CustomShapes
 
 
@@ -37,8 +35,11 @@ fun CustomComponent(
     indicatorValue: Int = 0,
     //maximum value we can reach in custom component
     maxIndicatorValue: Int = 100,
+     //projectionValue
+    projectionIndicatorValue:Int = 0,
     backgroundIndicatorColor: Color = MaterialTheme.colors.onSurface.copy(alpha = 0.1f),
     backgroundIndicatorStrokeWidth: Float = 50f,
+     projectionIndicatorColor: Color = MaterialTheme.colors.secondary,
     foregroundIndicatorColor: Color = MaterialTheme.colors.primary,
     foregroundIndicatorStrokeWidth: Float = 50f,
 //    indicatorStrokeCap: StrokeCap = StrokeCap.Round,
@@ -49,22 +50,32 @@ fun CustomComponent(
     smallTextFontSize: TextUnit = MaterialTheme.typography.h6.fontSize,
     smallTextColor: Color = MaterialTheme.colors.onSurface.copy(alpha = 0.3f)
 ) {
-    var allowedIndicatorValue by remember {
-        mutableStateOf(maxIndicatorValue)
-    }
-    allowedIndicatorValue = if (indicatorValue <= maxIndicatorValue) {
-        indicatorValue
+//    var allowedIndicatorValue by remember {mutableStateOf(maxIndicatorValue) }
+
+    val allowedIndicatorValue:Float = if (indicatorValue <= maxIndicatorValue) {
+        indicatorValue.toFloat()
     } else {
-        maxIndicatorValue
+        maxIndicatorValue.toFloat()
     }
 
-    var animatedIndicatorValue by remember { mutableStateOf(0f) }
-    LaunchedEffect(key1 = allowedIndicatorValue) {
-        animatedIndicatorValue = allowedIndicatorValue.toFloat()
+    println("V0$projectionIndicatorValue")
+
+    val allowedProjectionIndicatorValue:Float = if (projectionIndicatorValue <= maxIndicatorValue) {
+        projectionIndicatorValue.toFloat()
+    } else {
+        maxIndicatorValue.toFloat()
     }
+
+    println("V1$allowedProjectionIndicatorValue")
+
+//    var animatedIndicatorValue by remember { mutableStateOf(0f) }
+//    LaunchedEffect(key1 = allowedIndicatorValue) {
+//        animatedIndicatorValue = allowedIndicatorValue.toFloat()
+//    }
 // Calculates the percentage value of the amount completed on the progress bar
-    val percentage =
-        (animatedIndicatorValue / maxIndicatorValue) * 100
+    val percentage = (allowedIndicatorValue / maxIndicatorValue) * 100
+    val projectionPercentage = (allowedProjectionIndicatorValue / maxIndicatorValue) * 100
+    println("pp$projectionPercentage")
 //gives
     val sweepAngle by animateFloatAsState(
         //we are uisng 2.4 because maximum value of the progress should be
@@ -73,16 +84,25 @@ fun CustomComponent(
         animationSpec = tween(1000)
     )
 
+    //gives
+    val sweepProjectionAngle by animateFloatAsState(
+        //we are uisng 2.4 because maximum value of the progress should be
+        // 240f(thats the angle we take)
+        targetValue = (2.4 * projectionPercentage).toFloat(),
+        animationSpec = tween(1000)
+    )
+
     val receivedValue by animateIntAsState(
-        targetValue = allowedIndicatorValue,
+        targetValue = indicatorValue,
         animationSpec = tween(1000)
     )
 
     val animatedBigTextColor by animateColorAsState(
-        targetValue = if (allowedIndicatorValue == 0)
-            MaterialTheme.colors.onSurface.copy(alpha = 0.3f)
-        else
-            bigTextColor,
+        targetValue = MaterialTheme.colors.onSurface.copy(alpha = 0.3f + 0.7f * (percentage/100)),
+//        targetValue = if (allowedIndicatorValue == 0f)
+//            MaterialTheme.colors.onSurface.copy(alpha = 0.3f)
+//        else
+//            bigTextColor,
         animationSpec = tween(1000)
     )
 
@@ -96,6 +116,13 @@ fun CustomComponent(
                     componentSize = componentSize,
                     indicatorColor = backgroundIndicatorColor,
                     indicatorStrokeWidth = backgroundIndicatorStrokeWidth,
+//                    indicatorStokeCap = indicatorStrokeCap
+                )
+                foregroundIndicator(
+                    sweepAngle = sweepProjectionAngle,
+                    componentSize = componentSize,
+                    indicatorColor = projectionIndicatorColor.copy(alpha = 0.25f),
+                    indicatorStrokeWidth = foregroundIndicatorStrokeWidth,
 //                    indicatorStokeCap = indicatorStrokeCap
                 )
                 foregroundIndicator(
@@ -193,7 +220,7 @@ fun EmbeddedElements(
 // shows the steps
 
     Text(
-        text = "$Steps${bigTextSuffix.take(2)}",
+        text = "$bigText${bigTextSuffix.take(2)}",
         color = bigTextColor,
         fontSize = bigTextFontSize,
         textAlign = TextAlign.Center,

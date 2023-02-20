@@ -7,12 +7,13 @@ class ExpandableAddStepsVM:AddStepsVM(),Expandable{
 
     private val expandableState:ExpandState = ExpandState()
 
-    fun onExpandButtonClick(){
-        this.expandableState.expanded = !this.expandableState.expanded
-    }
-
     override fun expandable(): ExpandState {
         return expandableState
+    }
+
+    override fun commitSteps(){
+        expandableState.expanded = false
+        super.commitSteps()
     }
 
 }

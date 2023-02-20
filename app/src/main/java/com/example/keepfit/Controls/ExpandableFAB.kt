@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
@@ -25,7 +26,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.example.keepfit.TemplateFunctionality.ExpandState
-import com.example.keepfit.TemplateFunctionality.Expandable
 import com.example.keepfit.ui.theme.CustomShapes
 import com.example.keepfit.ui.theme.medium
 
@@ -35,21 +35,36 @@ fun ExpandableFAB(
     FABColor:Color,
     height:Dp,
     width:Dp,
+    compressedOffsetV:Dp = 0.dp,
+    compressedOffsetH:Dp = 0.dp,
+    expandedOffsetV:Dp = 0.dp,
+    expandedOffsetH:Dp = 0.dp,
     iconId:Int,
     iconDescriptor:String,
     alignment: Modifier,
     state: ExpandState,
     anchor:Alignment,
     rotation:Float = -90F,
+    beforeClose:()->Unit = {},
+    afterClose:()->Unit = {},
+    beforeOpen:()->Unit = {},
+    afterOpen:()->Unit = {},
     content:@Composable ()->Unit = {}
 ) {
 
     val transition: Transition<Boolean> = updateTransition(state.expanded, label = "settingButtonTransition")
 
-    val animatedPadding: Dp by transition.animateDp(label = "paddingTransition") { currentState ->
+    val animatedOffsetH: Dp by transition.animateDp(label = "paddingTransition") { currentState ->
         when (currentState) {
-            false -> 10.dp
-            true -> 20.dp
+            false -> compressedOffsetH
+            true -> expandedOffsetH
+        }
+    }
+
+    val animatedOffsetV: Dp by transition.animateDp(label = "paddingTransition") { currentState ->
+        when (currentState) {
+            false -> compressedOffsetV
+            true -> expandedOffsetV
         }
     }
 
@@ -131,7 +146,7 @@ fun ExpandableFAB(
 
     Surface(
         modifier = alignment
-            .padding(animatedPadding)
+            .offset(animatedOffsetH, animatedOffsetV)
             .width(animatedWidth)
             .height(animatedHeight)
             .shadow(animatedShadow, shape = RoundedCornerShape(animatedCorner))
@@ -141,7 +156,7 @@ fun ExpandableFAB(
                 state.expandedBox = layoutCoordinates.boundsInRoot()
             },
 //            .clip(RoundedCornerShape(animatedCorner)),
-        color = Color.LightGray,
+        color = FABColor,
     ) {
 
         Box(
@@ -161,7 +176,12 @@ fun ExpandableFAB(
                 shape = buttonShape,
                 colors = ButtonDefaults.buttonColors(backgroundColor = animatedColor,contentColor = Color.Transparent),
                 onClick = {
-                          state.expanded = !state.expanded
+                    if(state.expanded){
+                        beforeClose()
+                    }else{
+                        beforeOpen()
+                    }
+                    state.expanded = !state.expanded
                 },
             ){
 
@@ -175,6 +195,14 @@ fun ExpandableFAB(
 
         }
 
+    }
+
+    if(transition.currentState==transition.targetState){
+        if(state.expanded){
+            afterOpen()
+        }else{
+            afterClose()
+        }
     }
 
 }

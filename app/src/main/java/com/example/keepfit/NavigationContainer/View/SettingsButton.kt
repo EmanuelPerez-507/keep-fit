@@ -37,6 +37,10 @@ fun SettingsButton(
 ) {
 
 ExpandableFAB(
+    compressedOffsetH = (-10).dp,
+    compressedOffsetV = 10.dp,
+    expandedOffsetH = (-20).dp,
+    expandedOffsetV = 20.dp,
     expandedButtonColor = CancelRed,
     FABColor = Color.LightGray,
     height = 450.dp,
