@@ -470,11 +470,11 @@ fun FeatureItem(
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
+                    .clip(RoundedCornerShape(10.dp))
                     .clickable {
                         // Handle the click
                     }
                     .align(Alignment.BottomEnd)
-                    .clip(RoundedCornerShape(10.dp))
                     .background(ButtonOrange)
                     .padding(vertical = 6.dp, horizontal = 15.dp)
             )
