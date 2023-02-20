@@ -30,6 +30,7 @@ import com.example.keepfit.R
 import com.example.keepfit.Settings.View.SettingsScreen
 import com.example.keepfit.ui.theme.CustomShapes
 import com.example.keepfit.ui.theme.HeaderOrange
+import com.google.accompanist.insets.LocalWindowInsets
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -38,6 +39,7 @@ val current = LocalDateTime.now()
 val formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
 val formatted = current.format(formatter)
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun HomeScreen(
     state:HomeVM,
@@ -46,8 +48,8 @@ fun HomeScreen(
 
     Box(
         modifier = Modifier
-            .padding(bottom = 100.dp)
             .imePadding()
+            .padding(bottom = if(WindowInsets.isImeVisible) 10.dp else 80.dp)
             .fillMaxSize()
             .background(color = Color.White)
     ){
@@ -86,7 +88,6 @@ fun dateAndTime() {
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(0.dp)
             .height(80.dp)
     ) {
         Text(
