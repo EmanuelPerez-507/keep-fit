@@ -119,6 +119,7 @@ fun CustomComponent(
 //                    indicatorStokeCap = indicatorStrokeCap
                 )
                 foregroundIndicator(
+                    startAngle = 150f + sweepAngle,
                     sweepAngle = sweepProjectionAngle,
                     componentSize = componentSize,
                     indicatorColor = projectionIndicatorColor.copy(alpha = 0.25f),
@@ -126,6 +127,7 @@ fun CustomComponent(
 //                    indicatorStokeCap = indicatorStrokeCap
                 )
                 foregroundIndicator(
+                    startAngle = 150f,
                     sweepAngle = sweepAngle,
                     componentSize = componentSize,
                     indicatorColor = foregroundIndicatorColor,
@@ -180,6 +182,7 @@ fun DrawScope.backgroundIndicator(
 }
 // main colored indicator for progress bar
 fun DrawScope.foregroundIndicator(
+    startAngle: Float,
     sweepAngle: Float,
     componentSize: Size,
     indicatorColor: Color,
@@ -189,7 +192,7 @@ fun DrawScope.foregroundIndicator(
     drawArc(
         size = componentSize,
         color = indicatorColor,
-        startAngle = 150f,
+        startAngle = startAngle,
         //change back to "sweepAngle" to reset it to calculated measurement
         sweepAngle = sweepAngle,
         useCenter = false,

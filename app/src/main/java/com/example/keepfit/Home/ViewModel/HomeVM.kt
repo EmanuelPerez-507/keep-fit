@@ -20,11 +20,11 @@ class HomeVM: ViewModel() {
         get() = _projectionSteps
         set(value:Int){
             println(value)
-            _projectionSteps = _currentSteps + value
+            _projectionSteps = value
         }
 
     fun commitSteps(){
-        _currentSteps = _projectionSteps
+        _currentSteps += _projectionSteps
         _projectionSteps = 0
     }
 
