@@ -1,4 +1,4 @@
-package com.example.keepfit.TemplateFunctionality
+package com.example.keepfit.Functionality.Template
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

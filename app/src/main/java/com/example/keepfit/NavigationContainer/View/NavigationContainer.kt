@@ -10,8 +10,6 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -22,15 +20,14 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.keepfit.GoalScreen
 import com.example.keepfit.Goals.ViewModel.Create.ExpandableGoalCreateModel
-import com.example.keepfit.Goals.ViewModel.Create.GoalCreateModel
 import com.example.keepfit.Goals.ViewModel.Show.GoalScreenModel
 import com.example.keepfit.History.View.HistoryScreen
 import com.example.keepfit.Home.View.HomeScreen
 import com.example.keepfit.Home.ViewModel.ExpandableAddStepsVM
+import com.example.keepfit.Home.ViewModel.HomeVM
 import com.example.keepfit.NavigationContainer.View.Screen
 import com.example.keepfit.NavigationContainer.View.SettingsButton
 import com.example.keepfit.NavigationContainer.ViewModel.ExpandableSettingsViewModel
-import com.example.keepfit.TemplateFunctionality.Expandable
 import com.example.keepfit.ui.theme.CustomShapes
 import com.example.keepfit.ui.theme.KeepFitTheme
 
@@ -41,6 +38,7 @@ import com.example.keepfit.ui.theme.KeepFitTheme
 fun NavigationContainer(
     goalsViewModel: GoalScreenModel,
     goalsCreateModel: ExpandableGoalCreateModel,
+    homeVM: HomeVM,
     addStepsModel: ExpandableAddStepsVM,
     settingsExpandable:ExpandableSettingsViewModel
 ) {
@@ -51,6 +49,8 @@ fun NavigationContainer(
 
         Box(
             modifier = Modifier
+                .navigationBarsPadding()
+                .statusBarsPadding()
                 .fillMaxSize()
                 .pointerInteropFilter { motionEvent ->
                     when (motionEvent.action) {
@@ -78,6 +78,7 @@ fun NavigationContainer(
                 startDestination = Screen.Home.route){
 
                 composable(Screen.Home.route){ HomeScreen(
+                    homeVM,
                     addStepsModel
                 ) }
 

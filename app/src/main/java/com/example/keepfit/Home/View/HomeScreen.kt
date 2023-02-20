@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import com.example.keepfit.Home.ViewModel.ExpandableAddStepsVM
+import com.example.keepfit.Home.ViewModel.HomeVM
 import com.example.keepfit.NavigationContainer.View.Screen
 import com.example.keepfit.R
 import com.example.keepfit.Settings.View.SettingsScreen
@@ -36,33 +37,19 @@ import java.time.format.FormatStyle
 val current = LocalDateTime.now()
 val formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
 val formatted = current.format(formatter)
-var passableSteps = 100
-var savedTotalSteps = 0
-var hitStepsGoal = ""
 
 @Composable
 fun HomeScreen(
+    state:HomeVM,
     plusButtonState:ExpandableAddStepsVM
 ) {
 
-    var totalStepsToday:Int by remember {
-        mutableStateOf(0)
-    }
-
-    totalStepsToday = savedTotalSteps
-
-    val SetTotalSteps = fun (steps:Int){
-        println("Added $passableSteps steps!")
-        totalStepsToday += passableSteps
-        savedTotalSteps = totalStepsToday
-        println("Total steps $totalStepsToday")
-    }
-
     Box(
         modifier = Modifier
+            .padding(bottom = 100.dp)
+            .imePadding()
             .fillMaxSize()
             .background(color = Color.White)
-            .padding(bottom = 100.dp)
     ){
 
         Column (
@@ -74,8 +61,11 @@ fun HomeScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ){
+                println("V${state.projectionSteps}")
                 CustomComponent(
-                    indicatorValue = savedTotalSteps
+                    projectionIndicatorValue = state.projectionSteps,
+                    indicatorValue = state.currentSteps,
+                    maxIndicatorValue = 10000
                 )
             }
 
@@ -83,9 +73,7 @@ fun HomeScreen(
 
         PlusButton(
             alignment = Modifier.align(Alignment.BottomEnd),
-            state = plusButtonState){
-            Text("papas")
-        }
+            state = plusButtonState)
 
     }
 
