@@ -3,8 +3,8 @@ package com.example.keepfit
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -355,7 +355,7 @@ fun FeatureSection(features: List<Feature>) {
             modifier = Modifier.padding(10.dp)
         )
         LazyVerticalGrid(
-            cells = GridCells.Fixed(2),
+            columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(start = 7.5.dp, end = 7.5.dp, bottom = 100.dp),
             modifier = Modifier.fillMaxHeight()
         ) {
@@ -470,11 +470,11 @@ fun FeatureItem(
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
+                    .clip(RoundedCornerShape(10.dp))
                     .clickable {
                         // Handle the click
                     }
                     .align(Alignment.BottomEnd)
-                    .clip(RoundedCornerShape(10.dp))
                     .background(ButtonOrange)
                     .padding(vertical = 6.dp, horizontal = 15.dp)
             )

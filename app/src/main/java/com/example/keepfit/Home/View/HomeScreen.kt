@@ -46,9 +46,10 @@ fun HomeScreen(
 
     Box(
         modifier = Modifier
+            .padding(bottom = 100.dp)
+            .imePadding()
             .fillMaxSize()
             .background(color = Color.White)
-            .padding(bottom = 100.dp)
     ){
 
         Column (
