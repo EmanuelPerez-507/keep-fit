@@ -17,8 +17,18 @@ open class AddStepsVM:ViewModel() {
     var augmentSteps:String
         get() = _augmentSteps
         set(value:String){
-            _augmentSteps = value
-            proposeSteps()
+            if(value.length>0){
+                try{
+                    parseInt(value)
+                    _augmentSteps = value
+                    proposeSteps()
+                }catch (ex:Exception){
+
+                }
+            }else{
+                _augmentSteps = value
+                proposeSteps()
+            }
         }
 
     open fun proposeSteps(){

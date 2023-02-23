@@ -58,15 +58,12 @@ fun CustomComponent(
         maxIndicatorValue.toFloat()
     }
 
-    println("V0$projectionIndicatorValue")
-
-    val allowedProjectionIndicatorValue:Float = if (projectionIndicatorValue <= maxIndicatorValue) {
+    val allowedProjectionIndicatorValue:Float =
+        if ((allowedIndicatorValue + projectionIndicatorValue) <= maxIndicatorValue) {
         projectionIndicatorValue.toFloat()
     } else {
-        maxIndicatorValue.toFloat()
+            maxIndicatorValue - allowedIndicatorValue
     }
-
-    println("V1$allowedProjectionIndicatorValue")
 
 //    var animatedIndicatorValue by remember { mutableStateOf(0f) }
 //    LaunchedEffect(key1 = allowedIndicatorValue) {
@@ -75,7 +72,6 @@ fun CustomComponent(
 // Calculates the percentage value of the amount completed on the progress bar
     val percentage = (allowedIndicatorValue / maxIndicatorValue) * 100
     val projectionPercentage = (allowedProjectionIndicatorValue / maxIndicatorValue) * 100
-    println("pp$projectionPercentage")
 //gives
     val sweepAngle by animateFloatAsState(
         //we are uisng 2.4 because maximum value of the progress should be

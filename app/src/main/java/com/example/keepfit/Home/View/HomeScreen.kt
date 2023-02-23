@@ -3,6 +3,7 @@ package com.example.keepfit.Home.View
 import CustomComponent
 import android.content.Intent.getIntent
 import android.graphics.Paint.Align
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -17,11 +18,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.modifier.modifierLocalOf
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.*
 import androidx.core.content.ContextCompat.startActivity
 import com.example.keepfit.Home.ViewModel.ExpandableAddStepsVM
 import com.example.keepfit.Home.ViewModel.HomeVM
@@ -46,10 +48,18 @@ fun HomeScreen(
     plusButtonState:ExpandableAddStepsVM
 ) {
 
+    val constantPadding:Dp = 80.dp
+    val imePadding:Dp = WindowInsets.ime.asPaddingValues().calculateBottomPadding()-
+        WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+    val inputPadding = max(constantPadding, imePadding + 10.dp)
+
     Box(
         modifier = Modifier
-            .imePadding()
-            .padding(bottom = if(WindowInsets.isImeVisible) 10.dp else 80.dp)
+//            .let {
+//                if (imePadding > constantPadding) it.imePadding()
+//                else it
+//            }
+            .padding(bottom = inputPadding)
             .fillMaxSize()
             .background(color = Color.White)
     ){
