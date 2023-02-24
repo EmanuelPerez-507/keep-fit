@@ -1,38 +1,40 @@
 package com.example.keepfit.Home.View
 
 import CustomComponent
-import android.content.Intent.getIntent
-import android.graphics.Paint.Align
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.Image
+//import android.content.Intent.getIntent
+//import android.graphics.Paint.Align
+//import androidx.compose.animation.core.animateDpAsState
+//import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+//import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
+//import androidx.compose.foundation.shape.RoundedCornerShape
+//import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
+//import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+//import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.modifier.modifierLocalOf
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+//import androidx.compose.ui.modifier.modifierLocalOf
+//import androidx.compose.ui.platform.LocalDensity
+//import androidx.compose.ui.res.painterResource
+//import androidx.compose.ui.text.input.KeyboardType
+//import androidx.compose.ui.text.input.PasswordVisualTransformation
+//import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
-import androidx.core.content.ContextCompat.startActivity
+//import androidx.core.content.ContextCompat.startActivity
 import com.example.keepfit.Home.ViewModel.ExpandableAddStepsVM
 import com.example.keepfit.Home.ViewModel.HomeVM
-import com.example.keepfit.NavigationContainer.View.Screen
-import com.example.keepfit.R
-import com.example.keepfit.Settings.View.SettingsScreen
-import com.example.keepfit.ui.theme.CustomShapes
-import com.example.keepfit.ui.theme.HeaderOrange
-import com.google.accompanist.insets.LocalWindowInsets
+//import com.example.keepfit.NavigationContainer.View.Screen
+//import com.example.keepfit.R
+//import com.example.keepfit.Settings.View.SettingsScreen
+//import com.example.keepfit.ui.theme.CustomShapes
+//import com.example.keepfit.ui.theme.HeaderOrange
+//import com.google.accompanist.insets.LocalWindowInsets
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -42,6 +44,8 @@ val formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
 val formatted = current.format(formatter)
 
 @OptIn(ExperimentalLayoutApi::class)
+
+@Preview
 @Composable
 fun HomeScreen(
     state:HomeVM,
@@ -111,4 +115,5 @@ fun dateAndTime() {
     }
 
 }
+
 

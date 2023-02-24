@@ -3,7 +3,10 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -14,9 +17,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -24,7 +29,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import com.example.keepfit.ui.theme.ButtonOrange
 import com.example.keepfit.ui.theme.CustomShapes
+import com.example.keepfit.ui.theme.LLightOrange
+import com.example.keepfit.ui.theme.LightOrange
 
 
 @Composable
@@ -43,7 +51,7 @@ fun CustomComponent(
     foregroundIndicatorColor: Color = MaterialTheme.colors.primary,
     foregroundIndicatorStrokeWidth: Float = 50f,
 //    indicatorStrokeCap: StrokeCap = StrokeCap.Round,
-    bigTextFontSize: TextUnit = MaterialTheme.typography.h5.fontSize,
+    bigTextFontSize: TextUnit = MaterialTheme.typography.h4.fontSize,
     bigTextColor: Color = MaterialTheme.colors.onSurface,
     bigTextSuffix: String = "",
     smallText: String = "Remaining",
@@ -108,6 +116,7 @@ fun CustomComponent(
             .drawBehind {
                 //Progress bar will be small in size than the canvas hence we divide the size of canvas with 1.25f
                 val componentSize = size / 1.25f
+
                 backgroundIndicator(
                     componentSize = componentSize,
                     indicatorColor = backgroundIndicatorColor,
@@ -130,10 +139,12 @@ fun CustomComponent(
                     indicatorStrokeWidth = foregroundIndicatorStrokeWidth,
 //                    indicatorStokeCap = indicatorStrokeCap
                 )
-            },
+            }
+        ,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
         EmbeddedElements(
             bigText = receivedValue,
             bigTextFontSize = bigTextFontSize,
@@ -146,8 +157,20 @@ fun CustomComponent(
             TotalSteps = maxIndicatorValue
         )
     }
+//    Column (verticalArrangement = Arrangement.Center,
+//        horizontalAlignment = Alignment.CenterHorizontally
+//    ){
+// Box(modifier = Modifier
+//     .size(200.dp)
+//     .background(color = Color.Blue)
+//     .clip(RoundedCornerShape(20.dp))
+//
+// )
+//
+//    }
 }
-//the background of the progres bar shape
+//the background of the progress bar shape
+
 fun DrawScope.backgroundIndicator(
     componentSize: Size,
     //use adroidx.compose.ui.graphics
@@ -175,8 +198,35 @@ fun DrawScope.backgroundIndicator(
             y = (size.height - componentSize.height) / 2f
         )
     )
+
 }
 // main colored indicator for progress bar
+//fun DrawScope.foregroundIndicator(
+//    startAngle: Float,
+//    sweepAngle: Float,
+//    componentSize: Size,
+//    indicatorColor: Color,
+//    indicatorStrokeWidth: Float,
+////    indicatorStokeCap: StrokeCap
+//) {
+//    drawArc(
+//        size = componentSize,
+//        color = indicatorColor,
+//        startAngle = startAngle,
+//        //change back to "sweepAngle" to reset it to calculated measurement
+//        sweepAngle = sweepAngle,
+//        useCenter = false,
+//        style = Stroke(
+//            width = indicatorStrokeWidth,
+//            cap = StrokeCap.Round
+//        ),
+//        topLeft = Offset(
+//            x = (size.width - componentSize.width) / 2f,
+//            y = (size.height - componentSize.height) / 2f
+//        )
+//    )
+//}
+
 fun DrawScope.foregroundIndicator(
     startAngle: Float,
     sweepAngle: Float,
@@ -185,11 +235,25 @@ fun DrawScope.foregroundIndicator(
     indicatorStrokeWidth: Float,
 //    indicatorStokeCap: StrokeCap
 ) {
+    val outerRadius = (componentSize.width / 2f) + indicatorStrokeWidth -12f
+    val innerRadius = (outerRadius - indicatorStrokeWidth) - 10f
+
+    // draw outer circle
+    drawCircle(
+        color = LightOrange,
+        center = Offset(size.width / 2f, size.height / 2f),
+        radius = outerRadius,
+        style = Stroke(
+            width = indicatorStrokeWidth / 2f,
+            cap = StrokeCap.Round
+        ),
+    )
+
+    // draw inner arc
     drawArc(
         size = componentSize,
         color = indicatorColor,
         startAngle = startAngle,
-        //change back to "sweepAngle" to reset it to calculated measurement
         sweepAngle = sweepAngle,
         useCenter = false,
         style = Stroke(
@@ -201,8 +265,15 @@ fun DrawScope.foregroundIndicator(
             y = (size.height - componentSize.height) / 2f
         )
     )
-}
 
+    // draw inner circle
+    drawCircle(
+        color = LLightOrange,
+        center = Offset(size.width / 2f, size.height / 2f),
+        radius = innerRadius,
+        style = Fill,
+    )
+}
 @Composable
 fun EmbeddedElements(
     bigText: Int,
@@ -217,7 +288,12 @@ fun EmbeddedElements(
 
 ) {
 // shows the steps
-
+    Text(
+        text = "Steps",
+        color = Color.Black,
+        fontSize = smallTextFontSize,
+        textAlign = TextAlign.Center
+    )
     Text(
         text = "$bigText${bigTextSuffix.take(2)}",
         color = bigTextColor,
@@ -227,10 +303,11 @@ fun EmbeddedElements(
     )
 
     Divider(modifier = Modifier
-        .height(5.dp)
-        .width(100.dp)
+//        .height(5.dp)
+        .width(80.dp)
         .clip(CustomShapes.round())
-        .background(color = Color.Black)
+        .background(color = Color.Gray),
+        thickness = 1.dp
     )
 
 
@@ -239,17 +316,15 @@ fun EmbeddedElements(
         fontSize = bigTextFontSize,
         textAlign = TextAlign.Center,
         fontWeight = FontWeight.Bold,
-        color = Color.Cyan
+        color = ButtonOrange
     )
 
-    Text(
-        text = "Steps",
-        color = smallTextColor,
-        fontSize = smallTextFontSize,
-        textAlign = TextAlign.Center
-    )
+
+
 
 }
+
+
 
 @Composable
 @Preview(showBackground = true)
