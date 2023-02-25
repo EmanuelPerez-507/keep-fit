@@ -29,12 +29,13 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import com.example.keepfit.Goals.View.ExpandableGoalCreationScreen
 import com.example.keepfit.Goals.View.Feature
 import com.example.keepfit.Goals.ViewModel.Create.ExpandableGoalCreateModel
 import com.example.keepfit.Goals.ViewModel.Show.GoalScreenModel
 import com.example.keepfit.ui.theme.*
 
-val animationDelay:Int = 150
+const val animationDelay:Int = 150
 
 //main Goal screen
 //@Preview(showBackground = true)
@@ -54,93 +55,9 @@ fun GoalScreen(
         Column {
             HeaderSett()
 
-            val createGoalDialogTransition = updateTransition(targetState = creationViewModel.expandable().expanded,
-                label = "createGoalTransition"
-            )
-            val keyboardController = LocalSoftwareKeyboardController.current
-
             Box(){
 
-                val shadowAnimation:Dp by createGoalDialogTransition.animateDp(
-                    label="createGoalShadow",
-                    transitionSpec = {
-                        tween(
-                            delayMillis =
-                            when(creationViewModel.expandable().expanded){
-                                false -> animationDelay
-                                true -> 0
-                            }
-                        )
-                    }
-                ) {currentState->
-                    when(currentState){
-                        false -> 0.dp
-                        true -> 35.dp
-                    }
-                }
-
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .shadow(
-                            shadowAnimation,
-                            shape = CustomShapes.onlyBottom.medium
-                        )
-                        .zIndex(0.5F)
-                        .background(color = Color.White),
-                ){
-                    val alphaAnimation:Float by createGoalDialogTransition.animateFloat(
-                        label="createGoalAlpha",
-                        transitionSpec = {
-                            tween(
-                                delayMillis =
-                                when(creationViewModel.expandable().expanded){
-                                    false -> 0
-                                    true -> animationDelay
-                                }
-                            )
-                        }
-                    ) {currentState ->
-                        when(currentState){
-                            false -> 0F
-                            true -> 1F
-                        }
-                    }
-                    val heightAnimation:Dp by createGoalDialogTransition.animateDp(
-                        label="createGoalHeight",
-                        transitionSpec = {
-                            tween(
-                                delayMillis =
-                                when(creationViewModel.expandable().expanded){
-                                    false -> animationDelay
-                                    true -> 0
-                                }
-                            )
-                        }
-                    ) { currentState ->
-                        when(currentState){
-                            false -> 0.dp
-                            true -> 160.dp
-                        }
-                    }
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(heightAnimation)
-                            .alpha(alphaAnimation),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ){
-                        TextField(value = creationViewModel.goalName, onValueChange = creationViewModel::goalName::set)
-                        Spacer(modifier = Modifier.height(10.dp))
-                        TextField(value = creationViewModel.goalSteps, onValueChange = creationViewModel::goalSteps::set)
-                    }
-                    GoalButton(
-                        Modifier.align(Alignment.CenterHorizontally),
-                        createGoalDialogTransition,
-                        creationViewModel
-                    )
-                }
+                ExpandableGoalCreationScreen(creationViewModel)
 
                 Column(){
 
@@ -171,17 +88,18 @@ fun HeaderSett(
             .padding(0.dp)
             .background(HeaderOrange)
             .height(80.dp)
-            ){
-    Column(
+            ) {
+        Column(
 
 //      verticalArrangement = Arrangement.Center
 
-    ) {
-    Text(
-        text = "Goals",
-        style = MaterialTheme.typography.h4,
-        modifier = Modifier.padding(start = 10.dp)
-    )
+        ) {
+            Text(
+                text = "Goals",
+                style = MaterialTheme.typography.h4,
+                modifier = Modifier.padding(start = 10.dp)
+            )
+        }
     }
         //SETTINGS ICON(BUTTON)
 //        Icon(painter = painterResource(id = R.drawable.baseline_settings_24),
@@ -192,95 +110,7 @@ fun HeaderSett(
 //                .padding(end = 10.dp),
 //            )
     }
-}
 
-
-//Button to set the goals(BUTTON: add clickable or onclick)
-@Composable
-fun GoalButton(modifier: Modifier,
-               animationTransition: Transition<Boolean>,
-               currentPanelState: ExpandableGoalCreateModel){
-
-    val rotationAnimation:Float by animationTransition.animateFloat(
-        label = "rocketRotation",
-        transitionSpec = {
-            tween(
-                delayMillis =
-                when(currentPanelState.expandable().expanded){
-                    false -> animationDelay
-                    true -> 0
-                }
-            )
-        }
-    ) {currentValue ->
-        when(currentValue){
-         true -> -45F
-         false -> 0F
-        }
-    }
-
-    Row(
-        modifier = modifier
-            .height(150.dp)
-            .fillMaxWidth()
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .fillMaxWidth()
-                .height(120.dp)
-                .padding(top = 15.dp, bottom = 0.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-
-            Button(
-                shape = CustomShapes.round(),
-                onClick = currentPanelState::expansionBtnClick,
-                contentPadding = PaddingValues(0.dp)
-            ){
-
-                Box( contentAlignment = Center,
-                    modifier = Modifier
-                        .size(100.dp)
-                        .clip(CircleShape)
-                        .background(ButtonOrange)) {
-
-                    Box(
-                        contentAlignment = Center,
-                        modifier = Modifier
-                            .size(90.dp)
-                            .clip(CircleShape)
-                            .background(HeaderOrange)
-
-                    ) {
-                        Icon(
-                            contentDescription ="Rocket",
-                            tint = Color.Unspecified,
-                            imageVector = ImageVector.vectorResource(id = R.drawable.baseline_rocket_launch_24),
-                            modifier = Modifier
-                                .size(75.dp)
-                                .rotate(rotationAnimation)
-                        )
-                    }
-                }
-
-            }
-
-            Text(
-                text = "Tap to Create",
-                style = MaterialTheme.typography.body2,
-                modifier = Modifier
-                    .padding(start = 0.dp)
-
-
-            )
-        }
-
-
-    }
-
-
-}
 //HORIZONTAL SLOT FORM WHICH WAS USED ACCORDING TO THE PLAN
 
 //Slots created for each goal set
@@ -374,7 +204,7 @@ fun FeatureItem(
     BoxWithConstraints(
         modifier = Modifier
             .scale(
-                when(feature.title){
+                when (feature.title) {
                     "Blue" -> 1F
                     else -> 0.9F
                 }
@@ -454,7 +284,7 @@ fun FeatureItem(
             Text(
                 text = feature.steps,
                 style = MaterialTheme.typography.h4,
-                modifier = Modifier .align(Center),
+                modifier = Modifier.align(Center),
                 color = Color.Black
             )
             //CAN ADD DELETE ICON HERE
