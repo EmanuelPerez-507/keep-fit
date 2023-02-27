@@ -1,26 +1,37 @@
 package com.example.keepfit.Goals.View
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.*
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.example.keepfit.Goals.ViewModel.Create.ExpandableGoalCreateModel
+import com.example.keepfit.Goals.ViewModel.Create.GoalCreateModel
 import com.example.keepfit.R
+import com.example.keepfit.Utils.Utils
 import com.example.keepfit.animationDelay
+import com.example.keepfit.standardQuadFromTo
 import com.example.keepfit.ui.theme.ButtonOrange
 import com.example.keepfit.ui.theme.CustomShapes
 import com.example.keepfit.ui.theme.HeaderOrange
@@ -62,6 +73,7 @@ fun ExpandableGoalCreationScreen(
             .clip(CustomShapes.onlyBottom.medium)
             .zIndex(0.5F)
             .background(color = Color.White),
+        horizontalAlignment = Alignment.CenterHorizontally
     ){
         val alphaAnimation:Float by createGoalDialogTransition.animateFloat(
             label="createGoalAlpha",
@@ -94,14 +106,15 @@ fun ExpandableGoalCreationScreen(
         ) { currentState ->
             when(currentState){
                 false -> 0.dp
-                true -> 200.dp
+                true -> 250.dp
             }
         }
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(heightAnimation)
-                .alpha(alphaAnimation),
+                .alpha(alphaAnimation)
+                .border(1.dp, Color.Red),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ){
@@ -122,10 +135,14 @@ fun ExpandableGoalCreationScreen(
                 }
 
             }
+
             Spacer(modifier = Modifier.height(20.dp))
-            TextField(value = state.goalName, onValueChange = state::goalName::set)
-            Spacer(modifier = Modifier.height(10.dp))
-            TextField(value = state.goalSteps, onValueChange = state::goalSteps::set)
+
+            EditableFeatureItem(state = state)
+//            Spacer(modifier = Modifier.height(20.dp))
+//            TextField(value = state.goalName, onValueChange = state::goalName::set)
+//            Spacer(modifier = Modifier.height(10.dp))
+//            TextField(value = state.goalSteps, onValueChange = state::goalSteps::set)
         }
 
         val buttonScale:Float by createGoalDialogTransition.animateFloat(
@@ -146,10 +163,11 @@ fun ExpandableGoalCreationScreen(
             }
         }
 
-//        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.height(20.dp))
 
         Surface(
-            modifier = Modifier.scale(buttonScale)
+            modifier = Modifier
+                .border(1.dp, Color.Red)
         ){
 
             GoalButton(
@@ -190,16 +208,17 @@ fun GoalButton(modifier: Modifier,
 
     Row(
         modifier = modifier
-            .height(150.dp)
-            .fillMaxWidth()
+//            .height(150.dp)
+//            .fillMaxWidth()
+
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .fillMaxWidth()
-                .height(120.dp)
-                .padding(top = 15.dp, bottom = 0.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
+//                .fillMaxSize()
+//                .fillMaxWidth()
+//                .height(120.dp)
+//                .padding(top = 15.dp, bottom = 0.dp),
+            ,horizontalAlignment = Alignment.CenterHorizontally,
         ) {
 
             Button(
@@ -249,4 +268,113 @@ fun GoalButton(modifier: Modifier,
     }
 
 
+}
+
+@Composable
+fun EditableFeatureItem(
+    state: GoalCreateModel
+) {
+
+    val backColor:Color by animateColorAsState(targetValue = Utils.ColorMix.mediumLighten(state.goalColor))
+    val darkTone:Color = Utils.ColorMix.lighten(backColor)
+    val lightTone:Color = Utils.ColorMix.darken(backColor)
+
+    BoxWithConstraints(
+        modifier = Modifier
+//            .padding(7.5.dp)
+            .aspectRatio(1f)
+            .clip(RoundedCornerShape(10.dp))
+            .background(darkTone)
+    ) {
+        val width = constraints.maxWidth
+        val height = constraints.maxHeight
+
+        // Medium colored path
+        val mediumColoredPoint1 = Offset(0f, height * 0.3f)
+        val mediumColoredPoint2 = Offset(width * 0.1f, height * 0.35f)
+        val mediumColoredPoint3 = Offset(width * 0.4f, height * 0.17f)
+        val mediumColoredPoint4 = Offset(width * 0.75f, height * 0.7f)
+        val mediumColoredPoint5 = Offset(width * 1.4f, -height.toFloat())
+
+        val mediumColoredPath = Path().apply {
+            moveTo(mediumColoredPoint1.x, mediumColoredPoint1.y)
+            standardQuadFromTo(mediumColoredPoint1, mediumColoredPoint2)
+            standardQuadFromTo(mediumColoredPoint2, mediumColoredPoint3)
+            standardQuadFromTo(mediumColoredPoint3, mediumColoredPoint4)
+            standardQuadFromTo(mediumColoredPoint4, mediumColoredPoint5)
+            lineTo(width.toFloat() + 100f, height.toFloat() + 100f)
+            lineTo(-100f, height.toFloat() + 100f)
+            close()
+        }
+
+        // Light colored path
+        val lightPoint1 = Offset(0f, height * 0.35f)
+        val lightPoint2 = Offset(width * 0.1f, height * 0.4f)
+        val lightPoint3 = Offset(width * 0.3f, height * 0.35f)
+        val lightPoint4 = Offset(width * 0.65f, height.toFloat())
+        val lightPoint5 = Offset(width * 1.4f, -height.toFloat() / 3f)
+
+        val lightColoredPath = Path().apply {
+            moveTo(lightPoint1.x, lightPoint1.y)
+            standardQuadFromTo(lightPoint1, lightPoint2)
+            standardQuadFromTo(lightPoint2, lightPoint3)
+            standardQuadFromTo(lightPoint3, lightPoint4)
+            standardQuadFromTo(lightPoint4, lightPoint5)
+            lineTo(width.toFloat() + 100f, height.toFloat() + 100f)
+            lineTo(-100f, height.toFloat() + 100f)
+            close()
+        }
+
+        Canvas(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            drawPath(
+                path = mediumColoredPath,
+                color = backColor
+            )
+            drawPath(
+                path = lightColoredPath,
+                color = lightTone
+            )
+        }
+
+
+        // display everything in the box
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(15.dp)
+        ) {
+
+            TextField(
+                value = state.goalName,
+                onValueChange = state::goalName::set,
+                textStyle = MaterialTheme.typography.h6,
+////                lineHeight = 26.sp,
+                modifier = Modifier.align(Alignment.TopStart),
+//                colors = TextFieldDefaults.textFieldColors(
+//                    textColor = Color.Black,
+//                    backgroundColor = Color.Transparent
+//                )
+
+            )
+
+            TextField(
+                value = state.goalSteps,
+                onValueChange = state::goalSteps::set,
+                textStyle = MaterialTheme.typography.h4.copy(
+                    textAlign = TextAlign.Center,
+                    lineHeight = TextUnit.Unspecified
+                ),
+////                lineHeight = 26.sp,
+                modifier = Modifier.align(Alignment.Center),
+                colors = TextFieldDefaults.textFieldColors(
+                    textColor = Color.Black,
+                    backgroundColor = Color.Transparent
+                )
+            )
+
+        }
+    }
 }

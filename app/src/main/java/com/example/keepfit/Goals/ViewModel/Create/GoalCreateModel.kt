@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.keepfit.DataLayer.Goals.Goal
 import com.example.keepfit.Start
+import com.example.keepfit.ui.theme.GoalBacks
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.lang.Integer.parseInt
@@ -17,7 +18,7 @@ open class GoalCreateModel:ViewModel() {
 
     private var _newGoalName:String by mutableStateOf("")
     private var _newGoalSteps:String by mutableStateOf("")
-    private var _newGoalColor:Color by mutableStateOf(Color(0xFF33BBFF))
+    private var _newGoalColor:Color by mutableStateOf(GoalBacks.Green)
 
     var goalName:String
         set(value){ _newGoalName = value }

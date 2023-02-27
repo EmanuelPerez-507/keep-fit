@@ -1,5 +1,6 @@
 package com.example.keepfit
 
+import android.graphics.Color.toArgb
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -18,6 +19,7 @@ import com.example.keepfit.Home.ViewModel.ExpandableAddStepsVM
 import com.example.keepfit.Home.ViewModel.HomeVM
 import com.example.keepfit.NavigationContainer.NavigationContainer
 import com.example.keepfit.NavigationContainer.ViewModel.ExpandableSettingsViewModel
+import com.example.keepfit.ui.theme.GoalBacks
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.concurrent.ExecutorService
@@ -42,12 +44,12 @@ class Start : ComponentActivity() {
         ).build()
 
         val initialGoals = listOf<Goal>(
-             Goal(0, "Blue", 3000, Color(0xFF33BBFF).toArgb()),
-             Goal(0, "Green", 3000, Color(0xFF00CC66).toArgb()),
-             Goal(0, "Yellow", 3000, Color(0xFFFACA1E).toArgb()),
-             Goal(0, "Red", 3000, Color(0xFFFF1A1A).toArgb()),
-             Goal(0, "Purple", 3000, Color(0xFFbc89f5).toArgb()),
-             Goal(0, "Pink", 3000, Color(0xFFD909C7).toArgb())
+             Goal(0, "Blue", 3000, GoalBacks.Blue.toArgb()),
+             Goal(0, "Green", 3000, GoalBacks.Green.toArgb()),
+             Goal(0, "Yellow", 3000, GoalBacks.Yellow.toArgb()),
+             Goal(0, "Red", 3000, GoalBacks.Red.toArgb()),
+             Goal(0, "Purple", 3000, GoalBacks.Pink.toArgb()),
+             Goal(0, "Pink", 3000, GoalBacks.Purple.toArgb())
         )
 
         //goals
@@ -68,6 +70,9 @@ class Start : ComponentActivity() {
         val settingsExpandable:ExpandableSettingsViewModel by viewModels()
 
         lifecycleScope.launch(Dispatchers.Default){
+//            for (initialGoal in initialGoals) {
+//                database!!.Goals().create(initialGoal)
+//            }
             goalsScreenView.init()
         }
 
