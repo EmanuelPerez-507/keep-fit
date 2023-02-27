@@ -22,6 +22,10 @@ val HeaderOrange = Color(0xFFFAD7A2)
 val TextWhite = Color(0xffeeeeee)
 val DeepBlue = Color(0xff06164c)
 val ButtonOrange = Color(0xFFFF982B)
+val LightOrange = Color(0xFFF7B774)
+
+val LLightOrange = Color(0xFFF5DABE)
+
 val DarkerButtonBlue = Color(0xff566894)
 val LightRed = Color(0xfffc879a)
 val AquaBlue = Color(0xff9aa5c4)
