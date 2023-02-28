@@ -54,6 +54,13 @@ val current = LocalDateTime.now()
 val formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
 val formatted = current.format(formatter)
 
+@Composable
+@Preview
+fun HomePage()
+{
+    HomeScreen(state = HomeVM(), plusButtonState = ExpandableAddStepsVM())
+}
+
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun HomeScreen(state:HomeVM, plusButtonState:ExpandableAddStepsVM)
@@ -80,7 +87,9 @@ fun HomeScreen(state:HomeVM, plusButtonState:ExpandableAddStepsVM)
             modifier = Modifier.fillMaxSize()
                 ){
             //call functions
+
             dateAndTime()
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
@@ -92,12 +101,16 @@ fun HomeScreen(state:HomeVM, plusButtonState:ExpandableAddStepsVM)
                 )
             }
 
+            Spacer(modifier = Modifier.weight(1f))
+
+            canvasBottom(state)
+
         }
 
         PlusButton(
             alignment = Modifier.align(Alignment.BottomEnd),
             state = plusButtonState)
-        canvasBottom(state)
+
 
     }
 }
@@ -130,7 +143,7 @@ fun dateAndTime() {
 @Composable
 fun canvasBottom(state: HomeVM) {
 Box(modifier = Modifier
-    .padding(top = 400.dp)
+//    .padding(top = 400.dp)
     .clip(RoundedCornerShape(topStart = 40.dp, topEnd = 40.dp))
     .shadow(
         elevation = 20.dp,
@@ -140,9 +153,10 @@ Box(modifier = Modifier
     Row(
         modifier = Modifier
             .background(Color.White)
-
-            .height(250.dp)
-            .padding(0.dp)
+            .padding(vertical = 50.dp)
+//            .height(250.dp)
+            .wrapContentHeight()
+//            .padding(0.dp)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically,
