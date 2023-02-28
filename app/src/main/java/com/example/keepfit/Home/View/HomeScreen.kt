@@ -134,8 +134,8 @@ Box(modifier = Modifier
     .padding(top = 400.dp)
     .clip(RoundedCornerShape(topStart = 40.dp, topEnd = 40.dp))
     .shadow(
-        elevation = 4.dp,
-        shape = RoundedCornerShape(8.dp),
+        elevation = 20.dp,
+//        shape = RoundedCornerShape(8.dp),
     )
 ){
     Row(
@@ -170,7 +170,7 @@ Box(modifier = Modifier
                 Text(
                     text = "Calories Burned",
                     style = TextStyle(
-                        fontSize = 14.sp,
+                        fontSize = 12.sp,
                         fontWeight = FontWeight.Bold
                     ),
 
@@ -179,12 +179,25 @@ Box(modifier = Modifier
                     text = "${state.currentCalories}",
                     style = TextStyle(
                         fontSize = 24.sp,
-                        fontWeight = FontWeight.Normal,
+                        fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center,
+                        color = Color.White
 
                     ),
 
                 )
+                Text(
+                    text = "Kcal",
+                    style = TextStyle(
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        textAlign = TextAlign.Center,
+                        color = Color.Gray
+
+
+                    ),
+
+                    )
             }
         }
 
@@ -209,7 +222,7 @@ Box(modifier = Modifier
                 Text(
                     text = "Active Goal",
                     style = TextStyle(
-                        fontSize = 14.sp,
+                        fontSize = 12.sp,
                         fontWeight = FontWeight.Bold
                     ),
 
@@ -247,21 +260,34 @@ Box(modifier = Modifier
                 Text(
                     text = "Total Distance",
                     style = TextStyle(
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.ExtraBold
                     ),
 
                     )
                 Text(
-                    text = "${state.currentDistance} miles",
+                    text = "${state.currentDistance}",
                     style = TextStyle(
                         fontSize = 24.sp,
-                        fontWeight = FontWeight.Normal,
+                        fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center,
+                        color = Color.White
 
                         ),
+                    )
+                Text(
+                    text = "miles",
+                    style = TextStyle(
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        textAlign = TextAlign.Center,
+                        color = Color.Gray
+
+
+                    ),
 
                     )
+
             }
         }
     }
