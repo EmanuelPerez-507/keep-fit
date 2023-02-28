@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.*
 import com.example.keepfit.Home.ViewModel.ExpandableAddStepsVM
 import com.example.keepfit.Home.ViewModel.HomeVM
 import com.example.keepfit.ui.theme.*
+import java.text.DecimalFormat
 //import com.example.keepfit.NavigationContainer.View.Screen
 //import com.example.keepfit.R
 //import com.example.keepfit.Settings.View.SettingsScreen
@@ -142,7 +143,9 @@ fun dateAndTime() {
 
 @Composable
 fun canvasBottom(state: HomeVM) {
-Box(modifier = Modifier
+    val df = DecimalFormat("#.##")
+
+    Box(modifier = Modifier
 //    .padding(top = 400.dp)
     .clip(RoundedCornerShape(topStart = 40.dp, topEnd = 40.dp))
     .shadow(
@@ -189,7 +192,7 @@ Box(modifier = Modifier
 
                 )
                 Text(
-                    text = "${state.currentCalories}",
+                    text = "${df.format(state.currentCalories)}",
                     style = TextStyle(
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
@@ -279,7 +282,7 @@ Box(modifier = Modifier
 
                     )
                 Text(
-                    text = "${state.currentDistance}",
+                    text = "${df.format(state.currentDistance)}",
                     style = TextStyle(
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
