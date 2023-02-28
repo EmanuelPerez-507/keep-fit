@@ -2,6 +2,7 @@ package com.example.keepfit.NavigationContainer
 
 import android.view.MotionEvent
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -10,6 +11,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -28,6 +30,7 @@ import com.example.keepfit.Home.ViewModel.HomeVM
 import com.example.keepfit.NavigationContainer.View.Screen
 import com.example.keepfit.NavigationContainer.View.SettingsButton
 import com.example.keepfit.NavigationContainer.ViewModel.ExpandableSettingsViewModel
+import com.example.keepfit.ui.theme.Beige1
 import com.example.keepfit.ui.theme.CustomShapes
 import com.example.keepfit.ui.theme.KeepFitTheme
 
@@ -72,7 +75,9 @@ fun NavigationContainer(
 
             NavHost(
                 modifier = Modifier
-                    .fillMaxSize(),
+                    .fillMaxSize()
+                    .background(Color.White)
+                ,
 //                    .border(3.dp, Color(0xFFFF0000)),
                 navController = navController,
                 startDestination = Screen.Home.route){
@@ -94,7 +99,7 @@ fun NavigationContainer(
             BottomNavigation(
                 elevation = 0.dp,
                 modifier = Modifier
-                    .padding(horizontal = 10.dp)
+                    .padding(horizontal = 5.dp)
                     .clip(shape = CustomShapes.onlyTop.medium)
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)

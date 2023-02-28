@@ -29,10 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import com.example.keepfit.ui.theme.ButtonOrange
-import com.example.keepfit.ui.theme.CustomShapes
-import com.example.keepfit.ui.theme.LLightOrange
-import com.example.keepfit.ui.theme.LightOrange
+import com.example.keepfit.ui.theme.*
 
 
 @Composable
@@ -46,15 +43,18 @@ fun CustomComponent(
      //projectionValue
     projectionIndicatorValue:Int = 0,
     backgroundIndicatorColor: Color = MaterialTheme.colors.onSurface.copy(alpha = 0.1f),
-    backgroundIndicatorStrokeWidth: Float = 50f,
+    backgroundIndicatorStrokeWidth: Float = 65f,
      projectionIndicatorColor: Color = MaterialTheme.colors.secondary,
-    foregroundIndicatorColor: Color = MaterialTheme.colors.primary,
-    foregroundIndicatorStrokeWidth: Float = 50f,
+    foregroundIndicatorColor: Color = darkBlue,
+    foregroundIndicatorStrokeWidth: Float = 65f,
 //    indicatorStrokeCap: StrokeCap = StrokeCap.Round,
     bigTextFontSize: TextUnit = MaterialTheme.typography.h4.fontSize,
-    bigTextColor: Color = MaterialTheme.colors.onSurface,
+     percentageFont: TextUnit = MaterialTheme.typography.h3.fontSize,
+
+     bigTextColor: Color = MaterialTheme.colors.onSurface,
     bigTextSuffix: String = "",
     smallText: String = "Remaining",
+     StepPercentage: Int = 20,
     smallTextFontSize: TextUnit = MaterialTheme.typography.h6.fontSize,
     smallTextColor: Color = MaterialTheme.colors.onSurface.copy(alpha = 0.3f)
 ) {
@@ -154,7 +154,9 @@ fun CustomComponent(
             smallTextColor = smallTextColor,
             smallTextFontSize = smallTextFontSize,
             Steps = indicatorValue,
-            TotalSteps = maxIndicatorValue
+            TotalSteps = maxIndicatorValue,
+        StepPercentage = StepPercentage,
+                percentageFont = percentageFont
         )
     }
 //    Column (verticalArrangement = Arrangement.Center,
@@ -235,7 +237,7 @@ fun DrawScope.foregroundIndicator(
     indicatorStrokeWidth: Float,
 //    indicatorStokeCap: StrokeCap
 ) {
-    val outerRadius = (componentSize.width / 2f) + indicatorStrokeWidth -12f
+    val outerRadius = (componentSize.width / 2f) + indicatorStrokeWidth -16f
     val innerRadius = (outerRadius - indicatorStrokeWidth) - 10f
 
     // draw outer circle
@@ -278,13 +280,15 @@ fun DrawScope.foregroundIndicator(
 fun EmbeddedElements(
     bigText: Int,
     bigTextFontSize: TextUnit,
+    percentageFont: TextUnit,
     bigTextColor: Color,
     bigTextSuffix: String,
     smallText: String,
     smallTextColor: Color,
     smallTextFontSize: TextUnit,
     Steps: Int,
-    TotalSteps: Int
+    TotalSteps: Int,
+    StepPercentage: Int
 
 ) {
 // shows the steps
@@ -317,6 +321,16 @@ fun EmbeddedElements(
         textAlign = TextAlign.Center,
         fontWeight = FontWeight.Bold,
         color = ButtonOrange
+    )
+
+
+    Text(
+        modifier = Modifier.padding(start = 10.dp),
+        text = "$StepPercentage" + "%",
+        fontSize = percentageFont,
+        textAlign = TextAlign.Center,
+        fontWeight = FontWeight.Bold,
+        color = darkBlue
     )
 
 
