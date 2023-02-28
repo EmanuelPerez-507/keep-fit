@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModel
 import com.example.keepfit.DataLayer.Goals.Goal
 import com.example.keepfit.Goals.View.Feature
 import com.example.keepfit.Start
+import com.example.keepfit.Utils.Utils
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
@@ -27,16 +28,9 @@ class GoalScreenModel: ViewModel() {
         val goalsList: Flow<List<Goal>> = Start.database!!.Goals().getAll()
         goalsList.collect{goalsList->
             _goalsList = goalsList.map{goal->
-                val color: Color = Color(
-                    ColorUtils.blendARGB(goal.color, Color.White.toArgb(), 0.2F)
-                )
-                val mediumBlend = color.toArgb()
-                val lightColor:Color = Color(
-                    ColorUtils.blendARGB(mediumBlend, Color.White.toArgb(), 0.3F)
-                )
-                val darkColor:Color = Color(
-                    ColorUtils.blendARGB(mediumBlend, Color.Black.toArgb(), 0.3F)
-                )
+                val color: Color = Utils.ColorMix.mediumLighten(Color(goal.color))
+                val lightColor:Color = Utils.ColorMix.lighten(color)
+                val darkColor:Color = Utils.ColorMix.darken(color)
                 Feature(
                     title = goal.name,
                     steps = goal.steps.toString(),

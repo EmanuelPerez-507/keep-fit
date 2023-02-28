@@ -14,14 +14,21 @@ val Teal200 = Color(0xFF03DAC5)
 val PeachCream = Color(0xFFF28500)
 val Gray = Color(0xFF888888)
 val mediumBlue = Color(0xFF4EE0B8)
+val darkBlue = Color(0xFF2F8D84)
 
 val LightBlue = Color(0xFF81E2C7)
 val LLightBlue = Color(0xFF99D8C6)
 
 val HeaderOrange = Color(0xFFFAD7A2)
+val MainBack = Color(0xFFFFF8EE)
+
 val TextWhite = Color(0xffeeeeee)
 val DeepBlue = Color(0xff06164c)
 val ButtonOrange = Color(0xFFFF982B)
+val LightOrange = Color(0xFFF7C591)
+
+val LLightOrange = Color(0xFEFFE4C9)
+
 val DarkerButtonBlue = Color(0xff566894)
 val LightRed = Color(0xfffc879a)
 val AquaBlue = Color(0xff9aa5c4)
