@@ -55,13 +55,9 @@ val formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
 val formatted = current.format(formatter)
 
 @OptIn(ExperimentalLayoutApi::class)
-
 @Composable
-fun HomeScreen(
-    state:HomeVM,
-    plusButtonState:ExpandableAddStepsVM
-) {
-
+fun HomeScreen(state:HomeVM, plusButtonState:ExpandableAddStepsVM)
+{
     val constantPadding:Dp = 80.dp
     val imePadding:Dp = WindowInsets.ime.asPaddingValues().calculateBottomPadding()-
         WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
@@ -102,9 +98,12 @@ fun HomeScreen(
         PlusButton(
             alignment = Modifier.align(Alignment.BottomEnd),
             state = plusButtonState)
-        canvasBottom()
+        canvasBottom(state)
 
     }
+}
+
+fun PassThrough(){
 
 }
 
@@ -130,9 +129,7 @@ fun dateAndTime() {
 }
 
 @Composable
-fun canvasBottom(
-) {
-
+fun canvasBottom(state: HomeVM) {
 Box(modifier = Modifier
     .padding(top = 400.dp)
     .clip(RoundedCornerShape(topStart = 40.dp, topEnd = 40.dp))
@@ -171,7 +168,7 @@ Box(modifier = Modifier
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Last Rec",
+                    text = "Calories Burned",
                     style = TextStyle(
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold
@@ -179,7 +176,7 @@ Box(modifier = Modifier
 
                 )
                 Text(
-                    text = "1200",
+                    text = "${state.currentCalories}",
                     style = TextStyle(
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Normal,
@@ -248,7 +245,7 @@ Box(modifier = Modifier
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Total Goals",
+                    text = "Total Distance",
                     style = TextStyle(
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold
@@ -256,7 +253,7 @@ Box(modifier = Modifier
 
                     )
                 Text(
-                    text = "4",
+                    text = "${state.currentDistance} miles",
                     style = TextStyle(
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Normal,

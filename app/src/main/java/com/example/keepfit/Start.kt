@@ -63,6 +63,8 @@ class Start : ComponentActivity() {
         //makeHomeVM aware of events in addStepsVM
         expandableAddStepsVM.eventsBus.subscribeTo(homeVM::commitSteps)
         expandableAddStepsVM.eventsBus.subscribeTo(homeVM::projectionSteps::set)
+        expandableAddStepsVM.eventsBus.subscribeTo(homeVM::calculateCalories)
+        expandableAddStepsVM.eventsBus.subscribeTo(homeVM::calculateDistance)
 
         //settings button (temporary)
         val settingsExpandable:ExpandableSettingsViewModel by viewModels()

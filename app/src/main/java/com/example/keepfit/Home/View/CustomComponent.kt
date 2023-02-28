@@ -54,7 +54,7 @@ fun CustomComponent(
      bigTextColor: Color = MaterialTheme.colors.onSurface,
     bigTextSuffix: String = "",
     smallText: String = "Remaining",
-     StepPercentage: Int = 20,
+     StepPercentage: Int = 0,
     smallTextFontSize: TextUnit = MaterialTheme.typography.h6.fontSize,
     smallTextColor: Color = MaterialTheme.colors.onSurface.copy(alpha = 0.3f)
 ) {
@@ -155,8 +155,8 @@ fun CustomComponent(
             smallTextFontSize = smallTextFontSize,
             Steps = indicatorValue,
             TotalSteps = maxIndicatorValue,
-        StepPercentage = StepPercentage,
-                percentageFont = percentageFont
+            StepPercentage = StepPercentage,
+            percentageFont = percentageFont
         )
     }
 //    Column (verticalArrangement = Arrangement.Center,
@@ -289,7 +289,6 @@ fun EmbeddedElements(
     Steps: Int,
     TotalSteps: Int,
     StepPercentage: Int
-
 ) {
 // shows the steps
     Text(
@@ -314,7 +313,6 @@ fun EmbeddedElements(
         thickness = 1.dp
     )
 
-
     Text(
         text = "$TotalSteps",
         fontSize = bigTextFontSize,
@@ -322,7 +320,6 @@ fun EmbeddedElements(
         fontWeight = FontWeight.Bold,
         color = ButtonOrange
     )
-
 
     Text(
         modifier = Modifier.padding(start = 10.dp),
