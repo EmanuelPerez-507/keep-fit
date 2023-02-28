@@ -54,6 +54,13 @@ val current = LocalDateTime.now()
 val formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
 val formatted = current.format(formatter)
 
+@Composable
+@Preview
+fun HomePage()
+{
+    HomeScreen(state = HomeVM(), plusButtonState = ExpandableAddStepsVM())
+}
+
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun HomeScreen(state:HomeVM, plusButtonState:ExpandableAddStepsVM)
