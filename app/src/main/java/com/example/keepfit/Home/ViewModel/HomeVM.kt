@@ -20,21 +20,18 @@ class HomeVM: ViewModel() {
     var projectionSteps:Int
         get() = _projectionSteps
         set(value:Int){
-            println(value)
             _projectionSteps = value
         }
 
     var currentCalories:Double
         get() = _currentCalories
         set(value:Double){
-            println(value)
             _currentCalories = value
         }
 
     var currentDistance:Double
         get() = _currentDistance
         set(value:Double){
-            println(value)
             _currentDistance = value
         }
 
@@ -45,7 +42,6 @@ class HomeVM: ViewModel() {
     }
 
     fun calculateCalories(){
-        println(currentCalories)
         currentCalories = currentSteps * 0.04
     }
 

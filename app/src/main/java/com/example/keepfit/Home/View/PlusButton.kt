@@ -16,8 +16,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.keepfit.Controls.ExpandableFAB
 import com.example.keepfit.Home.ViewModel.ExpandableAddStepsVM
@@ -44,12 +46,12 @@ fun PlusButton(
 
     ExpandableFAB(
         compressedOffsetH = (-10).dp,
-        expandedOffsetH = (-20).dp,
+        expandedOffsetH = (0).dp,
 //        expandedOffsetV = (-200).dp,
         expandedButtonColor = CancelRed,
         FABColor = darkBlue,
         height = 55.dp,
-        width = 300.dp,
+        width = 500.dp,
         iconId = R.drawable.plus_round_icon,
         iconDescriptor = "Plus icon",
         alignment = alignment,
@@ -61,9 +63,10 @@ fun PlusButton(
     ){
 
         TextField(
+            textStyle = TextStyle.Default.copy(textAlign = TextAlign.Center),
             singleLine = true,
             modifier = Modifier
-                .width(235.dp)
+                .width(435.dp)
                 .focusRequester(focusRequester),
             value = state.augmentSteps,
             onValueChange = state::augmentSteps::set,

@@ -54,7 +54,6 @@ fun CustomComponent(
      bigTextColor: Color = MaterialTheme.colors.onSurface,
     bigTextSuffix: String = "",
     smallText: String = "Remaining",
-     StepPercentage: Int = 0,
     smallTextFontSize: TextUnit = MaterialTheme.typography.h6.fontSize,
     smallTextColor: Color = MaterialTheme.colors.onSurface.copy(alpha = 0.3f)
 ) {
@@ -80,6 +79,12 @@ fun CustomComponent(
 // Calculates the percentage value of the amount completed on the progress bar
     val percentage = (allowedIndicatorValue / maxIndicatorValue) * 100
     val projectionPercentage = (allowedProjectionIndicatorValue / maxIndicatorValue) * 100
+
+    val showPercentage:Float by animateFloatAsState(
+        targetValue = (indicatorValue.toFloat()/maxIndicatorValue.toFloat())*100,
+        animationSpec = tween(1000)
+    )
+
 //gives
     val sweepAngle by animateFloatAsState(
         //we are uisng 2.4 because maximum value of the progress should be
@@ -87,7 +92,6 @@ fun CustomComponent(
         targetValue = (2.4 * percentage).toFloat(),
         animationSpec = tween(1000)
     )
-
     //gives
     val sweepProjectionAngle by animateFloatAsState(
         //we are uisng 2.4 because maximum value of the progress should be
@@ -155,7 +159,7 @@ fun CustomComponent(
             smallTextFontSize = smallTextFontSize,
             Steps = indicatorValue,
             TotalSteps = maxIndicatorValue,
-            StepPercentage = StepPercentage,
+            StepPercentage = showPercentage,
             percentageFont = percentageFont
         )
     }
@@ -288,7 +292,7 @@ fun EmbeddedElements(
     smallTextFontSize: TextUnit,
     Steps: Int,
     TotalSteps: Int,
-    StepPercentage: Int
+    StepPercentage: Float
 ) {
 // shows the steps
     Text(
@@ -323,7 +327,7 @@ fun EmbeddedElements(
 
     Text(
         modifier = Modifier.padding(start = 10.dp),
-        text = "$StepPercentage" + "%",
+        text = "${String.format("%.0f", StepPercentage)}%",
         fontSize = percentageFont,
         textAlign = TextAlign.Center,
         fontWeight = FontWeight.Bold,

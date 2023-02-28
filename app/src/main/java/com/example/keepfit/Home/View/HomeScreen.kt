@@ -61,7 +61,7 @@ fun HomeScreen(state:HomeVM, plusButtonState:ExpandableAddStepsVM)
     val constantPadding:Dp = 80.dp
     val imePadding:Dp = WindowInsets.ime.asPaddingValues().calculateBottomPadding()-
         WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
-    val inputPadding = max(constantPadding, imePadding + 10.dp)
+    val inputPadding = max(constantPadding, imePadding + 0.dp)
 
     Box(
         modifier = Modifier
@@ -85,7 +85,6 @@ fun HomeScreen(state:HomeVM, plusButtonState:ExpandableAddStepsVM)
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ){
-                println("V${state.projectionSteps}")
                 CustomComponent(
                     projectionIndicatorValue = state.projectionSteps,
                     indicatorValue = state.currentSteps,

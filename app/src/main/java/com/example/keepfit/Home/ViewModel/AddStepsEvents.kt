@@ -27,7 +27,6 @@ class AddStepsEvents{
     fun initBroadcast(scope:CoroutineScope){
         scope.launch {
             _stepsProposalEvent.collect{proposal->
-                println("P$proposal")
                 proposalActions.forEach{action->
                     action.invoke(proposal)
                 }
