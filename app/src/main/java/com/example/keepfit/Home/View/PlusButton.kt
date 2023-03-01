@@ -25,6 +25,7 @@ import com.example.keepfit.Controls.ExpandableFAB
 import com.example.keepfit.Home.ViewModel.ExpandableAddStepsVM
 import com.example.keepfit.R
 import com.example.keepfit.ui.theme.CancelRed
+import com.example.keepfit.ui.theme.CustomShapes
 import com.example.keepfit.ui.theme.darkBlue
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -47,6 +48,7 @@ fun PlusButton(
     ExpandableFAB(
         compressedOffsetH = (-10).dp,
         expandedOffsetH = (0).dp,
+        expandedShape = CustomShapes.onlyTop.small,
 //        expandedOffsetV = (-200).dp,
         expandedButtonColor = CancelRed,
         FABColor = darkBlue,

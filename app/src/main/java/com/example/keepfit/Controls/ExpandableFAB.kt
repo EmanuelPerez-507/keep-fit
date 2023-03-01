@@ -3,7 +3,9 @@ package com.example.keepfit.Controls
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -12,10 +14,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.boundsInRoot
@@ -30,24 +34,30 @@ import com.example.keepfit.ui.theme.medium
 
 @Composable
 fun ExpandableFAB(
-    expandedButtonColor:Color,
-    FABColor:Color,
-    height:Dp,
-    width:Dp,
-    compressedOffsetV:Dp = 0.dp,
-    compressedOffsetH:Dp = 0.dp,
-    expandedOffsetV:Dp = 0.dp,
-    expandedOffsetH:Dp = 0.dp,
+    state: ExpandState,
     iconId:Int,
     iconDescriptor:String,
     alignment: Modifier,
-    state: ExpandState,
     anchor:Alignment,
     rotation:Float = -90F,
+
+    compressedOffsetV:Dp = 0.dp,
+    compressedOffsetH:Dp = 0.dp,
+    compressedShape: Shape = CircleShape,
+    FABColor:Color,
+
+    expandedOffsetV:Dp = 0.dp,
+    expandedOffsetH:Dp = 0.dp,
+    expandedShape: Shape = RoundedCornerShape(medium),
+    expandedButtonColor:Color,
+    height:Dp,
+    width:Dp,
+
     beforeClose:()->Unit = {},
     afterClose:()->Unit = {},
     beforeOpen:()->Unit = {},
     afterOpen:()->Unit = {},
+
     content:@Composable ()->Unit = {}
 ) {
 
@@ -144,18 +154,23 @@ fun ExpandableFAB(
     }
 
     Surface(
-        modifier = alignment
+        shape = when(state.expanded){
+            true->expandedShape
+            false->compressedShape
+                                    }
+        ,modifier = alignment
             .offset(animatedOffsetH, animatedOffsetV)
             .width(animatedWidth)
             .height(animatedHeight)
-            .shadow(animatedShadow, shape = RoundedCornerShape(animatedCorner))
+//            .shadow(animatedShadow, shape = RoundedCornerShape(animatedCorner))
             .zIndex(1F)
 //            .clip(RoundedCornerShape(animatedCorner))
             .onGloballyPositioned { layoutCoordinates ->
                 state.expandedBox = layoutCoordinates.boundsInRoot()
-            },
-//            .clip(RoundedCornerShape(animatedCorner)),
-        color = FABColor,
+            }
+//            .clip(RectangleShape)
+//            .background(Color.Cyan)
+        ,color = FABColor
     ) {
 
         Box(
@@ -173,7 +188,8 @@ fun ExpandableFAB(
                     .size(65.dp)
                     .align(anchor),
                 shape = buttonShape,
-                colors = ButtonDefaults.buttonColors(backgroundColor = animatedColor,contentColor = Color.Transparent),
+                colors = ButtonDefaults
+                    .buttonColors(backgroundColor = animatedColor,contentColor = Color.Transparent),
                 onClick = {
                     if(state.expanded){
                         beforeClose()
