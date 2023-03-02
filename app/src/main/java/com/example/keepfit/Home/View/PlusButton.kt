@@ -47,7 +47,7 @@ fun PlusButton(
 
     ExpandableFAB(
         compressedOffsetH = (-10).dp,
-        expandedOffsetH = (0).dp,
+        expandedOffsetH = 0.dp,
         expandedShape = CustomShapes.onlyTop.small,
 //        expandedOffsetV = (-200).dp,
         expandedButtonColor = CancelRed,
