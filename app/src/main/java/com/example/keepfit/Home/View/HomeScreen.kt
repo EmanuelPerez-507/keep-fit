@@ -6,6 +6,7 @@ import CustomComponent
 //import androidx.compose.animation.core.animateDpAsState
 //import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 //import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -66,10 +67,7 @@ fun HomePage()
 @Composable
 fun HomeScreen(state:HomeVM, plusButtonState:ExpandableAddStepsVM)
 {
-    val constantPadding:Dp = 80.dp
-    val imePadding:Dp = WindowInsets.ime.asPaddingValues().calculateBottomPadding()-
-        WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
-    val inputPadding = max(constantPadding, imePadding + 0.dp)
+    val constantPadding:Dp = 60.dp
 
     Box(
         modifier = Modifier
@@ -77,7 +75,7 @@ fun HomeScreen(state:HomeVM, plusButtonState:ExpandableAddStepsVM)
 //                if (imePadding > constantPadding) it.imePadding()
 //                else it
 //            }
-            .padding(bottom = inputPadding)
+            .padding(bottom = constantPadding)
             .fillMaxSize()
             .background(
                 MainBack
@@ -108,9 +106,28 @@ fun HomeScreen(state:HomeVM, plusButtonState:ExpandableAddStepsVM)
 
         }
 
-        PlusButton(
-            alignment = Modifier.align(Alignment.BottomEnd),
-            state = plusButtonState)
+        val addButtonConstantPadding = 5.dp
+        val imePadding:Dp = (WindowInsets.ime.asPaddingValues().calculateBottomPadding()
+                -WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+                - constantPadding
+                )
+
+        val inputPadding = max(addButtonConstantPadding, imePadding)
+
+        println("$imePadding // ${imePadding - constantPadding}  vs  $addButtonConstantPadding")
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = inputPadding)
+                .align(Alignment.BottomCenter)
+        ){
+
+            PlusButton(
+                alignment = Modifier.align(Alignment.BottomEnd),
+                state = plusButtonState)
+
+        }
 
 
     }
@@ -145,23 +162,22 @@ fun dateAndTime() {
 fun canvasBottom(state: HomeVM) {
     val df = DecimalFormat("#.##")
 
-    Box(modifier = Modifier
-//    .padding(top = 400.dp)
-    .clip(RoundedCornerShape(topStart = 40.dp, topEnd = 40.dp))
-    .shadow(
-        elevation = 20.dp,
-//        shape = RoundedCornerShape(8.dp),
-    )
-){
     Row(
         modifier = Modifier
             .background(Color.White)
-            .padding(vertical = 50.dp)
+//            .padding(vertical = 50.dp)
 //            .height(250.dp)
-            .wrapContentHeight()
+//            .wrapContentHeight()
 //            .padding(0.dp)
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceEvenly,
+            .fillMaxWidth()
+//            .clip(
+//                CustomShapes.onlyTop.medium
+//            )
+//            .shadow(
+//                elevation = 5.dp,
+//                shape = CustomShapes.onlyTop.medium,
+//            )
+        ,horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
@@ -307,7 +323,6 @@ fun canvasBottom(state: HomeVM) {
             }
         }
     }
-}
 
 }
 

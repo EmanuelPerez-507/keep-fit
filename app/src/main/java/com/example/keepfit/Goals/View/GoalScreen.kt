@@ -2,6 +2,7 @@ package com.example.keepfit
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -22,6 +23,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -202,18 +204,28 @@ fun FeatureSection(features: List<Feature>) {
 fun FeatureItem(
     feature: Feature
 ) {
+
+    var pressed:Boolean by remember { mutableStateOf(false) }
+
     BoxWithConstraints(
         modifier = Modifier
             .scale(
-                when (feature.title) {
-                    "Blue" -> 1F
-                    else -> 0.9F
+                when (pressed) {
+                    true -> 1.2F
+                    false -> 1F
                 }
             )
             .padding(7.5.dp)
             .aspectRatio(1f)
             .clip(RoundedCornerShape(10.dp))
             .background(feature.darkColor)
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onPress = { offset ->
+                        pressed = true
+                    }
+                )
+            }
     ) {
         val width = constraints.maxWidth
         val height = constraints.maxHeight
