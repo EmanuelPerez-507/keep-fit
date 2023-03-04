@@ -37,6 +37,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 //import androidx.compose.ui.text.input.PasswordVisualTransformation
 //import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
+import com.example.keepfit.Goals.ViewModel.Show.HomeScreenModel
 //import androidx.core.content.ContextCompat.startActivity
 import com.example.keepfit.Home.ViewModel.ExpandableAddStepsVM
 import com.example.keepfit.Home.ViewModel.HomeVM
@@ -60,12 +61,12 @@ val formatted = current.format(formatter)
 @Preview
 fun HomePage()
 {
-    HomeScreen(state = HomeVM(), plusButtonState = ExpandableAddStepsVM())
+    HomeScreen(state = HomeVM(), plusButtonState = ExpandableAddStepsVM(), viewModel = HomeScreenModel())
 }
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun HomeScreen(state:HomeVM, plusButtonState:ExpandableAddStepsVM)
+fun HomeScreen(state:HomeVM, plusButtonState:ExpandableAddStepsVM, viewModel: HomeScreenModel)
 {
     val constantPadding:Dp = 60.dp
 
