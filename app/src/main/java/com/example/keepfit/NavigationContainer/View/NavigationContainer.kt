@@ -23,6 +23,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.keepfit.GoalScreen
 import com.example.keepfit.Goals.ViewModel.Create.ExpandableGoalCreateModel
 import com.example.keepfit.Goals.ViewModel.Show.GoalScreenModel
+import com.example.keepfit.Goals.ViewModel.Show.HomeScreenModel
 import com.example.keepfit.History.View.HistoryScreen
 import com.example.keepfit.Home.View.HomeScreen
 import com.example.keepfit.Home.ViewModel.ExpandableAddStepsVM
@@ -84,7 +85,8 @@ fun NavigationContainer(
 
                 composable(Screen.Home.route){ HomeScreen(
                     homeVM,
-                    addStepsModel
+                    addStepsModel,
+                    HomeScreenModel()
                 ) }
 
                 composable(Screen.Goals.route){GoalScreen(

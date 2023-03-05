@@ -6,6 +6,7 @@ import CustomComponent
 //import androidx.compose.animation.core.animateDpAsState
 //import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 //import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -36,10 +37,12 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 //import androidx.compose.ui.text.input.PasswordVisualTransformation
 //import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
+import com.example.keepfit.Goals.ViewModel.Show.HomeScreenModel
 //import androidx.core.content.ContextCompat.startActivity
 import com.example.keepfit.Home.ViewModel.ExpandableAddStepsVM
 import com.example.keepfit.Home.ViewModel.HomeVM
 import com.example.keepfit.ui.theme.*
+import java.text.DecimalFormat
 //import com.example.keepfit.NavigationContainer.View.Screen
 //import com.example.keepfit.R
 //import com.example.keepfit.Settings.View.SettingsScreen
@@ -54,14 +57,18 @@ val current = LocalDateTime.now()
 val formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
 val formatted = current.format(formatter)
 
+@Composable
+@Preview
+fun HomePage()
+{
+    HomeScreen(state = HomeVM(), plusButtonState = ExpandableAddStepsVM(), viewModel = HomeScreenModel())
+}
+
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun HomeScreen(state:HomeVM, plusButtonState:ExpandableAddStepsVM)
+fun HomeScreen(state:HomeVM, plusButtonState:ExpandableAddStepsVM, viewModel: HomeScreenModel)
 {
-    val constantPadding:Dp = 80.dp
-    val imePadding:Dp = WindowInsets.ime.asPaddingValues().calculateBottomPadding()-
-        WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
-    val inputPadding = max(constantPadding, imePadding + 0.dp)
+    val constantPadding:Dp = 60.dp
 
     Box(
         modifier = Modifier
@@ -69,7 +76,7 @@ fun HomeScreen(state:HomeVM, plusButtonState:ExpandableAddStepsVM)
 //                if (imePadding > constantPadding) it.imePadding()
 //                else it
 //            }
-            .padding(bottom = inputPadding)
+            .padding(bottom = constantPadding)
             .fillMaxSize()
             .background(
                 MainBack
@@ -80,10 +87,16 @@ fun HomeScreen(state:HomeVM, plusButtonState:ExpandableAddStepsVM)
             modifier = Modifier.fillMaxSize()
                 ){
             //call functions
+
             dateAndTime()
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
+
+            Surface(
+                shape = CircleShape
+                ,modifier = Modifier
+//                    .fillMaxWidth()
+//                    .border(2.dp, Color.Red)
+                    .shadow(elevation = 15.dp, shape = CircleShape)
+                    .align(Alignment.CenterHorizontally),
             ){
                 CustomComponent(
                     projectionIndicatorValue = state.projectionSteps,
@@ -92,12 +105,35 @@ fun HomeScreen(state:HomeVM, plusButtonState:ExpandableAddStepsVM)
                 )
             }
 
+            Spacer(modifier = Modifier.weight(1f))
+
+            canvasBottom(state)
+
         }
 
-        PlusButton(
-            alignment = Modifier.align(Alignment.BottomEnd),
-            state = plusButtonState)
-        canvasBottom(state)
+        val addButtonConstantPadding = 5.dp
+        val imePadding:Dp = (WindowInsets.ime.asPaddingValues().calculateBottomPadding()
+                -WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+                - constantPadding
+                )
+
+        val inputPadding = max(addButtonConstantPadding, imePadding)
+
+        println("$imePadding // ${imePadding - constantPadding}  vs  $addButtonConstantPadding")
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = inputPadding)
+                .align(Alignment.BottomCenter)
+        ){
+
+            PlusButton(
+                alignment = Modifier.align(Alignment.BottomEnd),
+                state = plusButtonState)
+
+        }
+
 
     }
 }
@@ -129,22 +165,32 @@ fun dateAndTime() {
 
 @Composable
 fun canvasBottom(state: HomeVM) {
-Box(modifier = Modifier
-    .padding(top = 400.dp)
-    .clip(RoundedCornerShape(topStart = 40.dp, topEnd = 40.dp))
-    .shadow(
-        elevation = 20.dp,
-//        shape = RoundedCornerShape(8.dp),
-    )
-){
+    val df = DecimalFormat("#.##")
+
     Row(
         modifier = Modifier
+            .shadow(
+                elevation = 5.dp,
+                shape = CustomShapes.onlyTop.medium,
+            )
+            .clip(
+                CustomShapes.onlyTop.medium
+            )
             .background(Color.White)
-
-            .height(250.dp)
-            .padding(0.dp)
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceEvenly,
+            .padding(top = 15.dp, bottom = 25.dp)
+//            .padding(vertical = 50.dp)
+//            .height(250.dp)
+//            .wrapContentHeight()
+//            .padding(0.dp)
+            .fillMaxWidth()
+//            .clip(
+//                CustomShapes.onlyTop.medium
+//            )
+//            .shadow(
+//                elevation = 5.dp,
+//                shape = CustomShapes.onlyTop.medium,
+//            )
+        ,horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
@@ -175,7 +221,7 @@ Box(modifier = Modifier
 
                 )
                 Text(
-                    text = "${state.currentCalories}",
+                    text = "${df.format(state.currentCalories)}",
                     style = TextStyle(
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
@@ -265,7 +311,7 @@ Box(modifier = Modifier
 
                     )
                 Text(
-                    text = "${state.currentDistance}",
+                    text = "${df.format(state.currentDistance)}",
                     style = TextStyle(
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
@@ -290,7 +336,6 @@ Box(modifier = Modifier
             }
         }
     }
-}
 
 }
 

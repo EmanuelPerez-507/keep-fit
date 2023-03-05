@@ -3,7 +3,13 @@ package com.example.keepfit.Home.ViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.keepfit.DataLayer.Goals.Goal
+import com.example.keepfit.Start
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class HomeVM: ViewModel() {
     private var _currentSteps:Int by mutableStateOf(0)
@@ -48,4 +54,5 @@ class HomeVM: ViewModel() {
     fun calculateDistance(){
         currentDistance = currentSteps * 0.000397727
     }
+
 }
