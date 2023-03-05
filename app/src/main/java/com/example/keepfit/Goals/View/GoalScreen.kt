@@ -209,12 +209,15 @@ fun FeatureSection(features: List<Feature>) {
 fun FeatureItem(
     feature: Feature
 ) {
+
+    var pressed:Boolean by remember { mutableStateOf(false) }
+
     BoxWithConstraints(
         modifier = Modifier
             .scale(
-                when (feature.title) {
-                    "Blue" -> 1F
-                    else -> 0.9F
+                when (pressed) {
+                    true -> 1.2F
+                    false -> 1F
                 }
             )
             .padding(7.5.dp)

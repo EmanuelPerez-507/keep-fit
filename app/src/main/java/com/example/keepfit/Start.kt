@@ -1,13 +1,10 @@
 package com.example.keepfit
 
-import android.graphics.Color.toArgb
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.room.Room
@@ -15,6 +12,7 @@ import com.example.keepfit.DataLayer.Goals.Goal
 import com.example.keepfit.DataLayer.KeepFitDB
 import com.example.keepfit.Goals.ViewModel.Create.ExpandableGoalCreateModel
 import com.example.keepfit.Goals.ViewModel.Show.GoalScreenModel
+import com.example.keepfit.Goals.ViewModel.Show.HomeScreenModel
 import com.example.keepfit.Home.ViewModel.ExpandableAddStepsVM
 import com.example.keepfit.Home.ViewModel.HomeVM
 import com.example.keepfit.NavigationContainer.NavigationContainer
@@ -61,6 +59,9 @@ class Start : ComponentActivity() {
         val homeVM:HomeVM by viewModels()
         //add steps dialog
         val expandableAddStepsVM:ExpandableAddStepsVM by viewModels()
+        //
+        val homeScreenView: HomeScreenModel by viewModels()
+
         expandableAddStepsVM.eventsBus.initBroadcast(lifecycleScope)
         //makeHomeVM aware of events in addStepsVM
         expandableAddStepsVM.eventsBus.subscribeTo(homeVM::commitSteps)
@@ -76,6 +77,7 @@ class Start : ComponentActivity() {
 //                database!!.Goals().create(initialGoal)
 //            }
             goalsScreenView.init()
+            homeScreenView.init()
         }
 
         setContent {
