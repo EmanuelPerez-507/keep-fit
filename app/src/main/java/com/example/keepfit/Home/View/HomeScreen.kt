@@ -91,9 +91,13 @@ fun HomeScreen(state:HomeVM, plusButtonState:ExpandableAddStepsVM)
 
             dateAndTime()
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
+            Surface(
+                shape = CircleShape
+                ,modifier = Modifier
+//                    .fillMaxWidth()
+//                    .border(2.dp, Color.Red)
+                    .shadow(elevation = 15.dp, shape = CircleShape)
+                    .align(Alignment.CenterHorizontally),
             ){
                 CustomComponent(
                     projectionIndicatorValue = state.projectionSteps,
@@ -155,13 +159,22 @@ fun canvasBottom(state: HomeVM) {
 ){
     Row(
         modifier = Modifier
+            .shadow(
+                elevation = 5.dp,
+                shape = CustomShapes.onlyTop.medium,
+            )
+            .clip(
+                CustomShapes.onlyTop.medium
+            )
             .background(Color.White)
-            .padding(vertical = 50.dp)
+            .padding(top = 15.dp, bottom = 25.dp)
+//            .padding(vertical = 50.dp)
 //            .height(250.dp)
             .wrapContentHeight()
 //            .padding(0.dp)
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceEvenly,
+            .fillMaxWidth()
+
+        ,horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(

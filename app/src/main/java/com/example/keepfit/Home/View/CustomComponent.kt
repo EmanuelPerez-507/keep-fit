@@ -1,23 +1,19 @@
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.animateIntAsState
-import androidx.compose.animation.core.tween
+import android.annotation.SuppressLint
+import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
@@ -32,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.example.keepfit.ui.theme.*
 
 
+@SuppressLint("UnusedTransitionTargetStateParameter")
 @Composable
 fun CustomComponent(
     //canvas on which progress bar will lie
@@ -57,9 +54,11 @@ fun CustomComponent(
     smallTextFontSize: TextUnit = MaterialTheme.typography.h6.fontSize,
     smallTextColor: Color = MaterialTheme.colors.onSurface.copy(alpha = 0.3f)
 ) {
-//    var allowedIndicatorValue by remember {mutableStateOf(maxIndicatorValue) }
 
-    val allowedIndicatorValue:Float = if (indicatorValue <= maxIndicatorValue) {
+    //validation to check it doesn't goes a 100%
+
+    val allowedIndicatorValue:Float =
+        if (indicatorValue <= maxIndicatorValue) {
         indicatorValue.toFloat()
     } else {
         maxIndicatorValue.toFloat()
@@ -69,80 +68,96 @@ fun CustomComponent(
         if ((allowedIndicatorValue + projectionIndicatorValue) <= maxIndicatorValue) {
         projectionIndicatorValue.toFloat()
     } else {
-            maxIndicatorValue - allowedIndicatorValue
+            (maxIndicatorValue.toFloat() - allowedIndicatorValue.toFloat()).toFloat()
     }
 
-//    var animatedIndicatorValue by remember { mutableStateOf(0f) }
-//    LaunchedEffect(key1 = allowedIndicatorValue) {
-//        animatedIndicatorValue = allowedIndicatorValue.toFloat()
-//    }
 // Calculates the percentage value of the amount completed on the progress bar
     val percentage = (allowedIndicatorValue / maxIndicatorValue) * 100
     val projectionPercentage = (allowedProjectionIndicatorValue / maxIndicatorValue) * 100
 
-    val showPercentage:Float by animateFloatAsState(
-        targetValue = (indicatorValue.toFloat()/maxIndicatorValue.toFloat())*100,
-        animationSpec = tween(1000)
-    )
+    //animations
 
-//gives
-    val sweepAngle by animateFloatAsState(
-        //we are uisng 2.4 because maximum value of the progress should be
-        // 240f(thats the angle we take)
-        targetValue = (2.4 * percentage).toFloat(),
-        animationSpec = tween(1000)
-    )
-    //gives
-    val sweepProjectionAngle by animateFloatAsState(
-        //we are uisng 2.4 because maximum value of the progress should be
-        // 240f(thats the angle we take)
-        targetValue = (2.4 * projectionPercentage).toFloat(),
-        animationSpec = tween(1000)
-    )
+    val transitionDuration = 1000
 
-    val receivedValue by animateIntAsState(
-        targetValue = indicatorValue,
-        animationSpec = tween(1000)
-    )
+    val masterTransition:Transition<Int> = updateTransition(targetState = indicatorValue,
+        label = "Progress bar transition")
 
-    val animatedBigTextColor by animateColorAsState(
-        targetValue = MaterialTheme.colors.onSurface.copy(alpha = 0.3f + 0.7f * (percentage/100)),
-//        targetValue = if (allowedIndicatorValue == 0f)
-//            MaterialTheme.colors.onSurface.copy(alpha = 0.3f)
-//        else
-//            bigTextColor,
-        animationSpec = tween(1000)
-    )
+    val showPercentage:Float by masterTransition.animateFloat(
+        label = "actual progress",
+        transitionSpec = {tween(transitionDuration)}
+    ){
+        percentage
+    }
+
+    val rawShowPercentage:Float by masterTransition.animateFloat(
+        label = "Text percentage transition",
+        transitionSpec = {tween(transitionDuration)}
+    ){rawSteps ->
+        rawSteps.toFloat()/maxIndicatorValue.toFloat() * 100
+    }
+
+    val showProjectionPercentage by masterTransition.animateFloat(
+        label = "progress projection",
+        transitionSpec = {tween(transitionDuration)}
+    ){
+        projectionPercentage
+    }
+
+    println(showProjectionPercentage)
+
+    val showSteps by masterTransition.animateInt(
+        label = "int steps animation",
+        transitionSpec = {tween(transitionDuration)}
+    ){rawSteps->
+        rawSteps
+    }
+
+    val animatedBigTextColor by masterTransition.animateColor(
+        label = "steps color animation",
+        transitionSpec = {tween(transitionDuration)}
+    ){
+        MaterialTheme.colors.onSurface.copy(alpha = 0.3f + 0.7f * (percentage/100))
+    }
 
     Column(
         modifier = Modifier
             .size(canvasSize)
             .drawBehind {
                 //Progress bar will be small in size than the canvas hence we divide the size of canvas with 1.25f
-                val componentSize = size / 1.25f
-
-                backgroundIndicator(
+                val componentSize = size
+                innerOutterCircle(
+                    componentSize = componentSize,
+                    indicatorStrokeWidth = foregroundIndicatorStrokeWidth,
+                )
+                //the back
+                indicator(
+                    startAngle = 150f,
+                    sweepAngle = 240f,
+                    percentage = 100f,
                     componentSize = componentSize,
                     indicatorColor = backgroundIndicatorColor,
                     indicatorStrokeWidth = backgroundIndicatorStrokeWidth,
-//                    indicatorStokeCap = indicatorStrokeCap
                 )
-                foregroundIndicator(
-                    startAngle = 150f + sweepAngle,
-                    sweepAngle = sweepProjectionAngle,
+                //the preview
+                indicator(
+                    startAngle = 150f + (240f * (showPercentage / 100)),
+                    sweepAngle = 240f,
+                    percentage = showProjectionPercentage,
                     componentSize = componentSize,
                     indicatorColor = projectionIndicatorColor.copy(alpha = 0.25f),
                     indicatorStrokeWidth = foregroundIndicatorStrokeWidth,
-//                    indicatorStokeCap = indicatorStrokeCap
                 )
-                foregroundIndicator(
+                //the actual loading bar
+                indicator(
                     startAngle = 150f,
-                    sweepAngle = sweepAngle,
+                    sweepAngle = 240f,
+                    percentage = showPercentage,
                     componentSize = componentSize,
                     indicatorColor = foregroundIndicatorColor,
                     indicatorStrokeWidth = foregroundIndicatorStrokeWidth,
 //                    indicatorStokeCap = indicatorStrokeCap
                 )
+
             }
         ,
         verticalArrangement = Arrangement.Center,
@@ -150,7 +165,7 @@ fun CustomComponent(
     ) {
 
         EmbeddedElements(
-            bigText = receivedValue,
+            bigText = showSteps,
             bigTextFontSize = bigTextFontSize,
             bigTextColor = animatedBigTextColor,
             bigTextSuffix = bigTextSuffix,
@@ -159,90 +174,30 @@ fun CustomComponent(
             smallTextFontSize = smallTextFontSize,
             Steps = indicatorValue,
             TotalSteps = maxIndicatorValue,
-            StepPercentage = showPercentage,
+            StepPercentage = rawShowPercentage,
             percentageFont = percentageFont
         )
     }
-//    Column (verticalArrangement = Arrangement.Center,
-//        horizontalAlignment = Alignment.CenterHorizontally
-//    ){
-// Box(modifier = Modifier
-//     .size(200.dp)
-//     .background(color = Color.Blue)
-//     .clip(RoundedCornerShape(20.dp))
-//
-// )
-//
-//    }
 }
 //the background of the progress bar shape
 
-fun DrawScope.backgroundIndicator(
+
+fun DrawScope.innerOutterCircle(
     componentSize: Size,
-    //use adroidx.compose.ui.graphics
-    indicatorColor: Color,
     indicatorStrokeWidth: Float,
-//    indicatorStokeCap: StrokeCap
-) {
-    //Creating the arc(progress) for the background of the actual progress bar
-    drawArc(
-        size = componentSize,
-        color = indicatorColor,
-        //making the start point for the progress bar change based on angle
-        startAngle = 150f,
-        sweepAngle = 240f,
-        //set to false so that the we can create
-        // a gap below the progress so that it doesnt not connect to the center point of canvas
-        useCenter = false,
-        style = Stroke(
-            width = indicatorStrokeWidth,
-            cap = StrokeCap.Round
-        ),
-        //to center the progress(background indicator) into the canvas
-        topLeft = Offset(
-            x = (size.width - componentSize.width) / 2f,
-            y = (size.height - componentSize.height) / 2f
-        )
+){
+//    val innerRadius = (outerRadius - indicatorStrokeWidth) - 10f
+    val innerRadius = (componentSize.width/2f) - (indicatorStrokeWidth*1.5f)
+
+    // draw inner circle
+    drawCircle(
+        color = LLightOrange,
+        center = Offset(size.width / 2f, size.height / 2f),
+        radius = innerRadius,
+        style = Fill,
     )
 
-}
-// main colored indicator for progress bar
-//fun DrawScope.foregroundIndicator(
-//    startAngle: Float,
-//    sweepAngle: Float,
-//    componentSize: Size,
-//    indicatorColor: Color,
-//    indicatorStrokeWidth: Float,
-////    indicatorStokeCap: StrokeCap
-//) {
-//    drawArc(
-//        size = componentSize,
-//        color = indicatorColor,
-//        startAngle = startAngle,
-//        //change back to "sweepAngle" to reset it to calculated measurement
-//        sweepAngle = sweepAngle,
-//        useCenter = false,
-//        style = Stroke(
-//            width = indicatorStrokeWidth,
-//            cap = StrokeCap.Round
-//        ),
-//        topLeft = Offset(
-//            x = (size.width - componentSize.width) / 2f,
-//            y = (size.height - componentSize.height) / 2f
-//        )
-//    )
-//}
-
-fun DrawScope.foregroundIndicator(
-    startAngle: Float,
-    sweepAngle: Float,
-    componentSize: Size,
-    indicatorColor: Color,
-    indicatorStrokeWidth: Float,
-//    indicatorStokeCap: StrokeCap
-) {
-    val outerRadius = (componentSize.width / 2f) + indicatorStrokeWidth -16f
-    val innerRadius = (outerRadius - indicatorStrokeWidth) - 10f
+    val outerRadius = (componentSize.width / 2f) -  indicatorStrokeWidth / 4f
 
     // draw outer circle
     drawCircle(
@@ -255,30 +210,40 @@ fun DrawScope.foregroundIndicator(
         ),
     )
 
+
+}
+
+fun DrawScope.indicator(
+    startAngle: Float,
+    sweepAngle: Float,
+    percentage: Float,
+    componentSize: Size,
+    indicatorColor: Color,
+    indicatorStrokeWidth: Float,
+) {
+
+    val reduceFactor = indicatorStrokeWidth * 2f
+
     // draw inner arc
     drawArc(
-        size = componentSize,
-        color = indicatorColor,
+        size = Size(
+            width = componentSize.width - reduceFactor,
+            height = componentSize.height - reduceFactor
+        )
+        ,color = indicatorColor,
         startAngle = startAngle,
-        sweepAngle = sweepAngle,
+        sweepAngle = sweepAngle * (percentage/100),
         useCenter = false,
         style = Stroke(
             width = indicatorStrokeWidth,
             cap = StrokeCap.Round
         ),
         topLeft = Offset(
-            x = (size.width - componentSize.width) / 2f,
-            y = (size.height - componentSize.height) / 2f
+            x = reduceFactor / 2f,
+            y = reduceFactor / 2f
         )
     )
 
-    // draw inner circle
-    drawCircle(
-        color = LLightOrange,
-        center = Offset(size.width / 2f, size.height / 2f),
-        radius = innerRadius,
-        style = Fill,
-    )
 }
 @Composable
 fun EmbeddedElements(

@@ -1,7 +1,10 @@
 package com.example.keepfit
 
+import android.view.MotionEvent
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -21,7 +24,10 @@ import androidx.compose.ui.draw.*
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -198,6 +204,7 @@ fun FeatureSection(features: List<Feature>) {
 }
 // this composable describes each box with the pattern design with 3 different colors
 //
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun FeatureItem(
     feature: Feature
@@ -212,8 +219,27 @@ fun FeatureItem(
             )
             .padding(7.5.dp)
             .aspectRatio(1f)
-            .clip(RoundedCornerShape(10.dp))
+            .clip(finalShape)
+            .let{
+                if(pressed)
+                    it.border(5.dp, MaterialTheme.colors.secondary, finalShape)
+                else
+                    it
+            }
             .background(feature.darkColor)
+            .pointerInteropFilter (
+                onTouchEvent = {motion->
+                    when(motion.action){
+                        MotionEvent.ACTION_DOWN->{
+                            pressed = true
+                        }
+                        MotionEvent.ACTION_UP->{
+                            pressed = false
+                        }
+                    }
+                    true
+                }
+            )
     ) {
         val width = constraints.maxWidth
         val height = constraints.maxHeight
