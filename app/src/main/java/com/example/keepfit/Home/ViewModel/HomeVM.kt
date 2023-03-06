@@ -67,10 +67,9 @@ class HomeVM: ViewModel() {
         }
 
 
-    fun init(){
-        viewModelScope.launch {
+    suspend fun init(){
+
             _currentSteps = Start.database!!.Steps().getAllSteps()
-        }
     }
 
     fun commitSteps(){

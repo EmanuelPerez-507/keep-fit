@@ -76,7 +76,8 @@ class Start : ComponentActivity() {
         expandableAddStepsVM.eventsBus.subscribeTo(homeVM::projectionSteps::set)
         expandableAddStepsVM.eventsBus.subscribeTo(homeVM::calculateCalories)
         expandableAddStepsVM.eventsBus.subscribeTo(homeVM::calculateDistance)
-            //to goalListEvents
+
+        //to goalListEvents
         goalsScreenView.events.subscribeTo(homeVM::newSelectedGoal)
 
         //settings button (temporary)
@@ -94,6 +95,9 @@ class Start : ComponentActivity() {
             historyScreenView.init()
         }
 
+        lifecycleScope.launch(Dispatchers.Default){
+            homeVM.init()
+        }
 
         setContent {
             NavigationContainer(
