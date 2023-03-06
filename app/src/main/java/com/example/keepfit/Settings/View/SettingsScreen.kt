@@ -55,41 +55,41 @@ fun SettingsScreen() {
             Switch(checked = true, onCheckedChange = {})
         }
 
-        Divider(modifier = Modifier.padding(horizontal = sideSpacing))
+//        Divider(modifier = Modifier.padding(horizontal = sideSpacing))
+//
+//        SettingsPanel(
+//            title = stringResource(com.example.keepfit.R.string.settings_title_theme),
+//            description = stringResource(com.example.keepfit.R.string.settings_description_theme)
+//        ){
+//            Switch(checked = true, onCheckedChange = {})
+//        }
 
-        SettingsPanel(
-            title = stringResource(com.example.keepfit.R.string.settings_title_theme),
-            description = stringResource(com.example.keepfit.R.string.settings_description_theme)
-        ){
-            Switch(checked = true, onCheckedChange = {})
-        }
+//        Divider(modifier = Modifier.padding(horizontal = sideSpacing))
+//
+//        SettingsPanel(
+//            title = stringResource(com.example.keepfit.R.string.settings_title_distance),
+//            description = stringResource(com.example.keepfit.R.string.settings_description_distance)
+//        ){
+//
+//            SegmentedButton("Km", "Mi")
+//
+//        }
 
-        Divider(modifier = Modifier.padding(horizontal = sideSpacing))
-
-        SettingsPanel(
-            title = stringResource(com.example.keepfit.R.string.settings_title_distance),
-            description = stringResource(com.example.keepfit.R.string.settings_description_distance)
-        ){
-            
-            SegmentedButton("Km", "Mi")
-
-        }
-
-        Divider(modifier = Modifier.padding(horizontal = sideSpacing))
-
-        SettingsAction(
-            title = stringResource(com.example.keepfit.R.string.settings_title_clearData),
-            description = stringResource(com.example.keepfit.R.string.settings_description_clearData)
-        )
-
-        Divider(modifier = Modifier.padding(horizontal = sideSpacing))
-
-        SettingsAction(
-            title = stringResource(com.example.keepfit.R.string.settings_title_resetSettings),
-            description = stringResource(com.example.keepfit.R.string.settings_description_resetSettings)
-        )
-
-        Divider(modifier = Modifier.padding(bottom = 14.dp, start = sideSpacing, end = sideSpacing))
+//        Divider(modifier = Modifier.padding(horizontal = sideSpacing))
+//
+//        SettingsAction(
+//            title = stringResource(com.example.keepfit.R.string.settings_title_clearData),
+//            description = stringResource(com.example.keepfit.R.string.settings_description_clearData)
+//        )
+//
+//        Divider(modifier = Modifier.padding(horizontal = sideSpacing))
+//
+//        SettingsAction(
+//            title = stringResource(com.example.keepfit.R.string.settings_title_resetSettings),
+//            description = stringResource(com.example.keepfit.R.string.settings_description_resetSettings)
+//        )
+//
+//        Divider(modifier = Modifier.padding(bottom = 14.dp, start = sideSpacing, end = sideSpacing))
 
     }
 

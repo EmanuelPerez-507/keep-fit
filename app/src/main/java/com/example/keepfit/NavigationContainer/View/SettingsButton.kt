@@ -24,7 +24,7 @@ ExpandableFAB(
     expandedOffsetV = 20.dp,
     expandedButtonColor = CancelRed,
     FABColor = Color.LightGray,
-    height = 450.dp,
+    height = 150.dp,
     width = 300.dp,
     iconId = R.drawable.settings_icon,
     iconDescriptor = "Gear icon",

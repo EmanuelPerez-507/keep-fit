@@ -19,19 +19,19 @@ import com.example.keepfit.Home.ViewModel.ExpandableAddStepsVM
 import com.example.keepfit.Home.ViewModel.HomeVM
 import com.example.keepfit.NavigationContainer.NavigationContainer
 import com.example.keepfit.NavigationContainer.ViewModel.ExpandableSettingsViewModel
+import com.example.keepfit.SingletonPersistance.CacheData
+import com.example.keepfit.SingletonPersistance.CachePersistance
 import com.example.keepfit.ui.theme.GoalBacks
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
+import java.io.File
 
 class Start : ComponentActivity() {
 
     companion object{
 
-        val dbThread:ExecutorService = Executors.newSingleThreadExecutor()
         var database:KeepFitDB? = null
+        var cachePersistance:CachePersistance? = null
 
     }
 
@@ -39,6 +39,8 @@ class Start : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        cachePersistance = CachePersistance(File(filesDir, "CachePersistance.json"))
 
         database = Room.databaseBuilder(
             applicationContext, KeepFitDB::class.java, "goal-history-db"
@@ -76,9 +78,13 @@ class Start : ComponentActivity() {
         expandableAddStepsVM.eventsBus.subscribeTo(homeVM::projectionSteps::set)
         expandableAddStepsVM.eventsBus.subscribeTo(homeVM::calculateCalories)
         expandableAddStepsVM.eventsBus.subscribeTo(homeVM::calculateDistance)
-
-        //to goalListEvents
+            //to goalListEvents
         goalsScreenView.events.subscribeTo(homeVM::newSelectedGoal)
+                //to save the selectedGoals
+        goalsScreenView.events.subscribeTo { newGoalId->
+            Start.cachePersistance!!.write(CacheData(currentSelectedGoal = newGoalId))
+        }
+
 
         //settings button (temporary)
         val settingsExpandable:ExpandableSettingsViewModel by viewModels()
@@ -101,6 +107,11 @@ class Start : ComponentActivity() {
 
         lifecycleScope.launch(Dispatchers.Default){
             homeVM.init()
+        }
+
+        lifecycleScope.launch(Dispatchers.Default){
+            val lastCache:CacheData = Start.cachePersistance!!.read()
+            goalsScreenView.selectedGoalId = lastCache.currentSelectedGoal
         }
 
         setContent {

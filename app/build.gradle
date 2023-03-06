@@ -3,6 +3,8 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'com.google.devtools.ksp' version '1.8.0-1.0.8'
+
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.8.10'
 }
 
 android {
@@ -50,6 +52,8 @@ android {
 }
 
 dependencies {
+
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1'
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'

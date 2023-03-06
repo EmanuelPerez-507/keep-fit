@@ -225,7 +225,7 @@ fun FeatureItem(
             }
             .padding(7.5.dp)
             .aspectRatio(1f)
-            .clip(RoundedCornerShape(10.dp))
+            .clip(finalShape)
             .let{
                 if(selected)
                     it.border(5.dp, MaterialTheme.colors.secondary, finalShape)
