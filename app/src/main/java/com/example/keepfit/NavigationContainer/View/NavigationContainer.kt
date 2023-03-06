@@ -98,7 +98,7 @@ fun NavigationContainer(
                 ) }
 
                 composable(Screen.History.route){ HistoryScreen(
-                    HomeScreenModel()
+                    historyScreen
                 ) }
 
             }

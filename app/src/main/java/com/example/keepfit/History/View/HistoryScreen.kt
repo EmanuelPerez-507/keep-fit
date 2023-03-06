@@ -1,47 +1,40 @@
 package com.example.keepfit.History.View
 
-import android.icu.util.Calendar
-import android.widget.CalendarView
-import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key.Companion.Calendar
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
-import com.example.keepfit.Goals.ViewModel.Show.HomeScreenModel
+import com.example.keepfit.Goals.View.Feature
 import com.example.keepfit.History.ViewModel.HistoryScreenViewModel
+import com.example.keepfit.Home.View.StepsTable
 import com.example.keepfit.ui.theme.*
 import com.vanpra.composematerialdialogs.MaterialDialog
-import com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.datetime.time.timepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
-
 import java.util.*
 
 @Composable
-fun HistoryScreen(history:HomeScreenModel) {
+fun HistoryScreen(history:HistoryScreenViewModel) {
 Box(modifier = Modifier
     .fillMaxSize()
     .background(MainBack)
@@ -50,46 +43,47 @@ Box(modifier = Modifier
     Column {
         HeaderHis()
         CalanderAndTime()
-        history.stepsList.size
-        HistoryPage(dataList = listOf(
-            Triple("name1", "10000", "12/05/23"),
-            Triple("name2", "10000", "11/05/23"),
-            Triple("name3", "7500", "10/05/23"),
-            Triple("name4", "10000", "09/05/23"),
-            Triple("name5", "10000", "07/05/23"),
-            Triple("name6", "10000", "29/04/23"),
-        ))
+        val stepsTableList = history.stepsList
+        val goalTableList = history.goalsList
+        HistoryPage(stepsList = stepsTableList, goalsList = goalTableList)
     }
 }
 }
 
 
 @Composable
-fun HistoryPage(dataList: List<Triple<String, String, String>>) {
-
+fun HistoryPage(stepsList: List<StepsTable>, goalsList: List<Feature>) {
+    val simple = SimpleDateFormat(
+        "dd MMM yyyy HH:mm"
+    )
     Column(modifier = Modifier
         .fillMaxSize()
         .padding(top = 0.dp, bottom = 58.dp)
     ) {
 
+        Text(
+            text = "Step Entries",
+            color = Color.Black,
+            style = MaterialTheme.typography.h5,
+            modifier = Modifier.padding(start = 10.dp)
+        )
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MainBack)
-
         )
         {
-            items(dataList) { item ->
+            items(stepsList) { item ->
                 Card(
                     modifier = Modifier
                         .padding(8.dp)
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(25.dp))
 //                        .border(width = 4.dp, color = Color.Black)
-                        .shadow(elevation = 3.dp,),
+                        .shadow(elevation = 3.dp),
 
                     ) {
-                    Row (
+                    Row(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
@@ -98,12 +92,11 @@ fun HistoryPage(dataList: List<Triple<String, String, String>>) {
                             .background(darkBlue)
                             .height(80.dp)
                     ) {
-                        Column(modifier = Modifier .padding(1.dp)) {
+                        Column(modifier = Modifier.padding(1.dp)) {
                             Text(
-                                text = item.first,
 //                                style = MaterialTheme.typography.h6,
                                 style = TextStyle(
-                                  fontFamily = FontFamily.Serif,
+                                    fontFamily = FontFamily.Serif,
                                     fontSize = 20.sp,
                                     color = ButtonOrange,
                                     fontWeight = FontWeight.Bold
@@ -111,7 +104,7 @@ fun HistoryPage(dataList: List<Triple<String, String, String>>) {
                                 modifier = Modifier.padding(start = 10.dp)
                             )
                             Text(
-                                text = item.second,
+                                text = "${item.steps} Steps",
                                 color = LLightOrange,
                                 style = MaterialTheme.typography.h5,
                                 modifier = Modifier.padding(start = 10.dp)
@@ -119,12 +112,12 @@ fun HistoryPage(dataList: List<Triple<String, String, String>>) {
 
                         }
                         Text(
-                            text = item.third,
+                            text = "${simple.format(item.dateAdded)}",
                             color = Color.White,
 
                             style = MaterialTheme.typography.body1,
                             modifier = Modifier.padding(end = 10.dp),
-                         )
+                        )
                     }
 
                 }
@@ -133,9 +126,9 @@ fun HistoryPage(dataList: List<Triple<String, String, String>>) {
     }
 }
 
+fun Text(style: TextStyle, modifier: Modifier) {
 
-
-
+}
 
 
 @Composable

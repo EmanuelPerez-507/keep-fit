@@ -22,6 +22,7 @@ import com.example.keepfit.NavigationContainer.ViewModel.ExpandableSettingsViewM
 import com.example.keepfit.ui.theme.GoalBacks
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -81,9 +82,22 @@ class Start : ComponentActivity() {
 //                database!!.Goals().create(initialGoal)
 //            }
             goalsScreenView.init()
+        }
+
+        lifecycleScope.launch(Dispatchers.Default){
+//            for (initialGoal in initialGoals) {
+//                database!!.Goals().create(initialGoal)
+//            }
             homeScreenView.init()
+        }
+
+        lifecycleScope.launch(Dispatchers.Default){
+//            for (initialGoal in initialGoals) {
+//                database!!.Goals().create(initialGoal)
+//            }
             historyScreenView.init()
         }
+
 
         setContent {
             NavigationContainer(
