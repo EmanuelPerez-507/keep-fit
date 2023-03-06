@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.keepfit.DataLayer.Goals.Goal
 import com.example.keepfit.DataLayer.Steps.Step
-import com.example.keepfit.Home.View.PassThrough
 import com.example.keepfit.Home.View.current
 import com.example.keepfit.Start
 import kotlinx.coroutines.CoroutineScope

@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.keepfit.DataLayer.Goals.Goal
 import com.example.keepfit.DataLayer.KeepFitDB
 import com.example.keepfit.DataLayer.Steps.Steps
 import com.example.keepfit.Start
@@ -19,7 +20,7 @@ import kotlinx.coroutines.launch
 class HomeVM: ViewModel() {
 
     private var _selectedGoalId:Int by mutableStateOf(-1)
-    private var _selectedGoal:Goal? by mutableStateOf(null)
+    private var _selectedGoal: Goal? by mutableStateOf(null)
     private var _selectedGoalRetrieveJob: Job? = null
 
     private var _currentSteps:Int by mutableStateOf(0)
@@ -27,7 +28,7 @@ class HomeVM: ViewModel() {
     private var _currentCalories:Double by mutableStateOf(0.0)
     private var _currentDistance:Double by mutableStateOf(0.0)
 
-    fun init(){
+    fun resetSelectedGoal(){
         _selectedGoalRetrieveJob?.cancel()
         val selectedGoalUpdatesFlow:Flow<Goal> = Start.database!!.Goals().getById(_selectedGoalId)
         _selectedGoalRetrieveJob = viewModelScope.launch {
@@ -87,7 +88,7 @@ class HomeVM: ViewModel() {
 
     fun newSelectedGoal(newSelGoalId:Int){
         _selectedGoalId = newSelGoalId
-        this.init()
+        this.resetSelectedGoal()
     }
 
 }
