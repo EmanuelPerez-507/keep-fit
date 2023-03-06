@@ -87,10 +87,11 @@ class Start : ComponentActivity() {
         }
 
         lifecycleScope.launch(Dispatchers.Default){
-//            for (initialGoal in initialGoals) {
-//                database!!.Goals().create(initialGoal)
-//            }
             homeScreenView.init()
+        }
+
+        lifecycleScope.launch(Dispatchers.Default){
+            historyScreenView.init()
         }
 
 
