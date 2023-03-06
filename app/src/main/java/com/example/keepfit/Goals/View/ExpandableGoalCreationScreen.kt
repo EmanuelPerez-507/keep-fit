@@ -114,9 +114,9 @@ fun ExpandableGoalCreationScreen(
                 .fillMaxWidth()
                 .height(heightAnimation)
                 .alpha(alphaAnimation)
-                .border(1.dp, Color.Red),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
+//                .border(1.dp, Color.Red)
+            ,horizontalAlignment = Alignment.CenterHorizontally
+            ,verticalArrangement = Arrangement.Top
         ){
             Button(
                 contentPadding = PaddingValues(),
@@ -167,7 +167,7 @@ fun ExpandableGoalCreationScreen(
 
         Surface(
             modifier = Modifier
-                .border(1.dp, Color.Red)
+//                .border(1.dp, Color.Red)
         ){
 
             GoalButton(
