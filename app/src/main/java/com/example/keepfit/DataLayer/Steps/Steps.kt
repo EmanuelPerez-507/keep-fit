@@ -16,4 +16,7 @@ interface Steps {
 
     @Update
     fun set(newSteps: Step):Unit
+
+    @Query("SELECT SUM(Step_No) FROM Step")
+    fun getAllSteps(): Int
 }

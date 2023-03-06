@@ -1,14 +1,14 @@
 package com.example.keepfit.Home.ViewModel
 
+import android.database.Cursor
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.keepfit.DataLayer.Goals.Goal
+import com.example.keepfit.DataLayer.KeepFitDB
+import com.example.keepfit.DataLayer.Steps.Steps
 import com.example.keepfit.Start
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class HomeVM: ViewModel() {
@@ -41,6 +41,12 @@ class HomeVM: ViewModel() {
             _currentDistance = value
         }
 
+
+    fun init(){
+        viewModelScope.launch {
+            _currentSteps = Start.database!!.Steps().getAllSteps()
+        }
+    }
 
     fun commitSteps(){
         _currentSteps += _projectionSteps
