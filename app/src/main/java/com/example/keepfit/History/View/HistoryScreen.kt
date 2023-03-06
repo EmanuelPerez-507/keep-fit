@@ -69,8 +69,9 @@ fun HistoryPage(stepsList: List<StepsTable>, goalsList: List<Feature>) {
         )
         LazyColumn(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .background(MainBack)
+                .weight(1f)
         )
         {
             items(stepsList) { item ->
@@ -114,6 +115,70 @@ fun HistoryPage(stepsList: List<StepsTable>, goalsList: List<Feature>) {
                         Text(
                             text = "${simple.format(item.dateAdded)}",
                             color = Color.White,
+
+                            style = MaterialTheme.typography.body1,
+                            modifier = Modifier.padding(end = 10.dp),
+                        )
+                    }
+
+                }
+            }
+        }
+        Text(
+            text = "Goal Entries",
+            color = Color.Black,
+            style = MaterialTheme.typography.h5,
+            modifier = Modifier.padding(start = 10.dp)
+        )
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MainBack)
+                .weight(1f)
+        )
+        {
+            items(goalsList) { item ->
+                Card(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(25.dp))
+//                        .border(width = 4.dp, color = Color.Black)
+                        .shadow(elevation = 3.dp),
+
+                    ) {
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(0.dp)
+                            .background(darkBlue)
+                            .height(80.dp)
+                    ) {
+                        Column(modifier = Modifier.padding(1.dp)) {
+                            Text(
+//                                style = MaterialTheme.typography.h6,
+                                style = TextStyle(
+                                    fontFamily = FontFamily.Serif,
+                                    fontSize = 20.sp,
+                                    color = ButtonOrange,
+                                    fontWeight = FontWeight.Bold
+                                ),
+                                modifier = Modifier.padding(start = 10.dp)
+                            )
+                            Text(
+                                text = "${item.steps} Steps",
+                                color = LLightOrange,
+                                style = MaterialTheme.typography.h5,
+                                modifier = Modifier.padding(start = 10.dp)
+                            )
+
+                        }
+                        Text(
+//                            text = "${simple.format(item.title)}",
+                            text = "Date here"
+                            ,color = Color.White,
 
                             style = MaterialTheme.typography.body1,
                             modifier = Modifier.padding(end = 10.dp),
