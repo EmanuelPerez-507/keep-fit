@@ -37,6 +37,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 //import androidx.compose.ui.text.input.PasswordVisualTransformation
 //import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
+import com.example.keepfit.Controls.AdvancedShadowSide
+import com.example.keepfit.Controls.advancedShadow
 import com.example.keepfit.Goals.ViewModel.Show.HomeScreenModel
 //import androidx.core.content.ContextCompat.startActivity
 import com.example.keepfit.Home.ViewModel.ExpandableAddStepsVM
@@ -138,10 +140,6 @@ fun HomeScreen(state:HomeVM, plusButtonState:ExpandableAddStepsVM, viewModel: Ho
     }
 }
 
-fun PassThrough(){
-
-}
-
 @Composable
 fun dateAndTime() {
     Row(
@@ -169,29 +167,19 @@ fun canvasBottom(state: HomeVM) {
 
     Row(
         modifier = Modifier
-            .shadow(
-                elevation = 5.dp,
-                shape = CustomShapes.onlyTop.medium,
-            )
-            .clip(
-                CustomShapes.onlyTop.medium
-            )
-            .background(Color.White)
-            .padding(top = 15.dp, bottom = 25.dp)
-//            .padding(vertical = 50.dp)
-//            .height(250.dp)
-//            .wrapContentHeight()
-//            .padding(0.dp)
             .fillMaxWidth()
-//            .clip(
-//                CustomShapes.onlyTop.medium
-//            )
-//            .shadow(
-//                elevation = 5.dp,
-//                shape = CustomShapes.onlyTop.medium,
-//            )
-        ,horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment = Alignment.CenterVertically,
+            .advancedShadow(
+                color = Color.LightGray.copy(alpha = 0.6f),
+                shadowBlurRadius = 50.dp,
+//                offsetY = (-10).dp,
+                cornersRadius = medium,
+            side = AdvancedShadowSide.TOP)
+            .clip(CustomShapes.onlyTop.medium)
+            .background(Color.White)
+            .padding(top = 15.dp, bottom = 35.dp)
+
+        ,horizontalArrangement = Arrangement.SpaceEvenly
+        ,verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
             modifier = Modifier

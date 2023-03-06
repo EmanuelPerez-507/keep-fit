@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.example.keepfit.ui.theme.*
+import java.text.DecimalFormat
 
 
 @SuppressLint("UnusedTransitionTargetStateParameter")
@@ -290,9 +291,11 @@ fun EmbeddedElements(
         color = ButtonOrange
     )
 
+    val df = DecimalFormat("#")
+
     Text(
         modifier = Modifier.padding(start = 10.dp),
-        text = "${String.format("%.0f", StepPercentage)}%",
+        text = "${df.format(StepPercentage)}%",
         fontSize = percentageFont,
         textAlign = TextAlign.Center,
         fontWeight = FontWeight.Bold,

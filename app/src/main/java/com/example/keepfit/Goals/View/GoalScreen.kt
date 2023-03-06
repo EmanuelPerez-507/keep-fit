@@ -211,6 +211,7 @@ fun FeatureItem(
 ) {
 
     var pressed:Boolean by remember { mutableStateOf(false) }
+    val finalShape = RoundedCornerShape(medium)
 
     BoxWithConstraints(
         modifier = Modifier
