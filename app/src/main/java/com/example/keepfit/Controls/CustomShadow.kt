@@ -9,13 +9,19 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
+enum class AdvancedShadowSide{
+    TOP,
+    LEFT,
+    ALL
+}
 fun Modifier.advancedShadow(
     color: Color = Color.Black,
     alpha: Float = 1f,
     cornersRadius: Dp = 0.dp,
     shadowBlurRadius: Dp = 0.dp,
     offsetY: Dp = 0.dp,
-    offsetX: Dp = 0.dp
+    offsetX: Dp = 0.dp,
+    side:AdvancedShadowSide = AdvancedShadowSide.ALL
 ) = drawBehind {
 
     val shadowColor = color.copy(alpha = alpha).toArgb()
@@ -31,11 +37,17 @@ fun Modifier.advancedShadow(
             offsetY.toPx(),
             shadowColor
         )
+
+        val finalHeight:Float = when(side){
+            AdvancedShadowSide.TOP -> 150f
+            else->this.size.height
+        }
+
         it.drawRoundRect(
             0f,
             0f,
             this.size.width,
-            this.size.height,
+            finalHeight,
             cornersRadius.toPx(),
             cornersRadius.toPx(),
             paint
