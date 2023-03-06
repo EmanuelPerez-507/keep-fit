@@ -1,10 +1,8 @@
 package com.example.keepfit.Home.View
 
-import java.util.Date
-
-data class StepsTable (
-    val title: String,
+data class StepsTable(
+    val id: Int,
     val steps: Int,
-    val dateAdded: String,
+    val dateAdded: Long = System.currentTimeMillis(),
     val beenDeleted: Boolean
 )

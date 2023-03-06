@@ -13,6 +13,8 @@ import com.example.keepfit.DataLayer.KeepFitDB
 import com.example.keepfit.Goals.ViewModel.Create.ExpandableGoalCreateModel
 import com.example.keepfit.Goals.ViewModel.Show.GoalScreenModel
 import com.example.keepfit.Goals.ViewModel.Show.HomeScreenModel
+import com.example.keepfit.History.ViewModel.HistoryScreenViewModel
+import com.example.keepfit.Home.View.StepsTable
 import com.example.keepfit.Home.ViewModel.ExpandableAddStepsVM
 import com.example.keepfit.Home.ViewModel.HomeVM
 import com.example.keepfit.NavigationContainer.NavigationContainer
@@ -20,6 +22,7 @@ import com.example.keepfit.NavigationContainer.ViewModel.ExpandableSettingsViewM
 import com.example.keepfit.ui.theme.GoalBacks
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -62,6 +65,8 @@ class Start : ComponentActivity() {
         //
         val homeScreenView: HomeScreenModel by viewModels()
 
+        val historyScreenView: HistoryScreenViewModel by viewModels()
+
         //init event buses for inter viewModel communication
         expandableAddStepsVM.eventsBus.initBroadcast(lifecycleScope)
         goalsScreenView.events.initBroadcast(lifecycleScope)
@@ -71,7 +76,8 @@ class Start : ComponentActivity() {
         expandableAddStepsVM.eventsBus.subscribeTo(homeVM::projectionSteps::set)
         expandableAddStepsVM.eventsBus.subscribeTo(homeVM::calculateCalories)
         expandableAddStepsVM.eventsBus.subscribeTo(homeVM::calculateDistance)
-            //to goalListEvents
+
+        //to goalListEvents
         goalsScreenView.events.subscribeTo(homeVM::newSelectedGoal)
 
         //settings button (temporary)
@@ -85,6 +91,14 @@ class Start : ComponentActivity() {
             homeScreenView.init()
         }
 
+        lifecycleScope.launch(Dispatchers.Default){
+            historyScreenView.init()
+        }
+
+        lifecycleScope.launch(Dispatchers.Default){
+            homeVM.init()
+        }
+
         setContent {
             NavigationContainer(
                 goalsScreenView,
@@ -92,6 +106,8 @@ class Start : ComponentActivity() {
 
                 homeVM,
                 expandableAddStepsVM,
+
+                historyScreenView,
 
                 settingsExpandable
             )
