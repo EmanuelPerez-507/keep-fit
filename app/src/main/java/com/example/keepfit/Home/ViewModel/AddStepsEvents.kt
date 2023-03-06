@@ -12,8 +12,7 @@ class AddStepsEvents{
     private val _stepsProposalEvent = MutableStateFlow<Int>(0)
     private val _stepsCommitEvent = MutableSharedFlow<Unit>()
 
-    private val proposalActions:LinkedList<(Int)->Unit> =
-        LinkedList<(Int)->Unit>()
+    private val proposalActions:LinkedList<(Int)->Unit> = LinkedList<(Int)->Unit>()
     private val commitAction:LinkedList<()->Unit> = LinkedList<()->Unit>()
 
     fun subscribeTo(action:(Int)->Unit){

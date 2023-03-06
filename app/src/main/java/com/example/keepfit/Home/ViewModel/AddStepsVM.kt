@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.keepfit.DataLayer.Goals.Goal
 import com.example.keepfit.DataLayer.Steps.Step
-import com.example.keepfit.Home.View.PassThrough
+import com.example.keepfit.Home.View.current
 import com.example.keepfit.Start
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -56,20 +56,17 @@ open class AddStepsVM:ViewModel() {
         _augmentSteps = ""
         viewModelScope.launch {
             eventsBus.commitSteps()
-            println("Passed All Steps!")
         }
     }
 
     fun addStepsDB(Pass:String){
-        val formatter = SimpleDateFormat("yyyy-MM-dd")
-        val date = Date()
-        val current = formatter.format(date)
+        var current = System.currentTimeMillis()
 
         var passedSteps = Pass.toInt()
         println(passedSteps)
+
         val newStepEntry: Step = Step(
             id = 0,
-            name = "Step Entry",
             steps = passedSteps,
             date = current,
             delete = false
