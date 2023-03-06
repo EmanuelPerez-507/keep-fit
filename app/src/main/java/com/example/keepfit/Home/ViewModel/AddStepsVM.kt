@@ -57,7 +57,6 @@ open class AddStepsVM:ViewModel() {
         _augmentSteps = ""
         viewModelScope.launch {
             eventsBus.commitSteps()
-            println("Passed All Steps!")
         }
     }
 
