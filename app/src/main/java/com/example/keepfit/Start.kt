@@ -92,7 +92,11 @@ class Start : ComponentActivity() {
         }
 
         lifecycleScope.launch(Dispatchers.Default){
-            historyScreenView.init()
+            historyScreenView.init1()
+        }
+
+        lifecycleScope.launch(Dispatchers.Default){
+            historyScreenView.init2()
         }
 
         lifecycleScope.launch(Dispatchers.Default){

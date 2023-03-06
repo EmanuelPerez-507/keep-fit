@@ -1,21 +1,17 @@
 package com.example.keepfit.Home.ViewModel
 
-import android.database.Cursor
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.keepfit.DataLayer.Goals.Goal
-import com.example.keepfit.DataLayer.KeepFitDB
-import com.example.keepfit.DataLayer.Steps.Steps
 import com.example.keepfit.Start
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 class HomeVM: ViewModel() {
 
@@ -68,8 +64,25 @@ class HomeVM: ViewModel() {
 
 
     suspend fun init(){
+        val calStart: Calendar = GregorianCalendar()
+        calStart.setTime(Date())
+        calStart.set(Calendar.HOUR_OF_DAY, 0)
+        calStart.set(Calendar.MINUTE, 0)
+        calStart.set(Calendar.SECOND, 0)
+        val midnightYesterday: Long = calStart.timeInMillis
 
-            _currentSteps = Start.database!!.Steps().getAllSteps()
+        val calEnd: Calendar = GregorianCalendar()
+        calEnd.setTime(Date())
+        calEnd.set(Calendar.DAY_OF_YEAR, calEnd.get(Calendar.DAY_OF_YEAR) + 1)
+        calEnd.set(Calendar.HOUR_OF_DAY, 0)
+        calEnd.set(Calendar.MINUTE, 0)
+        calEnd.set(Calendar.SECOND, 0)
+        val midnightTonight: Long = calEnd.timeInMillis
+        println("$midnightYesterday, $midnightTonight")
+            _currentSteps = Start.database!!.Steps().getAllSteps(midnightYesterday, midnightTonight)
+            currentCalories = currentSteps * 0.04
+            currentDistance = currentSteps * 0.000397727
+
     }
 
     fun commitSteps(){
@@ -78,11 +91,10 @@ class HomeVM: ViewModel() {
     }
 
     fun calculateCalories(){
-        currentCalories = currentSteps * 0.04
+
     }
 
     fun calculateDistance(){
-        currentDistance = currentSteps * 0.000397727
     }
 
     fun newSelectedGoal(newSelGoalId:Int){

@@ -1,6 +1,7 @@
 package com.example.keepfit.History.View
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -12,6 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -21,6 +24,7 @@ import androidx.compose.ui.window.DialogProperties
 import com.example.keepfit.Goals.View.Feature
 import com.example.keepfit.History.ViewModel.HistoryScreenViewModel
 import com.example.keepfit.Home.View.StepsTable
+import com.example.keepfit.R
 import com.example.keepfit.ui.theme.*
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
@@ -95,8 +99,8 @@ fun HistoryPage(stepsList: List<StepsTable>, goalsList: List<Feature>) {
                     ) {
                         Column(modifier = Modifier.padding(1.dp)) {
                             Text(
-//                                style = MaterialTheme.typography.h6,
-                                style = TextStyle(
+                                    text = "${simple.format(item.dateAdded)}",
+                                    style = TextStyle(
                                     fontFamily = FontFamily.Serif,
                                     fontSize = 20.sp,
                                     color = ButtonOrange,
@@ -113,12 +117,40 @@ fun HistoryPage(stepsList: List<StepsTable>, goalsList: List<Feature>) {
 
                         }
                         Text(
-                            text = "${simple.format(item.dateAdded)}",
+                            text = "",
                             color = Color.White,
 
                             style = MaterialTheme.typography.body1,
                             modifier = Modifier.padding(end = 10.dp),
                         )
+                        Row{
+                            Text(
+                                text = "Edit",
+                                color = TextWhite,
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(10.dp))
+                                    .clickable {
+                                        // Handle the click
+                                    }
+                                    .align(Alignment.CenterVertically)
+                                    .background(ButtonOrange)
+                                    .padding(vertical = 6.dp, horizontal = 15.dp)
+                            )
+                            Icon(
+                                contentDescription ="Delete",
+                                tint = Color.Unspecified,
+                                imageVector = ImageVector.vectorResource(id = R.drawable.delete_icon),
+                                modifier = Modifier
+                                    .size(40.dp)
+                                    .align(Alignment.CenterVertically)
+                                    .clip(RoundedCornerShape(10.dp))
+                                    .background(MaterialTheme.colors.primary)
+                                    .clickable { println("Delete") }
+                            )
+                        }
+
                     }
 
                 }
@@ -155,7 +187,8 @@ fun HistoryPage(stepsList: List<StepsTable>, goalsList: List<Feature>) {
                             .padding(0.dp)
                             .background(darkBlue)
                             .height(80.dp)
-                    ) {
+                    )
+                    {
                         Column(modifier = Modifier.padding(1.dp)) {
                             Text(
 //                                style = MaterialTheme.typography.h6,
@@ -168,7 +201,7 @@ fun HistoryPage(stepsList: List<StepsTable>, goalsList: List<Feature>) {
                                 modifier = Modifier.padding(start = 10.dp)
                             )
                             Text(
-                                text = "${item.steps} Steps",
+                                text = "${item.title} Steps",
                                 color = LLightOrange,
                                 style = MaterialTheme.typography.h5,
                                 modifier = Modifier.padding(start = 10.dp)
@@ -176,13 +209,40 @@ fun HistoryPage(stepsList: List<StepsTable>, goalsList: List<Feature>) {
 
                         }
                         Text(
-//                            text = "${simple.format(item.title)}",
-                            text = "Date here"
-                            ,color = Color.White,
+                            text = "${item.steps}",
+                            color = Color.White,
 
                             style = MaterialTheme.typography.body1,
                             modifier = Modifier.padding(end = 10.dp),
                         )
+                        Row {
+                            Text(
+                                text = "Edit",
+                                color = TextWhite,
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(10.dp))
+                                    .clickable {
+                                        // Handle the click
+                                    }
+                                    .align(Alignment.CenterVertically)
+                                    .background(ButtonOrange)
+                                    .padding(vertical = 6.dp, horizontal = 15.dp)
+                            )
+
+                            Icon(
+                                contentDescription = "Delete",
+                                tint = Color.Unspecified,
+                                imageVector = ImageVector.vectorResource(id = R.drawable.delete_icon),
+                                modifier = Modifier
+                                    .size(40.dp)
+                                    .align(Alignment.CenterVertically)
+                                    .clip(RoundedCornerShape(10.dp))
+                                    .background(MaterialTheme.colors.primary)
+                                    .clickable { println("Delete") }
+                            )
+                        }
                     }
 
                 }

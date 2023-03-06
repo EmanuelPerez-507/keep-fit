@@ -24,18 +24,39 @@ class HistoryScreenViewModel: ViewModel() {
     val goalsList: List<Feature>
         get() = _goalsList
 
-    suspend fun init() {
+    suspend fun init1() {
 
         val stepsList: Flow<List<Step>> = Start.database!!.Steps().getAll()
-        val goalsList: Flow<List<Goal>> = Start.database!!.Goals().getAll()
 
         stepsList.collect{stepsList->
+            println("${stepsList.size}")
             _stepsList = stepsList.map{step->
                 StepsTable(
                     id = step.id,
                     steps = step.steps,
                     dateAdded = step.date,
                     beenDeleted = step.delete
+                )
+            }
+        }
+    }
+
+    suspend fun init2(){
+        val goalsList: Flow<List<Goal>> = Start.database!!.Goals().getAll()
+
+        goalsList.collect{goalsList->
+            _goalsList = goalsList.map{goal->
+                val color: Color = Utils.ColorMix.mediumLighten(Color(goal.color))
+                val lightColor:Color = Utils.ColorMix.lighten(color)
+                val darkColor:Color = Utils.ColorMix.darken(color)
+                Feature(
+                    id = goal.id,
+                    title = goal.name,
+                    steps = goal.steps.toString(),
+                    iconId = 0,
+                    lightColor = lightColor,
+                    mediumColor = color,
+                    darkColor = darkColor
                 )
             }
         }
