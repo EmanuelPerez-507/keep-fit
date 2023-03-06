@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.*
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -73,7 +74,7 @@ fun GoalScreen(
                     )
                     //Added features in the parameters to easily change the goals info,
                     // can be used dynamically as well
-                    FeatureSection(currentGoalList)
+                    FeatureSection(viewModel,currentGoalList)
 
                 }
 
@@ -184,7 +185,7 @@ fun HeaderSett(
 //This Composable is used to set a list of features to create a lazyverticalgrid
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun FeatureSection(features: List<Feature>) {
+fun FeatureSection(state:GoalScreenModel ,features: List<Feature>) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             text = "Your Goals",
@@ -197,7 +198,7 @@ fun FeatureSection(features: List<Feature>) {
             modifier = Modifier.fillMaxHeight()
         ) {
             items(features.size) {
-                FeatureItem(feature = features[it])
+                FeatureItem(state = state,feature = features[it])
             }
         }
     }
@@ -207,43 +208,33 @@ fun FeatureSection(features: List<Feature>) {
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun FeatureItem(
-    feature: Feature
+    state: GoalScreenModel,
+    feature: Feature,
 ) {
-
-    var pressed:Boolean by remember { mutableStateOf(false) }
+    val selected:Boolean = feature.id == state.selectedGoalId
     val finalShape = RoundedCornerShape(medium)
 
     BoxWithConstraints(
         modifier = Modifier
-            .scale(
-                when (pressed) {
-                    true -> 1.2F
-                    false -> 1F
+            .let{
+                when(selected){
+                    true -> it.scale(1.05f)
+                    false -> it
                 }
-            )
+            }
             .padding(7.5.dp)
             .aspectRatio(1f)
             .clip(finalShape)
             .let{
-                if(pressed)
+                if(selected)
                     it.border(5.dp, MaterialTheme.colors.secondary, finalShape)
                 else
                     it
             }
             .background(feature.darkColor)
-            .pointerInteropFilter (
-                onTouchEvent = {motion->
-                    when(motion.action){
-                        MotionEvent.ACTION_DOWN->{
-                            pressed = true
-                        }
-                        MotionEvent.ACTION_UP->{
-                            pressed = false
-                        }
-                    }
-                    true
-                }
-            )
+            .clickable {
+                state.selectedGoalId = feature.id
+            }
     ) {
         val width = constraints.maxWidth
         val height = constraints.maxHeight
@@ -304,13 +295,34 @@ fun FeatureItem(
                 .fillMaxSize()
                 .padding(15.dp)
         ) {
-            Text(
-                text = feature.title,
-                style = MaterialTheme.typography.h6,
-                lineHeight = 26.sp,
-                modifier = Modifier.align(Alignment.TopStart),
-                color = Color.Black
-            )
+
+            Row(
+                modifier = Modifier.fillMaxWidth()
+                , horizontalArrangement = when(selected){
+                    true -> Arrangement.SpaceBetween
+                    false->Arrangement.Start
+                }
+            ){
+
+                Text(
+                    text = feature.title,
+                    style = MaterialTheme.typography.h6,
+                    lineHeight = 26.sp,
+                    modifier = Modifier.align(Alignment.CenterVertically),
+                    color = Color.Black
+                )
+
+                if(selected){
+                    Image(modifier = Modifier
+                        .size(35.dp)
+                        ,imageVector =  ImageVector.vectorResource(R.drawable.check_icon)
+                        , colorFilter = ColorFilter.tint(color = MaterialTheme.colors.primary)
+                        ,contentDescription = "checkMark")
+                }
+
+            }
+
+
 
             Text(
                 text = feature.steps,
@@ -325,6 +337,7 @@ fun FeatureItem(
 //                tint = Color.White,
 //                modifier = Modifier.align(Alignment.BottomStart)
 //            )
+
             Text(
                 text = "Edit",
                 color = TextWhite,
@@ -339,15 +352,22 @@ fun FeatureItem(
                     .background(ButtonOrange)
                     .padding(vertical = 6.dp, horizontal = 15.dp)
             )
+
 //Add a delete icon (or) keep delete icon after an edit pop up opens after clicking edit
-//            Icon(
-//                contentDescription ="Delete",
-//                tint = Color.Unspecified,
-//                imageVector = ImageVector.vectorResource(id = R.drawable.delete_icon),
-//                modifier = Modifier
-//                    .size(75.dp)
-//                    .align(Alignment.BottomEnd)
-//            )
+            if(!selected){
+                Icon(
+                    contentDescription ="Delete",
+                    tint = Color.Unspecified,
+                    imageVector = ImageVector.vectorResource(id = R.drawable.delete_icon),
+                    modifier = Modifier
+                        .size(40.dp)
+                        .align(Alignment.BottomStart)
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(MaterialTheme.colors.primary)
+                        .clickable { println("Delete") }
+                )
+            }
+
         }
     }
 }

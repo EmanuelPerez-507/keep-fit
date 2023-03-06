@@ -103,7 +103,10 @@ fun HomeScreen(state:HomeVM, plusButtonState:ExpandableAddStepsVM, viewModel: Ho
                 CustomComponent(
                     projectionIndicatorValue = state.projectionSteps,
                     indicatorValue = state.currentSteps,
-                    maxIndicatorValue = 10000
+                    maxIndicatorValue = when(state.selectedGoal){
+                        null->10000
+                        else->state.selectedGoal!!.steps
+                    }
                 )
             }
 
@@ -169,7 +172,7 @@ fun canvasBottom(state: HomeVM) {
         modifier = Modifier
             .fillMaxWidth()
             .advancedShadow(
-                color = Color.LightGray.copy(alpha = 0.6f),
+                color = Color.Black.copy(alpha = 0.6f),
                 shadowBlurRadius = 50.dp,
 //                offsetY = (-10).dp,
                 cornersRadius = medium,
@@ -260,16 +263,16 @@ fun canvasBottom(state: HomeVM) {
                     ),
 
                     )
-                Text(
-                    text = "Name",
-                    style = TextStyle(
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Normal,
-                        textAlign = TextAlign.Center,
-
+                if(state.selectedGoal!=null){
+                    Text(
+                        text = state.selectedGoal!!.name,
+                        style = TextStyle(
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Normal,
+                            textAlign = TextAlign.Center,
                         ),
-
                     )
+                }
             }
         }
 
@@ -315,8 +318,6 @@ fun canvasBottom(state: HomeVM) {
                         fontWeight = FontWeight.SemiBold,
                         textAlign = TextAlign.Center,
                         color = Color.Gray
-
-
                     ),
 
                     )

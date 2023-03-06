@@ -62,21 +62,26 @@ class Start : ComponentActivity() {
         //
         val homeScreenView: HomeScreenModel by viewModels()
 
+        //init event buses for inter viewModel communication
         expandableAddStepsVM.eventsBus.initBroadcast(lifecycleScope)
-        //makeHomeVM aware of events in addStepsVM
+        goalsScreenView.events.initBroadcast(lifecycleScope)
+        //subscribe VMs to events
+            //to addStepsEvents
         expandableAddStepsVM.eventsBus.subscribeTo(homeVM::commitSteps)
         expandableAddStepsVM.eventsBus.subscribeTo(homeVM::projectionSteps::set)
         expandableAddStepsVM.eventsBus.subscribeTo(homeVM::calculateCalories)
         expandableAddStepsVM.eventsBus.subscribeTo(homeVM::calculateDistance)
+            //to goalListEvents
+        goalsScreenView.events.subscribeTo(homeVM::newSelectedGoal)
 
         //settings button (temporary)
         val settingsExpandable:ExpandableSettingsViewModel by viewModels()
 
         lifecycleScope.launch(Dispatchers.Default){
-//            for (initialGoal in initialGoals) {
-//                database!!.Goals().create(initialGoal)
-//            }
             goalsScreenView.init()
+        }
+
+        lifecycleScope.launch(Dispatchers.Default){
             homeScreenView.init()
         }
 
