@@ -13,7 +13,7 @@ interface Steps {
     fun getAll(): Flow<List<Step>>
 
     @Insert
-    fun create(newGoal: Step):Unit
+    fun create(newSteps: Step):Unit
 
     @Update
     fun set(newSteps: Step):Unit

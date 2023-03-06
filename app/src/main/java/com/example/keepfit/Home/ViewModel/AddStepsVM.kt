@@ -67,6 +67,7 @@ open class AddStepsVM:ViewModel() {
 
         var passedSteps = Pass.toInt()
         println(passedSteps)
+
         val newStepEntry: Step = Step(
             id = 0,
             name = "Step Entry",

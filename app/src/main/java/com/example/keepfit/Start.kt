@@ -13,6 +13,8 @@ import com.example.keepfit.DataLayer.KeepFitDB
 import com.example.keepfit.Goals.ViewModel.Create.ExpandableGoalCreateModel
 import com.example.keepfit.Goals.ViewModel.Show.GoalScreenModel
 import com.example.keepfit.Goals.ViewModel.Show.HomeScreenModel
+import com.example.keepfit.History.ViewModel.HistoryScreenViewModel
+import com.example.keepfit.Home.View.StepsTable
 import com.example.keepfit.Home.ViewModel.ExpandableAddStepsVM
 import com.example.keepfit.Home.ViewModel.HomeVM
 import com.example.keepfit.NavigationContainer.NavigationContainer
@@ -62,6 +64,8 @@ class Start : ComponentActivity() {
         //
         val homeScreenView: HomeScreenModel by viewModels()
 
+        val historyScreenView: HistoryScreenViewModel by viewModels()
+
         expandableAddStepsVM.eventsBus.initBroadcast(lifecycleScope)
         //makeHomeVM aware of events in addStepsVM
         expandableAddStepsVM.eventsBus.subscribeTo(homeVM::commitSteps)
@@ -78,6 +82,7 @@ class Start : ComponentActivity() {
 //            }
             goalsScreenView.init()
             homeScreenView.init()
+            historyScreenView.init()
         }
 
         setContent {
@@ -87,6 +92,8 @@ class Start : ComponentActivity() {
 
                 homeVM,
                 expandableAddStepsVM,
+
+                historyScreenView,
 
                 settingsExpandable
             )

@@ -25,7 +25,9 @@ import com.example.keepfit.Goals.ViewModel.Create.ExpandableGoalCreateModel
 import com.example.keepfit.Goals.ViewModel.Show.GoalScreenModel
 import com.example.keepfit.Goals.ViewModel.Show.HomeScreenModel
 import com.example.keepfit.History.View.HistoryScreen
+import com.example.keepfit.History.ViewModel.HistoryScreenViewModel
 import com.example.keepfit.Home.View.HomeScreen
+import com.example.keepfit.Home.View.StepsTable
 import com.example.keepfit.Home.ViewModel.ExpandableAddStepsVM
 import com.example.keepfit.Home.ViewModel.HomeVM
 import com.example.keepfit.NavigationContainer.View.Screen
@@ -44,6 +46,7 @@ fun NavigationContainer(
     goalsCreateModel: ExpandableGoalCreateModel,
     homeVM: HomeVM,
     addStepsModel: ExpandableAddStepsVM,
+    historyScreen: HistoryScreenViewModel,
     settingsExpandable:ExpandableSettingsViewModel
 ) {
 
@@ -81,7 +84,7 @@ fun NavigationContainer(
                 ,
 //                    .border(3.dp, Color(0xFFFF0000)),
                 navController = navController,
-                startDestination = Screen.History.route){
+                startDestination = Screen.Home.route){
 
                 composable(Screen.Home.route){ HomeScreen(
                     homeVM,
@@ -94,7 +97,9 @@ fun NavigationContainer(
                     goalsCreateModel
                 ) }
 
-                composable(Screen.History.route){ HistoryScreen() }
+                composable(Screen.History.route){ HistoryScreen(
+                    HomeScreenModel()
+                ) }
 
             }
 

@@ -25,6 +25,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.pointerInteropFilter
@@ -222,10 +223,10 @@ fun FeatureItem(
             )
             .padding(7.5.dp)
             .aspectRatio(1f)
-            .clip(finalShape)
+            .clip(RoundedCornerShape(10.dp))
             .let{
                 if(pressed)
-                    it.border(5.dp, MaterialTheme.colors.secondary, finalShape)
+                    it.border(5.dp, MaterialTheme.colors.secondary, RoundedCornerShape(10.dp))
                 else
                     it
             }

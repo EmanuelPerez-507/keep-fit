@@ -26,6 +26,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
+import com.example.keepfit.Goals.ViewModel.Show.HomeScreenModel
+import com.example.keepfit.History.ViewModel.HistoryScreenViewModel
 import com.example.keepfit.ui.theme.*
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults
@@ -39,8 +41,7 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 
 @Composable
-@Preview
-fun HistoryScreen() {
+fun HistoryScreen(history:HomeScreenModel) {
 Box(modifier = Modifier
     .fillMaxSize()
     .background(MainBack)
@@ -49,6 +50,7 @@ Box(modifier = Modifier
     Column {
         HeaderHis()
         CalanderAndTime()
+        history.stepsList.size
         HistoryPage(dataList = listOf(
             Triple("name1", "10000", "12/05/23"),
             Triple("name2", "10000", "11/05/23"),
@@ -56,7 +58,6 @@ Box(modifier = Modifier
             Triple("name4", "10000", "09/05/23"),
             Triple("name5", "10000", "07/05/23"),
             Triple("name6", "10000", "29/04/23"),
-
         ))
     }
 }
